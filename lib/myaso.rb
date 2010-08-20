@@ -11,6 +11,10 @@ class Myaso
     def root
       @myaso_root ||= File.expand_path('../../', __FILE__)
     end
+
+    def version
+      @version ||= File.read(File.join(Myaso.root, 'VERSION')).chomp
+    end
   end
 
   autoload :Inflector, File.join(Myaso.root, 'lib', 'myaso', 'inflector')
