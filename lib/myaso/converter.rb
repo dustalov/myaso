@@ -18,6 +18,18 @@ class Myaso
     # Convert the <a href='http://aot.ru/'>aot.ru</a> dictonaries to
     # <tt>myaso</tt>-compatible format (TokyoTable).
     def perform!
+      # load morphs
+      puts "Processing '#{morphs}'..."
+      to_tempfile(morphs).tap do |file|
+        puts '  Loading rules...'
+        load_rules(file)
+        puts '  Loading lemmas...'
+        load_lemmas(file)
+        puts '  Loading prefixes...'
+        load_prefixes(file)
+      end.close!
+      puts "Done."
+
       # load gramtab
       puts "Processing '#{gramtab}'..."
       to_tempfile(gramtab).tap do |file|
@@ -38,6 +50,47 @@ class Myaso
           end
         end
         temp.rewind
+      end
+    end
+
+    # Implement <tt>each_with_index</tt> according to <tt>mrd</tt>
+    # file structure with <tt>morphs_file</tt> processing,
+    # like “ё” (YO) letter replacing with “е” letter (YE).
+    def morphs_foreach(morphs_file, &block)
+      morphs_file.rewind
+      morphs_file.readline.to_i.times do |i|
+        line = morphs_file.readline
+        line.mb_chars.gsub!('Ё', 'Е')
+        block.call(line.strip, i)
+      end
+    end
+
+    # Parse the <tt>morphs_file</tt> and load it as words paradigm.
+    def load_rules(file)
+      morphs_foreach(file) do |line, index|
+        line.split('%').each do |rule|
+          if rule && !rule.empty?
+            parts = rule.split '*'
+            parts << '' while parts.size < 3
+            parts[1].mb_chars.slice! 0..2
+
+            suffix, ancode, prefix = parts
+          end
+        end
+      end
+    end
+
+    # Parse the <tt>morphs_file</tt> and load it as lemmas section.
+    def load_lemmas(file)
+      morphs_foreach(file) do |line, index|
+        base, rule_id = line.split
+      end
+    end
+
+    # Parse the <tt>morphs_file</tt> and load it as prefixes section.
+    def load_prefixes(file)
+      morphs_foreach(file) do |line, index|
+
       end
     end
 
