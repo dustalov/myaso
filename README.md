@@ -5,8 +5,16 @@ analysis tools, written in shiny Ruby.
 
 Based on [pymorphy](http://bitbucket.org/kmike/pymorphy/) by Mikhail Korobov.
 
+## Feature List (read as «To-Do List», please)
+
+* (TODO) TokyoCabinet/TokyoTable storage.
+* (TODO) Command-Line Interface based on Thor.
+* (TODO) Dictonaries converter on CLI.
+* (TODO) Grammatic Information retriever.
+* (TODO) Normalizer/Inflector/Pluralizer modules.
+
 ## Note on Patches/Pull Requests
- 
+
 * Fork the project.
 * Make your feature addition or bug fix.
 * Add tests for it. This is important so I don't break it in a
