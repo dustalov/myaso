@@ -8,14 +8,19 @@ require 'active_support/core_ext'
 
 class Myaso
   class << self
+    # Return the root path of the <tt>Myaso</tt> gem.
     def root
       @myaso_root ||= File.expand_path('../../', __FILE__)
     end
 
+    # Return the <tt>Myaso</tt> version according to
+    # jeweler-defined <tt>VERSION</tt> file.
     def version
       @version ||= File.read(File.join(Myaso.root, 'VERSION')).chomp
     end
   end
 
+  autoload :CLI, File.join(Myaso.root, 'lib', 'myaso', 'cli')
+  autoload :Converter, File.join(Myaso.root, 'lib', 'myaso', 'converter')
   autoload :Inflector, File.join(Myaso.root, 'lib', 'myaso', 'inflector')
 end
