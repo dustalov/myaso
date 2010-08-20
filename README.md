@@ -1,17 +1,30 @@
 # tasty myaso
 
-Tasty, fresh myaso is a set of (primarily) Russian morphological
-analysis tools, written in shiny Ruby.
+Tasty, fresh **myaso** is a morphological analyzer,
+written in shiny [Ruby](http://ruby-lang.org/).
 
-Based on [pymorphy](http://bitbucket.org/kmike/pymorphy/) by Mikhail Korobov.
+Mostly based on [pymorphy](http://bitbucket.org/kmike/pymorphy/) by
+Mikhail Korobov. Seriosuly, pymorphy is a great software written in
+[ugly](http://python.org/) programming language,
+so let fix this dirty mistake.
+
+As usual, myaso is [Suckless](http://suckless.ru/).
 
 ## Feature List (read as «To-Do List», please)
 
-* (TODO) TokyoCabinet/TokyoTable storage.
-* (TODO) Command-Line Interface based on Thor.
-* (TODO) Dictonaries converter on CLI.
-* (TODO) Grammatic Information retriever.
+* Command-Line Interface based on Thor.
+* Grammatic Information converter.
+* (TODO) TokyoTable storage.
+* (TODO) Morphology Dictonaries converter.
 * (TODO) Normalizer/Inflector/Pluralizer modules.
+
+## Basic Usage
+
+Tasty myaso supports only databases from awesome
+[aot.ru](http://aot.ru/) website. First, you should convert
+aot`s dictionaries to myaso-usable format (TokyoTable).
+
+This is not implemented yet.
 
 ## Note on Patches/Pull Requests
 
