@@ -15,7 +15,7 @@ class Myaso
         tch_path, options[:encoding], options[:morphs], options[:gramtab]
     end
 
-    # Convert the <a href='http://aot.ru/>aot.ru</a> dictonaries to
+    # Convert the <a href='http://aot.ru/'>aot.ru</a> dictonaries to
     # <tt>myaso</tt>-compatible format (TokyoTable).
     def perform!
       # load gramtab
