@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+# encoding: utf-8
+
+$:.unshift File.expand_path('../../lib', __FILE__)
+
+require 'myaso'
+require 'myaso/cli'
+
+begin
+  Myaso::CLI.start
+rescue Interrupt
+  puts 'Quitting...'
+  exit 1
+end
