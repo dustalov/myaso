@@ -21,7 +21,9 @@ nbproject
 
 ## PROJECT::GENERAL
 coverage
+doc
 rdoc
+.yardoc
 pkg
 
 ## PROJECT::SPECIFIC
