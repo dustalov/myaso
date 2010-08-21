@@ -7,14 +7,13 @@ class Myaso
     namespace :myaso
     map '-v' => :version
 
-    desc 'convert TCH_PATH',
-      'Convert aot.ru dictonaries into the TokyoTable'
+    desc 'convert TCH_PATH MORPHS GRAMTAB',
+      'Convert aot.ru dictonaries into the TokyoCabinet Hash'
     method_option :encoding, :type => :string, :default => 'utf8',
       :required => true
-    method_option :morphs, :type => :string, :required => true
-    method_option :gramtab, :type => :string, :required => true
-    def convert(tch_path)
-      converter = Myaso::Converter.new(tch_path, options)
+    def convert(tch_path, morphs, gramtab)
+      converter = Myaso::Converter.new(tch_path, morphs, gramtab,
+        options)
       converter.perform!
     end
 
