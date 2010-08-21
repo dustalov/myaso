@@ -20,7 +20,8 @@ class Myaso
     end
   end
 
-  autoload :CLI, File.join(Myaso.root, 'lib', 'myaso', 'cli')
-  autoload :Converter, File.join(Myaso.root, 'lib', 'myaso', 'converter')
-  autoload :Inflector, File.join(Myaso.root, 'lib', 'myaso', 'inflector')
+  extend ActiveSupport::Autoload
+  autoload :CLI
+  autoload :Converter
+  autoload :Inflector
 end
