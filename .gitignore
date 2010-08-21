@@ -27,3 +27,6 @@ rdoc
 pkg
 
 ## PROJECT::SPECIFIC
+*.tch
+*.mrd
+*.tab
