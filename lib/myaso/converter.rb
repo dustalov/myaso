@@ -4,20 +4,24 @@ class Myaso
   class Converter
     require 'iconv'
     require 'tempfile'
+    require 'oklahoma_mixer'
+    require 'yajl'
 
-    attr_reader :tch_path, :encoding, :morphs, :gramtab
+    attr_reader :tch_path, :morphs, :gramtab, :encoding
 
     # Create new <tt>Myaso::Converter</tt> with defined
     # result <tt>tch_path</tt> and <tt>options</tt>
     # from <tt>Myaso::CLI</tt>.
-    def initialize(tch_path, options)
-      @tch_path, @encoding, @morphs, @gramtab =
-        tch_path, options[:encoding], options[:morphs], options[:gramtab]
+    def initialize(tch_path, morphs, gramtab, options)
+      @tch_path, @morphs, @gramtab, @encoding =
+        tch_path, morphs, gramtab, options[:encoding]
     end
 
-    # Convert the <a href='http://aot.ru/'>aot.ru</a> dictonaries to
-    # <tt>myaso</tt>-compatible format (TokyoTable).
+    # Convert the http://aot.ru dictonaries to
+    # <tt>myaso</tt>-compatible format (TokyoCabinet Hash).
     def perform!
+      tokyo # just initialize TC
+
       # load morphs
       puts "Processing '#{morphs}'..."
       to_tempfile(morphs).tap do |file|
@@ -36,6 +40,8 @@ class Myaso
         load_gramtab(file)
       end.close!
       puts "Done."
+
+      tokyo.close
     end
 
     private
@@ -74,7 +80,9 @@ class Myaso
             parts << '' while parts.size < 3
             parts[1].mb_chars.slice! 0..2
 
-            suffix, ancode, prefix = parts
+            record = Yajl::Parser.parse(tokyo["rules-#{index}"])
+            record << parts
+            tokyo["rules-#{index}"] = Yajl::Encoder.encode(record)
           end
         end
       end
@@ -84,14 +92,24 @@ class Myaso
     def load_lemmas(file)
       morphs_foreach(file) do |line, index|
         base, rule_id = line.split
+
+        record = Yajl::Parser.parse(tokyo["lemmas-#{base}"])
+        record << rule_id.to_i
+        tokyo["lemmas-#{base}"] = Yajl::Encoder.encode(record)
+
+        record = tokyo.fetch("rule_freq-#{rule_id}", '0').to_i
+        record += 1
+        tokyo["rule_freq-#{rule_id}"] = record.to_s
       end
     end
 
     # Parse the <tt>morphs_file</tt> and load it as prefixes section.
     def load_prefixes(file)
+      prefixes = []
       morphs_foreach(file) do |line, index|
-
+        prefixes << line
       end
+      tokyo["prefixes"] = Yajl::Encoder.encode(prefixes)
     end
 
     # Parse the <tt>gramtab_file</tt> and retrieve the grammatic forms.
@@ -101,9 +119,18 @@ class Myaso
         unless line.empty? || line.start_with?('//')
           gram = line.split
           gram << '' while gram.size < 4
-          # TODO: store parsed gram
+          ancode, letter, type, info = gram
+
+          record = [ letter, type, info ]
+          tokyo["gramtab-#{ancode}"] = Yajl::Encoder.encode(record)
         end
       end
+    end
+
+    protected
+    # Caching accessor to the TokyoCabinet Hash.
+    def tokyo
+      @tokyo ||= OklahomaMixer.open(tch_path).tap { |ok| ok.default = '[]' }
     end
   end
 end
