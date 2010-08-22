@@ -3,6 +3,8 @@
 require 'tokyocabinet'
 include TokyoCabinet
 
+require 'yajl'
+
 # Duck Punch of TokyoCabinet Hash database that uses JSON over Yajl
 # to serialize Ruby objects. Serialization necessary since TC expects
 # values as strings or integers so won't handle other data types.
@@ -14,7 +16,7 @@ class TokyoCabinet::HDB
   # initialize db and return handle to db. There is one db file per
   # data structure, e.g. new hash means new database and database file
   # so call init again. Creates db file if it doesn't already exist.
-  alias original_open open
+  alias :original_open :open
   def open(path_to_db)
     unless self.original_open(path_to_db, HDB::OWRITER | HDB::OCREAT)
       raise "#{path_to_db} error: #{self.errmsg(self.ecode)}"
@@ -22,12 +24,9 @@ class TokyoCabinet::HDB
   end
 
   alias original_get_brackets []
-  def [](key, &block)
-    if result = self.original_get_brackets(key)
-      Yajl::Parser.parse(result)
-    else
-      block ? block.call : nil
-    end
+  def [](key)
+    result = self.original_get_brackets(key)
+    result ? Yajl::Parser.parse(result) : nil
   end
 
   alias original_set_brackets []=

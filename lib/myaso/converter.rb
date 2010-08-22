@@ -4,8 +4,6 @@ class Myaso
   class Converter
     require 'iconv'
     require 'tempfile'
-    require 'oklahoma_mixer'
-    require 'yajl'
 
     attr_reader :tch_path, :morphs, :gramtab, :encoding
 
@@ -20,7 +18,7 @@ class Myaso
     # Convert the http://aot.ru dictonaries to
     # <tt>myaso</tt>-compatible format (TokyoCabinet Hash).
     def perform!
-      tokyo # just initialize TC
+      store # just initialize TC
 
       # load morphs
       puts "Processing '#{morphs}'..."
@@ -41,7 +39,7 @@ class Myaso
       end.close!
       puts "Done."
 
-      tokyo.close
+      store.close
     end
 
     private
@@ -80,9 +78,9 @@ class Myaso
             parts << '' while parts.size < 3
             parts[1].mb_chars.slice! 0..2
 
-            record = Yajl::Parser.parse(tokyo["rules-#{index}"])
-            record << parts
-            tokyo["rules-#{index}"] = Yajl::Encoder.encode(record)
+            rule = store["rules-#{index}"] || []
+            rule << parts
+            store["rules-#{index}"] = parts
           end
         end
       end
@@ -93,13 +91,12 @@ class Myaso
       morphs_foreach(file) do |line, index|
         base, rule_id = line.split
 
-        record = Yajl::Parser.parse(tokyo["lemmas-#{base}"])
-        record << rule_id.to_i
-        tokyo["lemmas-#{base}"] = Yajl::Encoder.encode(record)
+        lemmas = store["lemmas-#{base}"] || []
+        lemmas << rule_id.to_i
+        store["lemmas-#{base}"] = lemmas
 
-        record = tokyo.fetch("rule_freq-#{rule_id}", '0').to_i
-        record += 1
-        tokyo["rule_freq-#{rule_id}"] = record.to_s
+        freq = store["rulefreq-#{rule_id}"] || 0
+        store["rulefreq-#{rule_id}"] = freq + 1
       end
     end
 
@@ -108,8 +105,8 @@ class Myaso
       prefixes = []
       morphs_foreach(file) do |line, index|
         prefixes << line
+        store["prefixes-#{index}"] = line
       end
-      tokyo["prefixes"] = Yajl::Encoder.encode(prefixes)
     end
 
     # Parse the <tt>gramtab_file</tt> and retrieve the grammatic forms.
@@ -120,17 +117,17 @@ class Myaso
           gram = line.split
           gram << '' while gram.size < 4
           ancode, letter, type, info = gram
-
-          record = [ letter, type, info ]
-          tokyo["gramtab-#{ancode}"] = Yajl::Encoder.encode(record)
+          store["gramtab-#{ancode}"] = [ letter, type, info ]
         end
       end
     end
 
     protected
     # Caching accessor to the TokyoCabinet Hash.
-    def tokyo
-      @tokyo ||= OklahomaMixer.open(tch_path).tap { |ok| ok.default = '[]' }
+    def store
+      @store ||= TokyoCabinet::HDB.new.tap do |hdb|
+        hdb.open(tch_path)
+      end
     end
   end
 end
