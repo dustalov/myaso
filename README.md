@@ -1,7 +1,8 @@
 # tasty myaso
 
-Tasty, fresh **myaso** is a morphological analyzer,
-written in shiny [Ruby](http://ruby-lang.org/).
+Tasty, fresh [myaso](http://github.com/eveel/myaso)
+is a morphological analyzer, written in shiny
+[Ruby](http://ruby-lang.org/).
 
 Mostly based on [pymorphy](http://bitbucket.org/kmike/pymorphy/) by
 Mikhail Korobov. Seriosuly, pymorphy is a great software written in
