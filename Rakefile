@@ -17,7 +17,7 @@ begin
     gem.add_dependency 'i18n', '>= 0.4.0'
     gem.add_dependency 'thor', '>= 0.14.0'
     gem.add_dependency 'yajl-ruby', '>= 0.7.0'
-    gem.add_dependency 'oklahoma_mixer', '>= 0.4.0'
+    gem.add_dependency 'tokyocabinet', '>= 1.20'
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
