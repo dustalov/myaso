@@ -16,6 +16,9 @@ tmtags
 ## NETBEANS
 nbproject
 
+## REDCAR
+.redcar
+
 ## RVM
 .rvmrc
 
@@ -25,6 +28,7 @@ doc
 rdoc
 .yardoc
 pkg
+wiki
 
 ## PROJECT::SPECIFIC
 *.tch
