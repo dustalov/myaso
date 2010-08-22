@@ -16,7 +16,6 @@ As usual, myaso is [Suckless](http://suckless.ru/).
 * TokyoCabinet Hash storage.
 * Grammatic Information converter.
 * Morphology Dictonaries converter.
-* (TODO) Single presence of morphology element abstraction.
 * (TODO) Preanalysis dictionary processing.
 * (TODO) Normalizer, Inflector and Pluralizer modules.
 
