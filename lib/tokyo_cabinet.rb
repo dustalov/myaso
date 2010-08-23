@@ -36,6 +36,6 @@ class TokyoCabinet::HDB
 
   alias original_each each
   def each
-    self.original_each { |k, v| yield( k, YAML.load(v) ) }
+    self.original_each { |k, v| yield(k, Yajl::Parser.parse(v)) }
   end
 end
