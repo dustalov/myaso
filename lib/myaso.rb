@@ -11,13 +11,13 @@ class Myaso
   class << self
     # Return the root path of the <tt>Myaso</tt> gem.
     def root
-      @myaso_root ||= File.expand_path('../../', __FILE__)
+      @@myaso_root ||= File.expand_path('../../', __FILE__)
     end
 
     # Return the <tt>Myaso</tt> version according to
     # jeweler-defined <tt>VERSION</tt> file.
     def version
-      @version ||= File.read(File.join(Myaso.root, 'VERSION')).chomp
+      @@version ||= File.read(File.join(Myaso.root, 'VERSION')).chomp
     end
   end
 
