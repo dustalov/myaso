@@ -7,13 +7,13 @@ class Myaso
     namespace :myaso
     map '-v' => :version
 
-    desc 'convert TCH_PATH MORPHS GRAMTAB',
-      'Convert aot.ru dictonaries into the TokyoCabinet Hash'
+    desc 'convert STORAGE_PATH MORPHS GRAMTAB',
+      'Convert aot.ru dictonaries into the TokyoCabinet'
     method_option :encoding, :type => :string, :default => 'utf8',
       :required => true
-    def convert(tch_path, morphs, gramtab)
-      converter = Myaso::Converter.new(tch_path, morphs, gramtab,
-        options)
+    def convert(storage_path, morphs, gramtab)
+      converter = Myaso::Converter.new(storage_path, morphs,
+        gramtab, options)
       converter.perform!
     end
 
