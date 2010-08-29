@@ -5,7 +5,6 @@ $KCODE = 'u' if RUBY_VERSION < '1.9'
 require 'rubygems'
 require 'active_support'
 require 'active_support/core_ext'
-require 'tokyo_cabinet'
 
 class Myaso
   class << self
