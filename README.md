@@ -5,7 +5,7 @@ is a morphological analyzer, written in shiny
 [Ruby](http://ruby-lang.org/).
 
 Mostly based on [pymorphy](http://bitbucket.org/kmike/pymorphy/) by
-Mikhail Korobov. Seriosuly, pymorphy is a great software written in
+Mikhail Korobov. Seriously, pymorphy is a great software written in
 [ugly](http://python.org/) programming language,
 so let fix this dirty mistake.
 
