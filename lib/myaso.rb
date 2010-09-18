@@ -25,4 +25,6 @@ class Myaso
   autoload :Store
   autoload :Converter
   autoload :Inflector
+
+  autoload :Model
 end
