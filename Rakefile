@@ -13,11 +13,10 @@ begin
     gem.authors = ["Dmitry A. Ustalov"]
     gem.add_development_dependency 'yard', '>= 0.5.0'
     gem.add_development_dependency 'shoulda', '>= 0'
-    gem.add_dependency 'activesupport', '>= 3.0.0.RC'
+    gem.add_dependency 'activesupport', '>= 3.0.0'
     gem.add_dependency 'i18n', '>= 0.4.0'
     gem.add_dependency 'thor', '>= 0.14.0'
-    gem.add_dependency 'yajl-ruby', '>= 0.7.0'
-    gem.add_dependency 'oklahoma_mixer', '>= 0.4.0'
+    gem.add_dependency 'sequel', '>= 3.15.0'
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
