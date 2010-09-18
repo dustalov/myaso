@@ -108,7 +108,6 @@ class Myaso
 
     # Parse the <tt>morphs_file</tt> and load it as prefixes section.
     def load_prefixes(file)
-      prefixes = []
       morphs_foreach(file) do |line, index|
         prefixes << line
         store.prefixes[index] = line
@@ -126,6 +125,23 @@ class Myaso
 
           store.gramtab[ancode] = { 'letter' => letter,
             'type' => type, 'info' => info }
+        end
+      end
+    end
+
+    # Discover endings from known <tt>rules</tt> and
+    # <tt>lemmas</tt>.
+    def discover_endings()
+      store.lemmas.each do |lemma, rule_id|
+        store.rules.values(rule_id).each_with_index do |rule, index|
+          suffix, ancode, prefix = rule
+
+          word = [ prefix, lemma, suffix ]
+          (1...5).each do |i|
+            if word_end = word[-i..-1]
+              
+            end
+          end
         end
       end
     end
