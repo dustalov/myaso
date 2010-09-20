@@ -5,7 +5,7 @@ class Myaso::Model::Prefix < Sequel::Model
 
   set_schema do
     primary_key :id
-    varchar :line, :size => 128, :null => false
+    varchar :line, :size => 32, :null => false
   end
 
   create_table unless table_exists?

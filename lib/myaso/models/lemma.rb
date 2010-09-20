@@ -5,10 +5,13 @@ class Myaso::Model::Lemma < Sequel::Model(:lemmas)
 
   set_schema do
     primary_key :id
-    foreign_key :rule_id, :rules
-    varchar :base, :size => 128, :null => false,
-      :index => true, :unique => true
+    integer :rule_id
+    #foreign_key :rule_id, :rules
+    varchar :base, :size => 64, :null => false,
+      :index => true
   end
+
+  many_to_one :rule, :primary_key => :rule_id
 
   create_table unless table_exists?
 end
