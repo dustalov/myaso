@@ -4,8 +4,11 @@ class Myaso
   class Converter
     require 'iconv'
     require 'tempfile'
+    require 'sqlite3'
+    require 'sequel'
 
     attr_reader :storage_path, :morphs, :gramtab, :encoding
+    attr_reader :sequel
 
     # Create new <tt>Myaso::Converter</tt> with defined
     # result path in <tt>storage_path</tt> and following
@@ -13,31 +16,30 @@ class Myaso
     def initialize(storage_path, morphs, gramtab, options)
       @storage_path, @morphs, @gramtab, @encoding =
         storage_path, morphs, gramtab, options[:encoding]
+      @sequel = Sequel.connect(storage_path)
     end
 
     # Convert the http://aot.ru dictonaries to
     # <tt>myaso</tt>-eatable format.
     def perform!
-      store # just initialize TC
-
       # load morphs
       puts "Processing '#{morphs}'..."
       to_tempfile(morphs).tap do |file|
         file.rewind
 
-        puts '  Loading rules...'
+        print '  Loading rules... '
         load_rules(file)
 
-        puts '  Passing accents...'
+        print '  Passing accents... '
         morphs_foreach(file)
 
-        puts '  Passing logs...'
+        print '  Passing logs... '
         morphs_foreach(file)
 
-        puts '  Loading prefixes...'
+        print '  Loading prefixes... '
         load_prefixes(file)
 
-        puts '  Loading lemmas...'
+        print '  Loading lemmas... '
         load_lemmas(file)
       end.close!
       puts "Done."
@@ -71,24 +73,37 @@ class Myaso
     # file structure with <tt>morphs_file</tt> processing,
     # like “ё” (YO) letter replacing with “е” letter (YE).
     def morphs_foreach(morphs_file, &block)
-      morphs_file.readline.to_i.times do |i|
+      index = morphs_file.readline.to_i.times do |i|
         line = morphs_file.readline
         next unless block
         line.mb_chars.gsub!('Ё', 'Е')
         block.call(line.strip, i)
+
+        if i % 50 == 0
+          STDOUT.print i
+          STDOUT.print ' '
+          STDOUT.flush
+        end
       end
+
+      STDOUT.print index unless index % 50 == 0
+      STDOUT.puts
     end
 
     # Parse the <tt>morphs_file</tt> and load it as words paradigm.
     def load_rules(file)
       morphs_foreach(file) do |line, index|
-        line.split('%').each do |rule|
-          if rule && !rule.empty?
-            parts = rule.split '*'
-            parts << '' while parts.size < 3
-            parts[1].mb_chars.slice! 0..2
+        sequel.transaction do
+          line.split('%').each do |rule|
+            if rule && !rule.empty?
+              parts = rule.split '*'
+              parts << '' while parts.size < 3
+              parts[1].mb_chars.slice! 0..2
 
-            store.rules.store(index, parts, :dup)
+              rule = Model::Rule.create(:rule_id => index,
+                :suffix => parts[0], :ancode => parts[1],
+                :prefix => parts[2])
+            end
           end
         end
       end
@@ -97,20 +112,26 @@ class Myaso
     # Parse the <tt>morphs_file</tt> and load it as lemmas section.
     def load_lemmas(file)
       morphs_foreach(file) do |line, index|
-        record = line.split
-        base, rule_id = record[0], record[1].to_i
-
-        store.lemmas.store(base, rule_id, :dup)
-        freq = (store.rulefreq.fetch(rule_id) { 0 }).to_i
-        store.rulefreq.store(rule_id, freq + 1)
+        sequel.transaction do
+          record = line.split
+          base, rule_id = record[0], record[1].to_i
+          
+          rule = Model::Rule.find(:rule_id => rule_id)
+          rule.update :freq => rule.freq + 1
+          
+          lemma = Model::Lemma.create(:rule_id => rule_id,
+            :base => base)
+          rule.add_lemma(lemma)
+        end
       end
     end
 
     # Parse the <tt>morphs_file</tt> and load it as prefixes section.
     def load_prefixes(file)
       morphs_foreach(file) do |line, index|
-        prefixes << line
-        store.prefixes[index] = line
+        sequel.transaction do
+          prefix = Model::Prefix.create(:line => line)
+        end
       end
     end
 
@@ -118,13 +139,15 @@ class Myaso
     def load_gramtab(gramtab_file)
       gramtab_file.each do |line|
         line.strip!
-        unless line.empty? || line.start_with?('//')
-          gram = line.split
-          gram << '' while gram.size < 4
-          ancode, letter, type, info = gram
-
-          store.gramtab[ancode] = { 'letter' => letter,
-            'type' => type, 'info' => info }
+        sequel.transaction do
+          unless line.empty? || line.start_with?('//')
+            gram = line.split
+            gram << '' while gram.size < 4
+            ancode, letter, type, info = gram
+            
+            gramtab = Model::Gramtab.create(:ancode => ancode,
+              :letter => letter, :kind => type, :info => info)
+          end
         end
       end
     end
@@ -144,12 +167,6 @@ class Myaso
           end
         end
       end
-    end
-
-    protected
-    # Caching accessor to the TokyoCabinet Hash.
-    def store
-      @store ||= Myaso::Store.new(storage_path)
     end
   end
 end
