@@ -8,7 +8,7 @@ class Myaso
     map '-v' => :version
 
     desc 'convert STORAGE_PATH MORPHS GRAMTAB',
-      'Convert aot.ru dictonaries into the TokyoCabinet'
+      'Convert aot.ru dictonaries into the SQLite3 database'
     method_option :encoding, :type => :string, :default => 'utf8',
       :required => true
     def convert(storage_path, morphs, gramtab)
