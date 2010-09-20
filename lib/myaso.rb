@@ -22,7 +22,6 @@ class Myaso
 
   extend ActiveSupport::Autoload
   autoload :CLI
-  autoload :Store
   autoload :Converter
   autoload :Inflector
 
