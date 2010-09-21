@@ -50,8 +50,6 @@ class Myaso
         load_gramtab(file)
       end.close!
       puts "Done."
-
-      store.close
     end
 
     private
@@ -115,10 +113,10 @@ class Myaso
         sequel.transaction do
           record = line.split
           base, rule_id = record[0], record[1].to_i
-          
+
           rule = Model::Rule.find(:rule_id => rule_id)
           rule.update :freq => rule.freq + 1
-          
+
           lemma = Model::Lemma.create(:rule_id => rule_id,
             :base => base)
           rule.add_lemma(lemma)
@@ -144,7 +142,7 @@ class Myaso
             gram = line.split
             gram << '' while gram.size < 4
             ancode, letter, type, info = gram
-            
+
             gramtab = Model::Gramtab.create(:ancode => ancode,
               :letter => letter, :kind => type, :info => info)
           end
@@ -155,18 +153,18 @@ class Myaso
     # Discover endings from known <tt>rules</tt> and
     # <tt>lemmas</tt>.
     def discover_endings()
-      store.lemmas.each do |lemma, rule_id|
-        store.rules.values(rule_id).each_with_index do |rule, index|
-          suffix, ancode, prefix = rule
-
-          word = [ prefix, lemma, suffix ]
-          (1...5).each do |i|
-            if word_end = word[-i..-1]
-              
-            end
-          end
-        end
-      end
+#      store.lemmas.each do |lemma, rule_id|
+#        store.rules.values(rule_id).each_with_index do |rule, index|
+#          suffix, ancode, prefix = rule
+#
+#          word = [ prefix, lemma, suffix ]
+#          (1...5).each do |i|
+#            if word_end = word[-i..-1]
+#
+#            end
+#          end
+#        end
+#      end
     end
   end
 end
