@@ -153,18 +153,25 @@ class Myaso
     # Discover endings from known <tt>rules</tt> and
     # <tt>lemmas</tt>.
     def discover_endings()
-#      store.lemmas.each do |lemma, rule_id|
-#        store.rules.values(rule_id).each_with_index do |rule, index|
-#          suffix, ancode, prefix = rule
-#
-#          word = [ prefix, lemma, suffix ]
-#          (1...5).each do |i|
-#            if word_end = word[-i..-1]
-#
-#            end
-#          end
-#        end
-#      end
+      sequel.transaction do
+        Model::Lemma.each do |lemma|
+          lemma.rules.each do |rule|
+            word = [ rule.prefix, lemma.base, rule.suffix ].join
+            (1..5).each do |i|
+              next unless word_end = word.mb_chars[-i..-1]
+              # Model::Ending.create(:rule_id => rule.rule_id,
+              #   :word_end => word_end, :index => rule.id)
+            end
+          end
+        end
+      end
+    end
+
+    # Cleanup the known endings list.
+    def cleanup_endings
+      Model::Ending.each do |ending|
+      end
+    end
     end
   end
 end
