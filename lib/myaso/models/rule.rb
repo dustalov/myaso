@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+# Myaso Rule Model.
+#
 class Myaso::Model::Rule < Sequel::Model(:rules)
   plugin :schema
 

@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+# Myaso Word Prefix Model.
+#
 class Myaso::Model::Prefix < Sequel::Model
   plugin :schema
 

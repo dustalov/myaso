@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+# Myaso Lemma Model.
+#
 class Myaso::Model::Lemma < Sequel::Model(:lemmas)
   plugin :schema
 

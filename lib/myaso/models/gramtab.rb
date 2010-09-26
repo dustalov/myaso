@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+# Myaso Grammatic Tab Model.
+#
 class Myaso::Model::Gramtab < Sequel::Model(:gramtabs)
   plugin :schema
 

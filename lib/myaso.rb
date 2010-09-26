@@ -6,15 +6,25 @@ require 'rubygems'
 require 'active_support'
 require 'active_support/core_ext'
 
+# Myaso: The Morphological Analyzer.
+#
 class Myaso
   class << self
-    # Return the root path of the <tt>Myaso</tt> gem.
+    # Root path of the Myaso gem.
+    #
+    # ==== Returns
+    # String:: Myaso root path.
+    #
     def root
       @@myaso_root ||= File.expand_path('../../', __FILE__)
     end
-
-    # Return the <tt>Myaso</tt> version according to
-    # jeweler-defined <tt>VERSION</tt> file.
+    
+    # Myaso gem version according to jeweler-defined
+    # VERSION file.
+    #
+    # ==== Returns
+    # String:: Myaso semantic version.
+    #
     def version
       @@version ||= File.read(File.join(Myaso.root, 'VERSION')).chomp
     end
