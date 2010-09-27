@@ -14,7 +14,7 @@ As usual, myaso is [Suckless](http://suckless.ru/).
 ## Feature List (read as «To-Do List», please)
 
 * Command-Line Interface based on Thor.
-* TokyoCabinet Hash storage.
+* SQLite3 relational database storage with Sequel ORM.
 * Grammatic Information converter.
 * Morphology Dictonaries converter.
 * (TODO) Preanalysis dictionary processing.
@@ -30,11 +30,11 @@ Yeah! Thanks to [thor](http://github.com/wycats/thor), you can view
 basic help messages on myaso:
     % ./myaso help
     Tasks:
-      ./myaso convert TCH_PATH MORPHS GRAMTAB --encoding=ENCODING  # Conv...
-      ./myaso help [TASK]                                          # Desc...
-      ./myaso version                                              # Prin...
-    % myaso -v
-    myaso version 0.0.0
+      myaso convert STORAGE_PATH MORPHS GRAMTAB --encoding=ENCODING  # Conv...
+      myaso help [TASK]                                              # Desc...
+      myaso version                                                  # Prin...
+    % ./myaso -v
+    myaso version 0.0.1
 
 Very useful, isn't it? :3
 
@@ -42,7 +42,7 @@ Very useful, isn't it? :3
 
 Tasty myaso supports only databases from awesome
 [aot.ru](http://aot.ru/) website. First, you should convert
-aot`s dictionaries to myaso-usable format (TokyoCabinet Hash).
+aot`s dictionaries to myaso-usable format (SQLite3).
 
 When you [download](http://wiki.github.com/eveel/myaso/dictonaries-from-aotru)
 these dictonaries, just run myaso converter.
@@ -54,7 +54,7 @@ Let assume following:
 * encoding of both files are _cp1251_.
 
 So run myaso like this and enjoy the resulting _test.tch_ hash:
-    myaso convert 'russian.tch' \
+    myaso convert 'myaso.ru.sqlite3' \
         'share/RusSrc/morphs.mrd' \
         'share/rgramtab.tab' \
         --encoding=cp1251
