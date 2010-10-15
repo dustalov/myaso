@@ -128,15 +128,15 @@ class Myaso::Converter
   # file<File>:: Opened morphs.mrd file.
   #
   def load_rules(file)
-    morphs_foreach(file) do |line, index|
-      sequel.transaction do
+    sequel.transaction do
+      morphs_foreach(file) do |line, index|
         line.split('%').each do |rule|
           if rule && !rule.empty?
             parts = rule.split '*'
             parts << '' while parts.size < 3
             parts[1].mb_chars.slice! 0..2
 
-            rule = Model::Rule.create(:rule_id => index,
+            rule = Myaso::Model::Rule.create(:rule_id => index,
               :suffix => parts[0], :ancode => parts[1],
               :prefix => parts[2])
             end
@@ -152,15 +152,15 @@ class Myaso::Converter
   # file<File>:: Opened morphs.mrd file.
   #
   def load_lemmas(file)
-    morphs_foreach(file) do |line, index|
-      sequel.transaction do
+    sequel.transaction do
+      morphs_foreach(file) do |line, index|
         record = line.split
         base, rule_id = record[0], record[1].to_i
 
-        rule = Model::Rule.find(:rule_id => rule_id)
+        rule = Myaso::Model::Rule.find(:rule_id => rule_id)
         rule.update :freq => rule.freq + 1
 
-        lemma = Model::Lemma.create(:rule_id => rule_id,
+        lemma = Myaso::Model::Lemma.create(:rule_id => rule_id,
           :base => base)
         rule.add_lemma(lemma)
       end
@@ -174,9 +174,9 @@ class Myaso::Converter
   # file<File>:: Opened morphs.mrd file.
   #
   def load_prefixes(file)
-    morphs_foreach(file) do |line, index|
-      sequel.transaction do
-        prefix = Model::Prefix.create(:line => line)
+    sequel.transaction do
+      morphs_foreach(file) do |line, index|
+        prefix = Myaso::Model::Prefix.create(:line => line)
       end
     end
   end
@@ -188,15 +188,15 @@ class Myaso::Converter
   # gramtab_file<File>:: Opened gramtab file.
   #
   def load_gramtab(gramtab_file)
-    gramtab_file.each do |line|
-      line.strip!
-      sequel.transaction do
+    sequel.transaction do
+      gramtab_file.each do |line|
+        line.strip!
         unless line.empty? || line.start_with?('//')
           gram = line.split
           gram << '' while gram.size < 4
           ancode, letter, type, info = gram
 
-          gramtab = Model::Gramtab.create(:ancode => ancode,
+          gramtab = Myaso::Model::Gramtab.create(:ancode => ancode,
             :letter => letter, :kind => type, :info => info)
           end
         end
@@ -208,12 +208,12 @@ class Myaso::Converter
   #
   def discover_endings()
     sequel.transaction do
-      Model::Lemma.each do |lemma|
+      Myaso::Model::Lemma.each do |lemma|
         lemma.rules.each do |rule|
           word = [ rule.prefix, lemma.base, rule.suffix ].join
           (1..5).each do |i|
             next unless word_end = word.mb_chars[-i..-1]
-            # Model::Ending.create(:rule_id => rule.rule_id,
+            # Myaso::Model::Ending.create(:rule_id => rule.rule_id,
             #   :word_end => word_end, :index => rule.id)
           end
         end
@@ -226,7 +226,7 @@ class Myaso::Converter
   # Cleanup word endings.
   #
   def cleanup_endings
-    Model::Ending.each do |ending|
+    Myaso::Model::Ending.each do |ending|
     end
   end
 end
