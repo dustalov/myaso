@@ -13,6 +13,9 @@ tmtags
 ## VIM
 *.swp
 
+## RUBINIUS
+*.rbc
+
 ## NETBEANS
 nbproject
 
@@ -21,6 +24,9 @@ nbproject
 
 ## RVM
 .rvmrc
+
+## BUNDLER
+.bundle
 
 ## PROJECT::GENERAL
 coverage
