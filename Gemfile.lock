@@ -1,0 +1,28 @@
+PATH
+  remote: .
+  specs:
+    myaso (0.0.1)
+      activesupport (>= 3.0.0)
+      thor (>= 0.14.0)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    activesupport (3.0.1)
+    mg (0.0.8)
+      rake
+    rake (0.8.7)
+    shoulda (2.11.3)
+    thor (0.14.3)
+    yard (0.6.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  activesupport (>= 3.0.0)
+  mg
+  myaso!
+  shoulda
+  thor (>= 0.14.0)
+  yard (>= 0.5.0)

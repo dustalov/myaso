@@ -3,7 +3,7 @@
 $KCODE = 'u' if RUBY_VERSION < '1.9'
 
 require 'rubygems'
-require 'active_support'
+require 'bundler/setup'
 require 'active_support/core_ext'
 
 # Myaso: The Morphological Analyzer.
