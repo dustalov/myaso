@@ -6,14 +6,17 @@ require 'myaso/version'
 require 'rubygems'
 require 'bundler/setup'
 require 'active_support/core_ext'
+require 'moneta'
 
 # Myaso: The Morphological Analyzer.
 #
 class Myaso
   extend ActiveSupport::Autoload
+
+  autoload :Model
+  autoload :Store
+
   autoload :CLI
   autoload :Converter
   autoload :Inflector
-
-  autoload :Model
 end
