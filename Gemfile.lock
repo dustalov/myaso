@@ -3,19 +3,23 @@ PATH
   specs:
     myaso (0.0.1)
       activesupport (>= 3.0.0)
+      eveel-moneta
       i18n (>= 0.4.1)
       thor (>= 0.14.0)
+      tokyocabinet
 
 GEM
   remote: http://rubygems.org/
   specs:
     activesupport (3.0.1)
+    eveel-moneta (0.5.0)
     i18n (0.4.1)
     mg (0.0.8)
       rake
     rake (0.8.7)
     shoulda (2.11.3)
     thor (0.14.3)
+    tokyocabinet (1.29)
     yard (0.6.1)
 
 PLATFORMS
@@ -23,9 +27,11 @@ PLATFORMS
 
 DEPENDENCIES
   activesupport (>= 3.0.0)
+  eveel-moneta
   i18n (>= 0.4.1)
   mg
   myaso!
   shoulda
   thor (>= 0.14.0)
+  tokyocabinet
   yard (>= 0.5.0)
