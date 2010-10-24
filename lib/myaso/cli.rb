@@ -22,4 +22,10 @@ class Myaso::CLI < Thor
   def version # :nodoc:
     puts [ 'myaso', 'version', Myaso.version ].join(' ')
   end
+
+  desc 'irb', 'Start the IRB Session in the Myaso'
+  def irb # :nodoc:
+    require 'myaso/core_ext/irb'
+    IRB.start_session(binding)
+  end
 end
