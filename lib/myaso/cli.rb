@@ -20,7 +20,7 @@ class Myaso::CLI < Thor
 
   desc 'version', 'Print the myaso version'
   def version # :nodoc:
-    puts [ 'myaso', 'version', Myaso.version ].join(' ')
+    puts [ 'myaso', 'version', Myaso::Version ].join(' ')
   end
 
   desc 'irb', 'Start the IRB Session in the Myaso'
