@@ -40,29 +40,38 @@ class Myaso::Converter
       file.rewind
 
       print '  Loading rules... '
-      load_rules(file)
+      #load_rules(file)
 
       print '  Passing accents... '
-      morphs_foreach(file)
+      #morphs_foreach(file)
 
       print '  Passing logs... '
-      morphs_foreach(file)
+      #morphs_foreach(file)
 
       print '  Loading prefixes... '
-      load_prefixes(file)
+      #load_prefixes(file)
 
       print '  Loading lemmas... '
-      load_lemmas(file)
+      #load_lemmas(file)
     end.close!
     puts "Done."
 
     # load gramtab
     puts "Processing '#{gramtab}'..."
     to_tempfile(gramtab).tap do |file|
-      load_gramtab(file)
+      #load_gramtab(file)
     end.close!
     puts "Done."
 
+    print 'Discovering endings, this may take a while... '
+    discover_endings
+    puts 'Done.'
+
+    print 'Cleaning up endings... '
+    cleanup_endings
+    puts 'Done.'
+
+    puts 'All done.'
     nil
   end
 
@@ -124,7 +133,7 @@ class Myaso::Converter
   #
   def load_rules(file)
     morphs_foreach(file) do |line, index|
-      flexia = store.flexias[index] || Myaso::Model::Flexia.new
+      flexia = store.flexias.fetch(index, Myaso::Model::Flexia.new)
       flexia.freq ||= 0
       flexia.forms ||= []
 
@@ -224,21 +233,35 @@ class Myaso::Converter
   # database.
   #
   def discover_endings()
-    store.lemmas.each do |lemma|
-      flexia = store.flexias[lemma.flexia_id]
-      flexia.forms.each do |form|
-        word = [ form.prefix, lemma, form.suffix ].join
-        (1..5).each do |i|
-          next unless word_end = word.mb_chars[-i..-1]
+    index = 0
 
-          # word = Myaso::Model::Word.new
-          # word.ending = word_end
-          # words = store.words['words']
-          # words << word
-          # store.words['words'] = words
+    store.lemmas.each do |base, lemma|
+      flexia = store.flexias[lemma.flexia_id]
+      flexia.forms.each_with_index do |form, form_index|
+        word = [ form.prefix, base, form.suffix ].join
+        (1..5).each do |i|
+          next unless word_end_mb = word.mb_chars[-i..-1]
+          word_end = word_end_mb.to_s
+
+          ending = store.endings.fetch(word_end, Myaso::Model::Ending.new)
+          ending.paradigms ||= {}
+          ending.paradigms[lemma.flexia_id] ||= Set.new
+          ending.paradigms[lemma.flexia_id] << form_index
+          store.endings[word_end] = ending
         end
       end
+
+      if index % 50 == 0
+        STDOUT.print index
+        STDOUT.print ' '
+        STDOUT.flush
+      end
+
+      index += 1
     end
+
+    STDOUT.print index unless index % 50 == 0
+    STDOUT.puts
 
     nil
   end
