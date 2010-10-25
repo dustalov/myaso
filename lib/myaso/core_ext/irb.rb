@@ -1,5 +1,7 @@
+# encoding: utf-8
+
 require 'irb'
- 
+
 module IRB # :nodoc:
   def self.start_session(binding)
     unless @__initialized
