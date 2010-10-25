@@ -1,6 +1,9 @@
 Changes in myaso
 ================
 
+Changes in myaso morphological analyzer releases
+are listed here.
+
 v0.0.2
 ------
 - Jeweler gem helper was replaced by mg + bundler.
@@ -8,7 +11,7 @@ v0.0.2
 Moneta/TokyoCabinet.
 - Plain Ruby model objects.
 - IRB session at `myaso` executable.
-- `CHANGES.md`.
+- Introducing this `CHANGES.md`.
 
 v0.0.1
 ------
