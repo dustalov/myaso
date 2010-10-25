@@ -6,19 +6,14 @@
 class Myaso::Converter
   require 'iconv'
   require 'tempfile'
-  require 'sqlite3'
-  require 'sequel'
 
-  attr_reader :sequel
-  private :sequel
-
-  attr_reader :storage_path, :morphs, :gramtab, :encoding
+  attr_reader :storage_path, :store, :morphs, :gramtab, :encoding
+  private :storage_path, :store
 
   # Create a new instance of the Myaso::Converter class.
   #
   # ==== Parameters
-  # storage_path<String>:: Destination of SQLite3 database to store
-  #                        the converted dictionaries.
+  # storage_path<String>:: Root directory of Myaso store.
   #
   # morphs<String>:: Relative path to the morphs.mrd file, which contains the
   #                  rules, lemmas and other prefixes information.
@@ -32,7 +27,7 @@ class Myaso::Converter
   def initialize(storage_path, morphs, gramtab, options)
     @storage_path, @morphs, @gramtab, @encoding =
       storage_path, morphs, gramtab, options[:encoding]
-    @sequel = Sequel.connect(storage_path)
+    @store = Myaso::Store.new(storage_path)
   end
 
   # Perform the conversion of initialized dictionaries to
@@ -128,22 +123,30 @@ class Myaso::Converter
   # file<File>:: Opened morphs.mrd file.
   #
   def load_rules(file)
-    sequel.transaction do
-      morphs_foreach(file) do |line, index|
-        line.split('%').each do |rule|
-          if rule && !rule.empty?
-            parts = rule.split '*'
-            parts << '' while parts.size < 3
-            parts[1].mb_chars.slice! 0..2
+    morphs_foreach(file) do |line, index|
+      flexia = store.flexias[index] || Myaso::Model::Flexia.new
+      flexia.freq ||= 0
+      flexia.forms ||= []
 
-            rule = Myaso::Model::Rule.create(:rule_id => index,
-              :suffix => parts[0], :ancode => parts[1],
-              :prefix => parts[2])
-            end
-          end
-        end
+      line.split('%').each do |rule|
+        next unless rule && !rule.empty?
+
+        parts = rule.split '*'
+        parts << '' while parts.size < 3
+        parts[1].mb_chars.slice! 0..2
+        # [ suffix, ancode, prefix ]
+
+        form = Myaso::Model::Flexia::Form.new
+        form.ancode = parts[1]
+        form.prefix = parts[2]
+        form.suffix = parts[0]
+
+        flexia.forms << form
       end
+
+      store.flexias[index] = flexia
     end
+  end
 
   # Parse the another morphs.mrd section as lemmas and store
   # them into the database.
@@ -152,18 +155,17 @@ class Myaso::Converter
   # file<File>:: Opened morphs.mrd file.
   #
   def load_lemmas(file)
-    sequel.transaction do
-      morphs_foreach(file) do |line, index|
-        record = line.split
-        base, rule_id = record[0], record[1].to_i
+    morphs_foreach(file) do |line, *index|
+      record = line.split
+      base, flexia_id = record[0], record[1].to_i
 
-        rule = Myaso::Model::Rule.find(:rule_id => rule_id)
-        rule.update :freq => rule.freq + 1
+      lemma = Myaso::Model::Lemma.new
+      lemma.flexia_id = flexia_id
+      store.lemmas[base] = lemma
 
-        lemma = Myaso::Model::Lemma.create(:rule_id => rule_id,
-          :base => base)
-        rule.add_lemma(lemma)
-      end
+      flexia = store.flexias[flexia_id]
+      flexia.freq += 1
+      store.flexias[flexia_id] = flexia
     end
   end
 
@@ -174,11 +176,11 @@ class Myaso::Converter
   # file<File>:: Opened morphs.mrd file.
   #
   def load_prefixes(file)
-    sequel.transaction do
-      morphs_foreach(file) do |line, index|
-        prefix = Myaso::Model::Prefix.create(:line => line)
-      end
+    prefixes = []
+    morphs_foreach(file) do |line, *index|
+      prefixes << line
     end
+    store.prefixes['prefixes'] = prefixes
   end
 
   # Parse the gramtab file and retrieve the grammatic forms
@@ -188,34 +190,38 @@ class Myaso::Converter
   # gramtab_file<File>:: Opened gramtab file.
   #
   def load_gramtab(gramtab_file)
-    sequel.transaction do
-      gramtab_file.each do |line|
-        line.strip!
-        unless line.empty? || line.start_with?('//')
-          gram = line.split
-          gram << '' while gram.size < 4
-          ancode, letter, type, info = gram
+    gramtab_file.each do |line|
+      line.strip!
+      next if line.empty? || line.start_with?('//')
 
-          gramtab = Myaso::Model::Gramtab.create(:ancode => ancode,
-            :letter => letter, :kind => type, :info => info)
-          end
-        end
-      end
+      gram = line.split
+      gram << '' while gram.size < 4
+      # [ ancode, letter, part, grammems ]
+
+      ancode = Myaso::Model::Ancode.new
+      ancode.part = gram[2]
+      ancode.grammems = gram[3]
+
+      store.ancodes[gram.first] = ancode
     end
+  end
 
   # Discover word endings from known rules and lemmas from
   # database.
   #
   def discover_endings()
-    sequel.transaction do
-      Myaso::Model::Lemma.each do |lemma|
-        lemma.rules.each do |rule|
-          word = [ rule.prefix, lemma.base, rule.suffix ].join
-          (1..5).each do |i|
-            next unless word_end = word.mb_chars[-i..-1]
-            # Myaso::Model::Ending.create(:rule_id => rule.rule_id,
-            #   :word_end => word_end, :index => rule.id)
-          end
+    store.lemmas.each do |lemma|
+      flexia = store.flexias[lemma.flexia_id]
+      flexia.forms.each do |form|
+        word = [ form.prefix, lemma, form.suffix ].join
+        (1..5).each do |i|
+          next unless word_end = word.mb_chars[-i..-1]
+
+          # word = Myaso::Model::Word.new
+          # word.ending = word_end
+          # words = store.words['words']
+          # words << word
+          # store.words['words'] = words
         end
       end
     end
@@ -226,7 +232,7 @@ class Myaso::Converter
   # Cleanup word endings.
   #
   def cleanup_endings
-    Myaso::Model::Ending.each do |ending|
-    end
+    #Myaso::Model::Ending.each do |ending|
+    #end
   end
 end
