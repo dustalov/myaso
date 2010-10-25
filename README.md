@@ -9,16 +9,24 @@ Mikhail Korobov. Seriously, pymorphy is a great software written in
 [ugly](http://python.org/) programming language,
 so let fix this dirty mistake.
 
-As usual, myaso is [Suckless](http://suckless.ru/).
+As usual, myaso is [Suckless](http://suckless.ru/). Stupid pussies and
+tolerance-faggots are not welcome, thanks.
 
-## Feature List (read as «To-Do List», please)
+## Feature List
 
-* Command-Line Interface based on Thor.
-* SQLite3 relational database storage with Sequel ORM.
-* Grammatic Information converter.
-* Morphology Dictonaries converter.
-* (TODO) Preanalysis dictionary processing.
-* (TODO) Normalizer, Inflector and Pluralizer modules.
+* [Thor](http://github.com/carlhuda/thor)-based command-line
+interface.
+* Ability to start the Myaso IRB session to work with
+morphological information over our awesome objects.
+* Grammatic databases converter (*.tab files).
+* Morphology databases converter (*.mrd files).
+* TokyoCabinet storage with [Moneta](http://github.com/eveel/moneta)
+middleware.
+
+### To-Do List
+
+* Preanalysis dictionary processor.
+* Normalizer, Inflector and Pluralizer modules.
 
 ## Basic Usage
 
@@ -26,13 +34,13 @@ Here comes typical myaso use cases.
 
 ### Help viewing
 
-Yeah! Thanks to [thor](http://github.com/wycats/thor), you can view
-basic help messages on myaso:
+Yeah! You can view basic help messages on myaso:
     % ./myaso help
     Tasks:
-      myaso convert STORAGE_PATH MORPHS GRAMTAB --encoding=ENCODING  # Conv...
-      myaso help [TASK]                                              # Desc...
-      myaso version                                                  # Prin...
+      myaso convert STORAGE_PATH MORPHS GRAMTAB --encoding=ENCODING  # Conver...
+      myaso help [TASK]                                              # Descri...
+      myaso irb                                                      # Start ...
+      myaso version                                                  # Print ...
     % ./myaso -v
     myaso version 0.0.1
 
@@ -53,8 +61,9 @@ Let assume following:
 * gramtab file is located at _share/rgramtab.tab_;
 * encoding of both files are _cp1251_.
 
-So run myaso like this and enjoy the resulting _test.tch_ hash:
-    myaso convert 'myaso.ru.sqlite3' \
+So run myaso like this and enjoy the resulting content of `ru`
+directory:
+    myaso convert 'ru/' \
         'share/RusSrc/morphs.mrd' \
         'share/rgramtab.tab' \
         --encoding=cp1251
