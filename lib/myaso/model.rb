@@ -8,4 +8,5 @@ module Myaso::Model
   autoload :Ancode
   autoload :Flexia
   autoload :Lemma
+  autoload :Ending
 end

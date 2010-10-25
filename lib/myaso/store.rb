@@ -5,7 +5,7 @@ require 'moneta/adapters/tokyo_cabinet'
 #
 class Myaso::Store
   # List of suitable storages for Myaso.
-  STORAGES = [ :flexias, :lemmas, :ancodes, :prefixes ]
+  STORAGES = [ :flexias, :lemmas, :ancodes, :prefixes, :endings ]
   STORAGES.each { |s| attr_reader(s) }
 
   # Create a new instance of the Myaso::Store class.
