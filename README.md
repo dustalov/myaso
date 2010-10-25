@@ -32,6 +32,26 @@ middleware.
 
 Here comes typical myaso use cases.
 
+### Myaso IRB Session
+
+Thanks to IRB, you can use Myaso classes to solve your tasks
+easily, like this:
+    % ./myaso irb
+    irb: warn: can't alias help from irb_help.
+    >> base = 'ЛОПАТ';
+    ?> store = Myaso::Store.new('../ru/');
+    ?> lemma = store.lemmas[base]
+    => #<struct Myaso::Model::Lemma flexia_id=15>
+    >> flexia = store.flexias[lemma.flexia_id];
+    ?> words = flexia.forms.map do |form|
+    ?>   [ form.prefix, base, form.suffix ].join
+    >> end.inspect
+    => ["ЛОПАТКА", "ЛОПАТКИ", "ЛОПАТКЕ", "ЛОПАТКУ", "ЛОПАТКОЙ",
+        "ЛОПАТКОЮ", "ЛОПАТКЕ", "ЛОПАТКИ", "ЛОПАТОК", "ЛОПАТКАМ",
+        "ЛОПАТКИ", "ЛОПАТКАМИ", "ЛОПАТКАХ"]
+
+It's just a beginning!
+
 ### Help viewing
 
 Yeah! You can view basic help messages on myaso:
