@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    myaso (0.0.1)
+    myaso (0.0.2)
       activesupport (>= 3.0.0)
       eveel-moneta (>= 0.5.1)
       i18n (>= 0.4.1)
@@ -13,11 +13,18 @@ GEM
   specs:
     activesupport (3.0.1)
     bluecloth (2.0.9)
+    columnize (0.3.1)
     eveel-moneta (0.5.1)
     i18n (0.4.1)
+    linecache (0.43)
     mg (0.0.8)
       rake
     rake (0.8.7)
+    ruby-debug (0.10.3)
+      columnize (>= 0.1)
+      ruby-debug-base (~> 0.10.3.0)
+    ruby-debug-base (0.10.3)
+      linecache (>= 0.3)
     shoulda (2.11.3)
     thor (0.14.3)
     tokyocabinet (1.29)
@@ -33,6 +40,7 @@ DEPENDENCIES
   i18n (>= 0.4.1)
   mg
   myaso!
+  ruby-debug
   shoulda
   thor (>= 0.14.0)
   tokyocabinet
