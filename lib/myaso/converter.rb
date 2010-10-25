@@ -190,6 +190,8 @@ class Myaso::Converter
   # gramtab_file<File>:: Opened gramtab file.
   #
   def load_gramtab(gramtab_file)
+    i = 0
+
     gramtab_file.each do |line|
       line.strip!
       next if line.empty? || line.start_with?('//')
@@ -203,7 +205,19 @@ class Myaso::Converter
       ancode.grammems = gram[3]
 
       store.ancodes[gram.first] = ancode
+
+      i += 1
+      if i % 50 == 0
+        STDOUT.print i
+        STDOUT.print ' '
+        STDOUT.flush
+      end
     end
+
+    STDOUT.print i unless i % 50 == 0
+    STDOUT.puts
+
+    nil
   end
 
   # Discover word endings from known rules and lemmas from
