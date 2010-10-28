@@ -64,7 +64,7 @@ class Myaso::Converter
     puts "Done."
 
     print 'Discovering endings, this may take a while... '
-    discover_endings
+    #discover_endings
     puts 'Done.'
 
     print 'Cleaning up endings... '
@@ -269,7 +269,50 @@ class Myaso::Converter
   # Cleanup word endings.
   #
   def cleanup_endings
-    #Myaso::Model::Ending.each do |ending|
-    #end
+    index = 0
+
+    store.endings.each do |ending, meta|
+      best_flexias = {}
+
+      meta.paradigms.each do |flexia_id, *set|
+        flexia = store.flexias[flexia_id]
+
+        ancode = store.ancodes[flexia.forms.first.ancode]
+        part = ancode.part
+
+        if Myaso::Constants::PRODUCTIVE_CLASSES.include? part
+          unless best_flexias.include? part
+            best_flexias[part] = flexia_id
+          else
+            old_flexia_id = best_flexias[part]
+            old_freq = store.flexias[old_flexia_id].freq
+            new_freq = flexia.freq
+
+            best_flexias[part] = flexia_id if new_freq > old_freq
+          end
+        end
+      end
+
+      result_flexias = {}
+      best_flexias.each do |part, flexia_id|
+        result_flexias[flexia_id] = meta.paradigms[flexia_id]
+      end
+
+      meta.paradigms = result_flexias
+      store.endings[ending] = meta
+
+      if index % 50 == 0
+        STDOUT.print index
+        STDOUT.print ' '
+        STDOUT.flush
+      end
+
+      index += 1
+    end
+
+    STDOUT.print index unless index % 50 == 0
+    STDOUT.puts
+
+    nil
   end
 end
