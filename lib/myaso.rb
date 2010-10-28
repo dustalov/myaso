@@ -13,6 +13,8 @@ require 'moneta'
 class Myaso
   extend ActiveSupport::Autoload
 
+  autoload :Constants
+
   autoload :Model
   autoload :Store
 
