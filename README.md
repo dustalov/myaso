@@ -25,8 +25,7 @@ middleware.
 
 ### To-Do List
 
-* Preanalysis dictionary processor.
-* Normalizer, Inflector and Pluralizer modules.
+* Analysis. Well, let it be.
 
 ## Basic Usage
 
