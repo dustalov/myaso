@@ -20,7 +20,7 @@ interface.
 morphological information over our awesome objects.
 * Grammatic databases converter (*.tab files).
 * Morphology databases converter (*.mrd files).
-* TokyoCabinet storage with [Moneta](http://github.com/eveel/moneta)
+* TokyoCabinet storage via [Moneta](http://github.com/eveel/moneta)
 middleware.
 
 ### To-Do List
@@ -61,24 +61,24 @@ Yeah! You can view basic help messages on myaso:
       myaso irb                                                      # Start ...
       myaso version                                                  # Print ...
     % ./myaso -v
-    myaso version 0.0.1
+    myaso version 0.0.3
 
 Very useful, isn't it? :3
 
 ### Dictonaries converting
 
-Tasty myaso supports only databases from awesome
+Tasty myaso support only databases from awesome
 [aot.ru](http://aot.ru/) website. First, you should convert
-aot`s dictionaries to myaso-usable format (SQLite3).
+aot`s dictionaries to myaso-usable format.
 
 When you [download](http://wiki.github.com/eveel/myaso/dictonaries-from-aotru)
 these dictonaries, just run myaso converter.
 
 Let assume following:
 
-* morphs file is located at _share/RusSrc/morphs.mrd_;
-* gramtab file is located at _share/rgramtab.tab_;
-* encoding of both files are _cp1251_.
+* morphs file is located at `share/RusSrc/morphs.mrd`;
+* gramtab file is located at `share/rgramtab.tab`;
+* encoding of both files are `cp1251`.
 
 So run myaso like this and enjoy the resulting content of `ru`
 directory:
