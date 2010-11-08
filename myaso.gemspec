@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'eveel-moneta', '>= 0.5.1'
   s.add_dependency 'tokyocabinet'
 
-  s.add_development_dependency 'ruby-debug'
+  s.add_development_dependency 'ruby-debug19'
   s.add_development_dependency 'bluecloth'
   s.add_development_dependency 'yard', '>= 0.5.0'
   s.add_development_dependency 'shoulda'
