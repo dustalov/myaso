@@ -3,10 +3,9 @@ PATH
   specs:
     myaso (0.0.3)
       activesupport (>= 3.0.0)
-      eveel-moneta (>= 0.5.1)
       i18n (>= 0.4.1)
+      shkuph
       thor (>= 0.14.0)
-      tokyocabinet
 
 GEM
   remote: http://rubygems.org/
@@ -15,7 +14,6 @@ GEM
     archive-tar-minitar (0.5.2)
     bluecloth (2.0.9)
     columnize (0.3.2)
-    eveel-moneta (0.5.1)
     i18n (0.4.2)
     linecache19 (0.5.11)
       ruby_core_source (>= 0.1.4)
@@ -32,9 +30,9 @@ GEM
       ruby-debug-base19 (>= 0.11.19)
     ruby_core_source (0.1.4)
       archive-tar-minitar (>= 0.5.2)
+    shkuph (0.0.1)
     shoulda (2.11.3)
     thor (0.14.3)
-    tokyocabinet (1.29)
     yard (0.6.1)
 
 PLATFORMS
@@ -43,12 +41,11 @@ PLATFORMS
 DEPENDENCIES
   activesupport (>= 3.0.0)
   bluecloth
-  eveel-moneta (>= 0.5.1)
   i18n (>= 0.4.1)
   mg
   myaso!
   ruby-debug19
+  shkuph
   shoulda
   thor (>= 0.14.0)
-  tokyocabinet
-  yard (>= 0.5.0)
+  yard

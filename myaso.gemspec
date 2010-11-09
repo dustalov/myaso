@@ -21,12 +21,11 @@ Gem::Specification.new do |s|
   s.add_dependency 'activesupport', '>= 3.0.0'
   s.add_dependency 'i18n', '>= 0.4.1'
   s.add_dependency 'thor', '>= 0.14.0'
-  s.add_dependency 'eveel-moneta', '>= 0.5.1'
-  s.add_dependency 'tokyocabinet'
+  s.add_dependency 'shkuph'
 
   s.add_development_dependency 'ruby-debug19'
   s.add_development_dependency 'bluecloth'
-  s.add_development_dependency 'yard', '>= 0.5.0'
+  s.add_development_dependency 'yard'
   s.add_development_dependency 'shoulda'
   s.add_development_dependency 'mg'
 

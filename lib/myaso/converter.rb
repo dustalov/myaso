@@ -27,7 +27,7 @@ class Myaso::Converter
   def initialize(storage_path, morphs, gramtab, options)
     @storage_path, @morphs, @gramtab, @encoding =
       storage_path, morphs, gramtab, options[:encoding]
-    @store = Myaso::Store.new(storage_path)
+    @store = Myaso::Store.new(storage_path, :manage)
   end
 
   # Perform the conversion of initialized dictionaries to
@@ -40,7 +40,7 @@ class Myaso::Converter
       file.rewind
 
       print '  Loading rules... '
-      #load_rules(file)
+      load_rules(file)
 
       print '  Passing accents... '
       #morphs_foreach(file)
@@ -68,7 +68,7 @@ class Myaso::Converter
     puts 'Done.'
 
     print 'Cleaning up endings... '
-    cleanup_endings
+    #cleanup_endings
     puts 'Done.'
 
     puts 'All done.'
@@ -133,7 +133,7 @@ class Myaso::Converter
   #
   def load_rules(file)
     morphs_foreach(file) do |line, index|
-      flexia = store.flexias.fetch(index, Myaso::Model::Flexia.new)
+      flexia = store.flexias.fetch(index.to_s, Myaso::Model::Flexia.new)
       flexia.freq ||= 0
       flexia.forms ||= []
 
@@ -153,7 +153,7 @@ class Myaso::Converter
         flexia.forms << form
       end
 
-      store.flexias[index] = flexia
+      store.flexias[index.to_s] = flexia
     end
   end
 
@@ -172,9 +172,9 @@ class Myaso::Converter
       lemma.flexia_id = flexia_id
       store.lemmas[base] = lemma
 
-      flexia = store.flexias[flexia_id]
+      flexia = store.flexias[flexia_id.to_s]
       flexia.freq += 1
-      store.flexias[flexia_id] = flexia
+      store.flexias[flexia_id.to_s] = flexia
     end
   end
 
@@ -236,7 +236,7 @@ class Myaso::Converter
     index = 0
 
     store.lemmas.each do |base, lemma|
-      flexia = store.flexias[lemma.flexia_id]
+      flexia = store.flexias[lemma.flexia_id.to_s]
       flexia.forms.each_with_index do |form, form_index|
         word = [ form.prefix, base, form.suffix ].join
         (1..5).each do |i|
@@ -247,7 +247,7 @@ class Myaso::Converter
           ending.paradigms ||= {}
           ending.paradigms[lemma.flexia_id] ||= Set.new
           ending.paradigms[lemma.flexia_id] << form_index
-          store.endings[word_end] = ending
+          store.endings[word_end.to_s] = ending
         end
       end
 
@@ -275,7 +275,7 @@ class Myaso::Converter
       best_flexias = {}
 
       meta.paradigms.each do |flexia_id, *set|
-        flexia = store.flexias[flexia_id]
+        flexia = store.flexias[flexia_id.to_s]
 
         ancode = store.ancodes[flexia.forms.first.ancode]
         part = ancode.part
@@ -285,7 +285,7 @@ class Myaso::Converter
             best_flexias[part] = flexia_id
           else
             old_flexia_id = best_flexias[part]
-            old_freq = store.flexias[old_flexia_id].freq
+            old_freq = store.flexias[old_flexia_id.to_s].freq
             new_freq = flexia.freq
 
             best_flexias[part] = flexia_id if new_freq > old_freq
@@ -299,7 +299,7 @@ class Myaso::Converter
       end
 
       meta.paradigms = result_flexias
-      store.endings[ending] = meta
+      store.endings[ending.to_s] = meta
 
       if index % 50 == 0
         STDOUT.print index

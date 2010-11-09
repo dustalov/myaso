@@ -6,7 +6,7 @@ require 'myaso/version'
 require 'rubygems'
 require 'bundler/setup'
 require 'active_support/core_ext'
-require 'moneta'
+require 'shkuph'
 
 # Myaso: The Morphological Analyzer.
 #

@@ -1,9 +1,16 @@
 # encoding: utf-8
 
-require 'moneta/adapters/tokyo_cabinet'
+require 'shkuph/strategies/string_strategy'
+require 'shkuph/strategies/marshal_strategy'
+require 'shkuph/adapters/gdbm'
+
 # Myaso Store.
 #
 class Myaso::Store
+  # Myaso Key Strategy for Shkuph.
+  KEY_STRATEGY = Shkuph::StringStrategy.new
+  VALUE_STRATEGY = Shkuph::MarshalStrategy.new
+
   # List of suitable storages for Myaso.
   STORAGES = [ :flexias, :lemmas, :ancodes, :prefixes, :endings ]
   STORAGES.each { |s| attr_reader(s) }
@@ -17,12 +24,13 @@ class Myaso::Store
   #
   def initialize(root, mode = nil)
     STORAGES.each do |storage|
-      filename = File.join(root, [ storage, 'tch' ].join('.'))
-      moneta = Moneta::Adapters::TokyoCabinet.new(:file => filename,
-        :mode => mode)
+      filename = File.join(root, [ storage, 'gdbm' ].join('.'))
+
+      shkuph = Shkuph::Adapters::GDBM.new(filename, mode,
+        KEY_STRATEGY, VALUE_STRATEGY)
 
       ivar = "@#{storage}".to_sym
-      instance_variable_set(ivar, moneta)
+      instance_variable_set(ivar, shkuph)
     end
   end
 
