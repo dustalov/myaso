@@ -7,7 +7,8 @@ class Myaso::Converter
   require 'iconv'
   require 'tempfile'
 
-  attr_reader :storage_path, :store, :morphs, :gramtab, :encoding
+  attr_reader :storage_path, :store, :morphs, :gramtab,
+    :encoding
   private :storage_path, :store
 
   # Create a new instance of the Myaso::Converter class.
@@ -19,7 +20,7 @@ class Myaso::Converter
   #                  rules, lemmas and other prefixes information.
   #
   # gramtab<String>:: Relative path to the gramtab file, which contains the
-  #                   importain grammatic information necessary to
+  #                   important grammatic information necessary to
   #                   prediction.
   #
   # options<Hash>:: Configuration for this Myaso::Converter class.
@@ -43,32 +44,32 @@ class Myaso::Converter
       load_rules(file)
 
       print '  Passing accents... '
-      #morphs_foreach(file)
+      morphs_foreach(file)
 
       print '  Passing logs... '
-      #morphs_foreach(file)
+      morphs_foreach(file)
 
       print '  Loading prefixes... '
-      #load_prefixes(file)
+      load_prefixes(file)
 
       print '  Loading lemmas... '
-      #load_lemmas(file)
+      load_lemmas(file)
     end.close!
     puts "Done."
 
     # load gramtab
     puts "Processing '#{gramtab}'..."
     to_tempfile(gramtab).tap do |file|
-      #load_gramtab(file)
+      load_gramtab(file)
     end.close!
     puts "Done."
 
     print 'Discovering endings, this may take a while... '
-    #discover_endings
+    discover_endings
     puts 'Done.'
 
     print 'Cleaning up endings... '
-    #cleanup_endings
+    cleanup_endings
     puts 'Done.'
 
     puts 'All done.'
@@ -142,7 +143,7 @@ class Myaso::Converter
 
         parts = rule.split '*'
         parts << '' while parts.size < 3
-        parts[1].mb_chars.slice! 0..2
+        parts[1] = parts[1].mb_chars.slice!(0..2).to_s
         # [ suffix, ancode, prefix ]
 
         form = Myaso::Model::Flexia::Form.new

@@ -39,6 +39,4 @@ wiki
 ## PROJECT::SPECIFIC
 dist
 *.tch
-*.mrd
-*.tab
 *.sqlite3
