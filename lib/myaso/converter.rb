@@ -237,6 +237,7 @@ class Myaso::Converter
     index = 0
 
     store.lemmas.each do |base, lemma|
+      base.force_encoding('UTF-8')
       flexia = store.flexias[lemma.flexia_id.to_s]
       flexia.forms.each_with_index do |form, form_index|
         word = [ form.prefix, base, form.suffix ].join
