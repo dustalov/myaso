@@ -4,6 +4,10 @@ Changes in myaso
 Changes in myaso morphological analyzer releases
 are listed here.
 
+v0.0.4
+- Converter really works, I've tested.
+- Using `shkuph` gem instead of moneta.
+
 v0.0.3
 ------
 - Converter is ready, but I'm not sure that he
