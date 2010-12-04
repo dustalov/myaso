@@ -7,9 +7,9 @@ require 'myaso/version'
 Gem::Specification.new do |s|
   s.name         = 'myaso'
   s.version      = Myaso::Version.to_s
-  s.authors      = [ 'Dmitry A. Ustalov' ]
+  s.authors      = [ 'Dmitry A. Ustalov', 'Konstantin Lukinskih' ]
   s.email        = 'dmitry@eveel.ru'
-  s.homepage     = 'http://github.com/eveel/myaso'
+  s.homepage     = 'https://github.com/eveel/myaso'
   s.summary      = 'Tasty myaso is a nice morphological analyzer in Ruby.'
   s.description  = s.summary
 
