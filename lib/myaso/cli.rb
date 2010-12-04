@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 require 'thor'
+require 'daemons'
 
 # Myaso Command-Line Interface based on the awesome Thor library.
 #
@@ -9,10 +10,12 @@ class Myaso::CLI < Thor
   map '-v' => :version
 
   desc 'convert STORAGE_PATH MORPHS GRAMTAB',
-    'Convert aot.ru dictonaries into the SQLite3 database'
+    'Convert aot.ru dictonaries into the GDBM database'
   method_option :encoding, :type => :string, :default => 'utf8',
     :required => true
-    def convert(storage_path, morphs, gramtab) # :nodoc:
+  method_option :daemonize, :type => :boolean, :default => false
+  def convert(storage_path, morphs, gramtab) # :nodoc:
+    raise NotImplementedError if options[:daemonize]
     converter = Myaso::Converter.new(storage_path, morphs,
       gramtab, options)
     converter.perform!
