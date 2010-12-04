@@ -74,8 +74,8 @@ these dictonaries, just run myaso converter.
 
 Let assume following:
 
-* morphs file is located at `share/RusSrc/morphs.mrd`;
-* gramtab file is located at `share/rgramtab.tab`;
+* morphs file is located at `share/dicts/ru/rmorphs.mrd`;
+* gramtab file is located at `share/dicts/ru/rgramtab.tab`;
 * encoding of both files are `cp1251`.
 
 So run myaso like this and enjoy the resulting content of `ru`
