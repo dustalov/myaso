@@ -20,7 +20,7 @@ interface.
 morphological information over our awesome objects.
 * Grammatic databases converter (*.tab files).
 * Morphology databases converter (*.mrd files).
-* TokyoCabinet storage via [Moneta](http://github.com/eveel/moneta)
+* GNU DBM storage via [Shkuph](https://github.com/eveel/shkuph)
 middleware.
 
 ### To-Do List
@@ -60,8 +60,6 @@ Yeah! You can view basic help messages on myaso:
       myaso help [TASK]                                              # Descri...
       myaso irb                                                      # Start ...
       myaso version                                                  # Print ...
-    % ./myaso -v
-    myaso version 0.0.3
 
 Very useful, isn't it? :3
 
@@ -82,9 +80,9 @@ Let assume following:
 
 So run myaso like this and enjoy the resulting content of `ru`
 directory:
-    myaso convert 'ru/' \
-        'share/RusSrc/morphs.mrd' \
-        'share/rgramtab.tab' \
+    myaso convert 'share/ru' \
+        'share/dicts/ru/rmorphs.mrd' \
+        'share/dicts/ru/rgramtab.tab' \
         --encoding=cp1251
 
 ## Note on Patches/Pull Requests
