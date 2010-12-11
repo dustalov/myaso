@@ -1,9 +1,13 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
 
-$:.unshift File.expand_path('../../lib', __FILE__)
-
-require 'myaso'
+begin
+  $:.unshift File.expand_path('../../lib', __FILE__)
+  require 'myaso'
+rescue => LoadError
+  require 'rubygems'
+  require 'myaso'  
+end
 
 begin
   Myaso::CLI.start
