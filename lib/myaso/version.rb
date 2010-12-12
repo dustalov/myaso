@@ -3,14 +3,17 @@ class Myaso
   # Using Semantic Version (http://semver.org/) specification.
   class Version
     class << self
-      # Root path of the Myaso gem.
+      # Myaso major version.
       #
-      # ==== Returns
-      # String:: Myaso gem root path.
+      MAJOR = 0
+
+      # Myaso minor version.
       #
-      def root
-        @@myaso_root ||= File.expand_path('../../../', __FILE__)
-      end
+      MINOR = 1
+
+      # Myaso patch version.
+      #
+      PATCH = 0
 
       # Myaso gem version according to VERSION file.
       #
@@ -18,7 +21,7 @@ class Myaso
       # String:: Myaso semantic version.
       #
       def to_s
-        @@version ||= File.read(File.join(Myaso::Version.root, 'VERSION')).chomp
+        @@version ||= [ MAJOR, MINOR, PATCH ] * '.'
       end
     end
   end

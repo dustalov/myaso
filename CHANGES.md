@@ -4,7 +4,14 @@ Changes in myaso
 Changes in myaso morphological analyzer releases
 are listed here.
 
+v0.1.0
+------
+- Implement word morphology prediction by suffix.
+- Do not store version information in the VERSION file.
+- Runtime is no longer depend on Bundler.
+
 v0.0.4
+------
 - Converter really works, I've tested.
 - Using `shkuph` gem instead of moneta.
 

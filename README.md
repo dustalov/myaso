@@ -22,10 +22,14 @@ morphological information over our awesome objects.
 * Morphology databases converter (*.mrd files).
 * GNU DBM storage via [Shkuph](https://github.com/eveel/shkuph)
 middleware.
+* Word morphology prediction, hahaha.
 
 ### To-Do List
 
-* Analysis. Well, let it be.
+* Code documentation.
+* Tests (sorry guys).
+* More word prediction methods.
+* Inflection, delicious candies, many sweets, etc.
 
 ## Basic Usage
 
@@ -84,6 +88,30 @@ directory:
         'share/dicts/ru/rmorphs.mrd' \
         'share/dicts/ru/rgramtab.tab' \
         --encoding=cp1251
+
+### Word Analysis
+
+You can perform morphology analysis of some words, according to
+converted dictionaries:
+    myaso predict мясо --store=share/ru
+
+After this, in your terminal appears something like:
+    [#<struct Myaso::Model::Gram
+      normal="МЯСО",
+      part="С",
+      grammems="ср,0",
+      flexia_id=25,
+      ancode="ем",
+      lemma="МЯСО",
+      method="predict_by_suffix('МЯСО')">]
+
+### Application Programming Interface
+
+Tasty myaso has nice (and tasty, of course) API for Ruby
+programmers. See myaso at
+[RubyDoc.info](http://rubydoc.info/gems/myaso),
+but currently documentation really sucks: you'll better read
+source code.
 
 ## Note on Patches/Pull Requests
 
