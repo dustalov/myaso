@@ -55,9 +55,10 @@ class Myaso::Morphology
               lemma = word.mb_chars[0..-suffix_offset].upcase.to_s
               normal = lemma + flexia.forms[0].suffix
               method_call = "#{__method__}('#{word_end}')"
+              grammems = graminfo.grammems.split(',')
 
               gram << Myaso::Model::Gram.new(normal, graminfo.part,
-                graminfo.grammems, flexia_id, ancode, lemma, method_call)
+                grammems, flexia_id, ancode, lemma, method_call)
             end
           end
         end
