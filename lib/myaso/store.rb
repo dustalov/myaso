@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+require 'shkuph'
 require 'shkuph/strategies/string_strategy'
 require 'shkuph/strategies/marshal_strategy'
 require 'shkuph/adapters/gdbm'
