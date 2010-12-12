@@ -67,6 +67,9 @@ class Myaso::Morphology
       break unless gram.empty?
     end
 
-    gram
+    # expirement: try to sort grams by flexia frequency descending order
+    gram.sort do |g1, g2|
+      store.flexias[g1.flexia_id].freq <=> store.flexias[g1.flexia_id].freq
+    end.reverse
   end
 end
