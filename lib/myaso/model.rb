@@ -9,4 +9,5 @@ module Myaso::Model
   autoload :Flexia
   autoload :Lemma
   autoload :Ending
+  autoload :Gram
 end
