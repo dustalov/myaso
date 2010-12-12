@@ -2,6 +2,7 @@
 
 require 'thor'
 require 'daemons'
+require 'pp'
 
 # Myaso Command-Line Interface based on the awesome Thor library.
 #
@@ -19,6 +20,16 @@ class Myaso::CLI < Thor
     converter = Myaso::Converter.new(storage_path, morphs,
       gramtab, options)
     converter.perform!
+  end
+
+  desc 'predict WORD', 'Perform the word morphology prediction'
+  method_option :store, :type => :string, :required => true
+  def predict(word) # :nodoc:
+    raise ArgumentError unless word && !word.empty?
+
+    store = Myaso::Store.new(options[:store])
+    morph = Myaso::Morphology.new(store)
+    pp morph.predict(word)
   end
 
   desc 'version', 'Print the myaso version'
