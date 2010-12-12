@@ -21,4 +21,6 @@ class Myaso
   autoload :CLI
   autoload :Converter
   autoload :Inflector
+
+  autoload :Morphology
 end
