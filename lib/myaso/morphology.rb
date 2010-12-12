@@ -51,7 +51,7 @@ class Myaso::Morphology
             graminfo = store.ancodes[ancode]
 
             if Myaso::Constants::PRODUCTIVE_CLASSES.include? graminfo.part
-              suffix_offset = suffix.size + 1
+              suffix_offset = suffix.mb_chars.size + 1
               lemma = word.mb_chars[0..-suffix_offset].upcase.to_s
               normal = lemma + flexia.forms[0].suffix
               method_call = "#{__method__}('#{word_end}')"
