@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'shkuph'
   s.add_dependency 'daemons'
 
-  s.add_development_dependency 'ruby-debug19'
+#  s.add_development_dependency 'ruby-debug19'
   s.add_development_dependency 'bluecloth'
   s.add_development_dependency 'yard'
   s.add_development_dependency 'shoulda'
