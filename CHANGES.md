@@ -4,6 +4,15 @@ Changes in myaso
 Changes in myaso morphological analyzer releases
 are listed here.
 
+v0.1.1
+------
+- Grammems splitting on prediction.
+- Some 1.8.7 compability fixes, but more work still
+required.
+- Add `myaso` executable to gemspec.
+- Temporarily remove `ruby-debug19` from development
+dependencies.
+
 v0.1.0
 ------
 - Implement word morphology prediction by suffix.

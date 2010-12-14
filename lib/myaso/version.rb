@@ -13,7 +13,7 @@ class Myaso
 
       # Myaso patch version.
       #
-      PATCH = 0
+      PATCH = 1
 
       # Myaso gem version according to VERSION file.
       #

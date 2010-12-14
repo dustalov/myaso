@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    myaso (0.1.0)
+    myaso (0.1.1)
       activesupport (>= 3.0.0)
       daemons
       i18n (>= 0.4.1)
@@ -12,26 +12,12 @@ GEM
   remote: http://rubygems.org/
   specs:
     activesupport (3.0.3)
-    archive-tar-minitar (0.5.2)
     bluecloth (2.0.9)
-    columnize (0.3.2)
     daemons (1.1.0)
     i18n (0.5.0)
-    linecache19 (0.5.11)
-      ruby_core_source (>= 0.1.4)
     mg (0.0.8)
       rake
     rake (0.8.7)
-    ruby-debug-base19 (0.11.24)
-      columnize (>= 0.3.1)
-      linecache19 (>= 0.5.11)
-      ruby_core_source (>= 0.1.4)
-    ruby-debug19 (0.11.6)
-      columnize (>= 0.3.1)
-      linecache19 (>= 0.5.11)
-      ruby-debug-base19 (>= 0.11.19)
-    ruby_core_source (0.1.4)
-      archive-tar-minitar (>= 0.5.2)
     shkuph (0.0.3)
     shoulda (2.11.3)
     thor (0.14.6)
@@ -47,7 +33,6 @@ DEPENDENCIES
   i18n (>= 0.4.1)
   mg
   myaso!
-  ruby-debug19
   shkuph
   shoulda
   thor (>= 0.14.0)
