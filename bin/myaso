@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
 
+$KCODE = 'u' if RUBY_VERSION < '1.9'
+
 require 'rubygems'
 
 $:.unshift File.expand_path('../../lib', __FILE__)
