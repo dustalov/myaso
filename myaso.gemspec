@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.executables  = [ 'myaso' ]
   s.default_executable = 'myaso'
 
-  s.files        = Dir.glob('lib/**/**')
+  s.files        = Dir.glob('lib/**/*.rb')
   s.platform     = Gem::Platform::RUBY
   s.require_path = 'lib'
   s.rubyforge_project = '[none]'
