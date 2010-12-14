@@ -1,13 +1,12 @@
 # encoding: utf-8
 
-# Myaso models namespace and autoloader.
+# Myaso models namespace.
 #
 module Myaso::Model
-  extend ActiveSupport::Autoload
-
-  autoload :Ancode
-  autoload :Flexia
-  autoload :Lemma
-  autoload :Ending
-  autoload :Gram
 end
+
+require 'myaso/model/ancode'
+require 'myaso/model/flexia'
+require 'myaso/model/lemma'
+require 'myaso/model/ending'
+require 'myaso/model/gram'
