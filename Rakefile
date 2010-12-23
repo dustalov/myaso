@@ -2,7 +2,11 @@
 
 require 'rubygems'
 require 'bundler/setup'
+
 Bundler.require(:default, :development)
+
+$:.unshift File.expand_path('../../lib', __FILE__)
+require 'myaso'
 
 MG.new('myaso.gemspec')
 
