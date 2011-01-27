@@ -4,6 +4,11 @@ Changes in myaso
 Changes in myaso morphological analyzer releases
 are listed here.
 
+v0.1.2
+------
+- Stop using `mg` gem.
+- Switch to RSpec.
+
 v0.1.1
 ------
 - Grammems splitting on prediction.
