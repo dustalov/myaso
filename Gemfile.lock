@@ -3,37 +3,36 @@ PATH
   specs:
     myaso (0.1.1)
       activesupport (>= 3.0.0)
-      daemons
+      daemons (~> 1.1.0)
       i18n (>= 0.4.1)
+      rspec (~> 2.4.0)
       shkuph
-      thor (>= 0.14.0)
+      thor (~> 0.14.0)
 
 GEM
   remote: http://rubygems.org/
   specs:
     activesupport (3.0.3)
-    bluecloth (2.0.9)
+    bluecloth (2.0.10)
     daemons (1.1.0)
+    diff-lcs (1.1.2)
     i18n (0.5.0)
-    mg (0.0.8)
-      rake
-    rake (0.8.7)
+    rspec (2.4.0)
+      rspec-core (~> 2.4.0)
+      rspec-expectations (~> 2.4.0)
+      rspec-mocks (~> 2.4.0)
+    rspec-core (2.4.0)
+    rspec-expectations (2.4.0)
+      diff-lcs (~> 1.1.2)
+    rspec-mocks (2.4.0)
     shkuph (0.0.3)
-    shoulda (2.11.3)
     thor (0.14.6)
-    yard (0.6.3)
+    yard (0.6.4)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  activesupport (>= 3.0.0)
-  bluecloth
-  daemons
-  i18n (>= 0.4.1)
-  mg
+  bluecloth (~> 2.0.0)
   myaso!
-  shkuph
-  shoulda
-  thor (>= 0.14.0)
-  yard
+  yard (~> 0.6.0)
