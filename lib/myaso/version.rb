@@ -14,7 +14,7 @@ module Myaso # :nodoc:
 
       # Myaso patch version.
       #
-      PATCH = 1
+      PATCH = 2
 
       # Myaso gem version according to VERSION file.
       #
