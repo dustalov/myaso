@@ -4,7 +4,7 @@ Tasty, fresh [myaso](http://github.com/eveel/myaso)
 is a morphological analyzer, written in shiny
 [Ruby](http://ruby-lang.org/).
 
-![Delicious myaso](myaso.jpg)
+![Delicious myaso](https://github.com/eveel/myaso/raw/master/myaso.jpg)
 
 Mostly based on
 [pymorphy](http://bitbucket.org/kmike/pymorphy/)
