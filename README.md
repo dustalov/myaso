@@ -1,16 +1,20 @@
-# tasty myaso
+# myaso
 
 Tasty, fresh [myaso](http://github.com/eveel/myaso)
 is a morphological analyzer, written in shiny
 [Ruby](http://ruby-lang.org/).
 
-Mostly based on [pymorphy](http://bitbucket.org/kmike/pymorphy/) by
-Mikhail Korobov. Seriously, pymorphy is a great software written in
-[ugly](http://python.org/) programming language,
-so let fix this dirty mistake.
+![Delicious myaso](myaso.jpg)
 
-As usual, myaso is [Suckless](http://suckless.ru/). Stupid pussies and
-tolerance-faggots are not welcome, thanks.
+Mostly based on
+[pymorphy](http://bitbucket.org/kmike/pymorphy/)
+by Mikhail Korobov. Seriously, pymorphy is a great
+software written in [ugly](http://python.org/) programming
+language, so let fix this dirty mistake.
+
+As usual, myaso is [Suckless](http://suckless.ru/).
+Stupid pussies and tolerance-faggots are not welcome,
+thanks.
 
 ## Feature List
 
@@ -91,8 +95,8 @@ directory:
 
 ### Word Analysis
 
-You can perform morphology analysis of some words, according to
-converted dictionaries:
+You can perform morphology analysis of some words,
+according to converted dictionaries:
     myaso predict мясо --store=share/ru
 
 After this, in your terminal appears something like:
@@ -110,19 +114,24 @@ After this, in your terminal appears something like:
 Tasty myaso has nice (and tasty, of course) API for Ruby
 programmers. See myaso at
 [RubyDoc.info](http://rubydoc.info/gems/myaso),
-but currently documentation really sucks: you'll better read
-source code.
+but currently documentation really sucks: you'd better
+read source code.
 
 ## Note on Patches/Pull Requests
 
 * Fork the project.
 * Make your feature addition or bug fix.
-* Add tests for it. This is important so I don't break it in a
-  future version unintentionally.
+* Add tests for it. This is important so
+  I don't break it in a future version
+  unintentionally.
 * Commit, do not mess with rakefile, version, or history.
-  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
-* Send me a pull request. Bonus points for topic branches.
+  (if you want to have your own version, that is
+  fine but bump version in a commit by itself
+  I can ignore when I pull)
+* Send me a pull request. Bonus points for
+  topic branches.
 
 ## Copyright
 
-Copyright (c) 2010 Dmitry A. Ustalov. See LICENSE for details.
+Copyright (c) 2010-2011 Dmitry A. Ustalov.
+See LICENSE for details.
