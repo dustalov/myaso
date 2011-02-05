@@ -48,9 +48,14 @@ class Myaso::Morphology
       end
 
       word.mb_chars.size.downto 1 do |i|
-        word_begin = word.mb_chars[0..i - 1].upcase.to_s
+        word_begin_mb = word.mb_chars[0..i - 1]
+        next unless word_begin_mb
+
+        word_begin = word_begin_mb.upcase.to_s
+
         if lemma = store.lemmas[word_begin]
-          word_end = word.mb_chars[i + 1..-1].upcase.to_s
+          word_end_mb = word.mb_chars[i..-1]
+          word_end = word_end_mb ? word_end_mb.upcase.to_s : ''
 
           flexia_id = lemma.flexia_id
           flexia = store.flexias[flexia_id]
@@ -69,11 +74,11 @@ class Myaso::Morphology
               grammems, flexia_id, ancode, word_begin, method_call)
           end
 
-          return gram
+          break
         end
       end
 
-      []
+      gram
     end
 
     def predict_by_suffix(word) # :nodoc:
