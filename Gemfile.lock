@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    myaso (0.2.0)
+    myaso (0.2.1)
       activesupport (>= 3.0.0)
       daemons (~> 1.1.0)
       i18n (>= 0.4.1)
