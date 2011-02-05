@@ -47,10 +47,10 @@ class Myaso::Morphology
         end
       end
 
-      word.size.downto 0 do |i|
-        word_begin = word[0..i].mb_chars.upcase.to_s
+      word.mb_chars.size.downto 1 do |i|
+        word_begin = word.mb_chars[0..i - 1].upcase.to_s
         if lemma = store.lemmas[word_begin]
-          word_end = word[i + 1..-1].mb_chars.upcase.to_s
+          word_end = word.mb_chars[i + 1..-1].upcase.to_s
 
           flexia_id = lemma.flexia_id
           flexia = store.flexias[flexia_id]
@@ -61,7 +61,6 @@ class Myaso::Morphology
 
             graminfo = store.ancodes[ancode]
 
-            suffix_offset = suffix.mb_chars.size + 1
             normal = word_begin + flexia.forms[0].suffix
             method_call = "#{__method__}('#{word.mb_chars.upcase}')"
             grammems = graminfo.grammems.split(',')
