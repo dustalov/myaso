@@ -10,11 +10,11 @@ module Myaso # :nodoc:
 
       # Myaso minor version.
       #
-      MINOR = 1
+      MINOR = 2
 
       # Myaso patch version.
       #
-      PATCH = 2
+      PATCH = 0
 
       # Myaso gem version according to VERSION file.
       #
