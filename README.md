@@ -30,23 +30,42 @@ middleware.
 
 ### To-Do List
 
+* Decouple Myaso::Converter into the
+[Myasorubka](https://github.com/eveel/myasorubka).
 * Code documentation.
 * Tests (sorry guys).
-* More word prediction methods.
 * Inflection, delicious candies, many sweets, etc.
 
 ## Basic Usage
 
 Here comes typical myaso use cases.
 
+### Morphological Analysis
+
+Direct usage of Myaso, just check it out:
+    % bin/myaso predict лопатка --store=share/ru
+    [#<struct Myaso::Model::Gram
+      normal="ЛОПАТКА",
+      part="С",
+      grammems=["жр", "ед", "им"],
+      flexia_id=46,
+      ancode="га",
+      lemma="ЛОПАТК",
+      method="predict_by_lemma('ЛОПАТКА')">]
+
+Obviously, this functionality can by accessed by API:
+    store = Myaso::Store.new('share/ru')
+    morph = Myaso::Morphology.new(store)
+    p morph.predict('лопатка')
+
 ### Myaso IRB Session
 
 Thanks to IRB, you can use Myaso classes to solve your tasks
 easily, like this:
-    % ./myaso irb
+    % bin/myaso irb
     irb: warn: can't alias help from irb_help.
     >> base = 'ЛОПАТ';
-    ?> store = Myaso::Store.new('../ru/');
+    ?> store = Myaso::Store.new('share/ru');
     ?> lemma = store.lemmas[base]
     => #<struct Myaso::Model::Lemma flexia_id=15>
     >> flexia = store.flexias[lemma.flexia_id];
@@ -57,25 +76,22 @@ easily, like this:
         "ЛОПАТКОЮ", "ЛОПАТКЕ", "ЛОПАТКИ", "ЛОПАТОК", "ЛОПАТКАМ",
         "ЛОПАТКИ", "ЛОПАТКАМИ", "ЛОПАТКАХ"]
 
-It's just a beginning!
-
 ### Help viewing
 
-Yeah! You can view basic help messages on myaso:
-    % ./myaso help
+    Yeah! You can view basic help messages on myaso:
+    % bin/myaso help
     Tasks:
-      myaso convert STORAGE_PATH MORPHS GRAMTAB --encoding=ENCODING  # Conver...
-      myaso help [TASK]                                              # Descri...
-      myaso irb                                                      # Start ...
-      myaso version                                                  # Print ...
-
-Very useful, isn't it? :3
+      myaso convert STORAGE_PATH MORPHS GRAMTAB --encoding=ENCODING  # Convert ao...
+      myaso help [TASK]                                              # Describe a...
+      myaso irb                                                      # Start the ...
+      myaso predict WORD --store=STORE                               # Perform th...
+      myaso version                                                  # Print the ...
 
 ### Dictonaries converting
 
 Tasty myaso support only databases from awesome
 [aot.ru](http://aot.ru/) website. First, you should convert
-aot`s dictionaries to myaso-usable format.
+aot`s dictionaries to Myaso-usable format.
 
 When you [download](http://wiki.github.com/eveel/myaso/dictonaries-from-aotru)
 these dictonaries, just run myaso converter.
@@ -88,26 +104,10 @@ Let assume following:
 
 So run myaso like this and enjoy the resulting content of `ru`
 directory:
-    myaso convert 'share/ru' \
+    % bin/myaso convert 'share/ru' \
         'share/dicts/ru/rmorphs.mrd' \
         'share/dicts/ru/rgramtab.tab' \
         --encoding=cp1251
-
-### Word Analysis
-
-You can perform morphology analysis of some words,
-according to converted dictionaries:
-    myaso predict мясо --store=share/ru
-
-After this, in your terminal appears something like:
-    [#<struct Myaso::Model::Gram
-      normal="МЯСО",
-      part="С",
-      grammems="ср,0",
-      flexia_id=25,
-      ancode="ем",
-      lemma="МЯСО",
-      method="predict_by_suffix('МЯСО')">]
 
 ### Application Programming Interface
 
