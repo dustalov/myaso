@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-# Different constants used in Myaso.
+# Some constants that used in Myaso.
 #
-class Myaso::Constants
+module Myaso
   # Definitions of the noun.
   #
   NOUNS = [ 'NOUN', 'С' ]

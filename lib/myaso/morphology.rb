@@ -3,8 +3,10 @@
 # Morphology Parser of Myaso.
 #
 class Myaso::Morphology
-  attr_reader :store
-  private :store
+  include TokyoCabinet
+
+  attr_reader :store, :stem_trie, :suffix_trie
+  private :store, :stem_trie, :suffix_trie
 
   # Create a new instance of the Myaso::Morphology analyzer.
   #
@@ -13,6 +15,8 @@ class Myaso::Morphology
   #
   def initialize(store)
     @store = store
+    @stem_trie = Myaso::Store::Trie.new(store.stems)
+    @suffix_trie = Myaso::Store::Trie.new(store.suffixes)
   end
 
   # Perform a word morphology information prediction.
@@ -25,99 +29,99 @@ class Myaso::Morphology
   # actual word morphology.
   #
   def predict(word)
-    gram = predict_by_lemma(word)
+    word = make_suitable('кот') #(word)
 
-    if gram.empty?
-      gram = predict_by_suffix(word)
+    tuple = possible_suffixes(word).map do |suffix|
+      [ possible_stem(word, suffix),
+        suffix_trie.find(suffix) ]
+    end.last
+
+    stem_id, suffix_id = tuple
+    p stem_trie.retrieve(stem_id)
+    #p suffix_trie.retrieve(suffix_id)
+
+    rule_forms_by_stem(stem_id).each do |rule_form_id|
+      rule_form = store.rule_forms[rule_form_id]
+      ancode = rule_form['ancode'].force_encoding('utf-8').strip
+      p store.patterns[ancode]['grammemes'].force_encoding('utf-8')
+#      p store.patterns[]
     end
 
-    gram.sort do |g1, g2|
-      store.flexias[g1.flexia_id].freq <=>
-        store.flexias[g1.flexia_id].freq
-    end.reverse
+#.reduce([]) do |r, (stem_id, suffix_id)|
+#      stem_forms = rule_forms_by_stem(stem_id)
+#      suffix_forms = rule_forms_by_suffix(suffix_id)
+#      r << (stem_forms & suffix_forms)
+#    end.delete_if do |stem_id, suffix_id|
+      #!stem_id
+      #    end
+    nil
   end
 
   private
-    def predict_by_lemma(word) # :nodoc:
-      gram = []
-
-      store.prefixes['prefixes'].each do |prefix|
-        if word.mb_chars.upcase.start_with? prefix
-          word = word[prefix.size..-1]
-        end
-      end
-
-      word.mb_chars.size.downto 1 do |i|
-        word_begin_mb = word.mb_chars[0..i - 1]
-        next unless word_begin_mb
-
-        word_begin = word_begin_mb.upcase.to_s
-
-        if lemma = store.lemmas[word_begin]
-          word_end_mb = word.mb_chars[i..-1]
-          word_end = word_end_mb ? word_end_mb.upcase.to_s : ''
-
-          flexia_id = lemma.flexia_id
-          flexia = store.flexias[flexia_id]
-
-          flexia.forms.each do |form|
-            suffix, ancode = form.suffix, form.ancode
-            next unless suffix == word_end
-
-            graminfo = store.ancodes[ancode]
-
-            normal = word_begin + flexia.forms[0].suffix
-            method_call = "#{__method__}('#{word.mb_chars.upcase}')"
-            grammems = graminfo.grammems.split(',')
-
-            gram << Myaso::Model::Gram.new(normal, graminfo.part,
-              grammems, flexia_id, ancode, word_begin, method_call)
-          end
-
-          break
-        end
-      end
-
-      gram
+    def make_suitable(word)
+      word.strip.mb_chars.upcase.to_s
     end
 
-    def predict_by_suffix(word) # :nodoc:
-      gram = []
+    def possible_suffixes(normal_word)
+      return [] if !normal_word || normal_word.empty?
+      word = normal_word.reverse
 
-      5.downto 1 do |i|
-        word_end_mb = word.mb_chars[-i..-1]
-        next unless word_end_mb
-
-        word_end = word_end_mb.upcase.to_s
-
-        if store.endings.key?(word_end)
-          ending = store.endings[word_end]
-
-          ending.paradigms.each do |flexia_id, forms|
-            flexia = store.flexias[flexia_id]
-
-            forms.each do |id|
-              form = flexia.forms[id]
-              suffix, ancode = form.suffix, form.ancode
-              graminfo = store.ancodes[ancode]
-
-              if Myaso::Constants::PRODUCTIVE_CLASSES.include? graminfo.part
-                suffix_offset = suffix.mb_chars.size + 1
-                lemma = word.mb_chars[0..-suffix_offset].upcase.to_s
-                normal = lemma + flexia.forms[0].suffix
-                method_call = "#{__method__}('#{word_end}')"
-                grammems = graminfo.grammems.split(',')
-
-                gram << Myaso::Model::Gram.new(normal, graminfo.part,
-                  grammems, flexia_id, ancode, lemma, method_call)
-              end
-            end
-          end
-        end
-
-        break unless gram.empty?
+      endings = []
+      word.length.times do |i|
+        slice = word[0..i]
+        break unless slice
+        endings.unshift(slice) if suffix_trie.find(slice)
       end
 
-      gram
+      endings << ''
+      endings
+    end
+
+    def possible_stem(normal_word, suffix)
+      word_length = normal_word.length - suffix.length - 1
+      word = normal_word[0..word_length].reverse
+      stem_trie.find(word)
+    end
+
+    def rule_forms_by_suffix(suffix_id)
+      if suffix_id
+        suffix = store.suffixes[suffix_id]
+        return [] unless suffix
+      end
+
+      rule_forms = []
+
+      query(store.rule_forms, proc { |query|
+        if suffix_id
+          query.addcond('suffix_id', TDBQRY::QCNUMEQ, suffix_id)
+        else
+          query.addcond('suffix_id', TDBQRY::QCSTRRX |
+            TDBQRY::QCNEGATE, '^(.+)$')
+        end
+      }) { |found_id| rule_forms << found_id }
+
+      rule_forms
+    end
+
+    def rule_forms_by_stem(stem_id)
+      stem = store.stems[stem_id]
+      return [] unless stem
+
+      rule_id = stem['rule_id']
+      return [] unless store.rules[rule_id]
+
+      rule_forms = []
+
+      query(store.rule_forms, proc { |query|
+        query.addcond('rule_id', TDBQRY::QCNUMEQ, rule_id)
+      }) { |found_id| rule_forms << found_id }
+
+      rule_forms
+    end
+
+    def query(store, query_setup, &block)
+      TokyoCabinet::TDBQRY.new(store).
+        tap(&query_setup).
+        search.each(&block)
     end
 end

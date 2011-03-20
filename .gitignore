@@ -37,6 +37,7 @@ pkg
 wiki
 
 ## PROJECT::SPECIFIC
-dist
-*.tch
-*.sqlite3
+*.tct
+*.lex
+*.dec
+*.tsv
