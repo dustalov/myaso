@@ -20,7 +20,7 @@ class Myaso::Store::Trie
       query(proc { |query|
         query.addcond('letter', TDBQRY::QCSTREQ, letter)
         if parent_id
-          query.addcond('parent_id', TDBQRY::QCSTREQ, parent_id.to_i)
+          query.addcond('parent_id', TDBQRY::QCSTREQ, parent_id)
         else
           query.addcond('parent_id',
             TDBQRY::QCSTRRX | TDBQRY::QCNEGATE, '^(.+)$')
