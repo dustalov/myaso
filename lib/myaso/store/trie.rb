@@ -10,16 +10,17 @@ class Myaso::Store::Trie
   end
 
   def find(line)
-    return nil if !line || line.empty?
+    return nil unless line && !line.empty?
     parent_id = nil
 
     line.each_char do |letter|
+      #p [line, letter]
       found_parent_id = nil
 
       query(proc { |query|
         query.addcond('letter', TDBQRY::QCSTREQ, letter)
         if parent_id
-          query.addcond('parent_id', TDBQRY::QCNUMEQ, parent_id)
+          query.addcond('parent_id', TDBQRY::QCSTREQ, parent_id.to_i)
         else
           query.addcond('parent_id',
             TDBQRY::QCSTRRX | TDBQRY::QCNEGATE, '^(.+)$')

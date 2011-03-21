@@ -29,32 +29,33 @@ class Myaso::Morphology
   # actual word morphology.
   #
   def predict(word)
-    word = make_suitable('кот') #(word)
+    word = make_suitable(word)
+    suffixes = possible_suffixes(word)
 
-    tuple = possible_suffixes(word).map do |suffix|
-      [ possible_stem(word, suffix),
-        suffix_trie.find(suffix) ]
-    end.last
-
-    stem_id, suffix_id = tuple
-    p stem_trie.retrieve(stem_id)
-    #p suffix_trie.retrieve(suffix_id)
-
-    rule_forms_by_stem(stem_id).each do |rule_form_id|
-      rule_form = store.rule_forms[rule_form_id]
-      ancode = rule_form['ancode'].force_encoding('utf-8').strip
-      p store.patterns[ancode]['grammemes'].force_encoding('utf-8')
-#      p store.patterns[]
+    splits = suffixes.map do |suffix|
+      [ possible_stem(word, suffix), suffix ]
+    end.delete_if do |stem_id, suffix|
+      !stem_id
+    end.map do |stem_id, suffix|
+      [ stem_id, suffix_trie.find(suffix) ]
     end
 
-#.reduce([]) do |r, (stem_id, suffix_id)|
-#      stem_forms = rule_forms_by_stem(stem_id)
-#      suffix_forms = rule_forms_by_suffix(suffix_id)
-#      r << (stem_forms & suffix_forms)
-#    end.delete_if do |stem_id, suffix_id|
-      #!stem_id
-      #    end
-    nil
+    known = splits.map do |stem_id, suffix_id|
+      stem_forms = rule_forms_by_stem(stem_id)
+      suffix_forms = rule_forms_by_suffix(suffix_id)
+      stem_forms & suffix_forms
+    end.flatten
+
+    known.map do |rule_form_id|
+      store.rule_forms[rule_form_id].tap do |rule_form|
+        pattern_id = rule_form['pattern_id'].force_encoding('utf-8')
+        store.patterns[pattern_id].tap do |pattern|
+          pattern['grammemes'].force_encoding('utf-8')
+          pattern['pos'].force_encoding('utf-8')
+          rule_form['pattern'] = pattern
+        end
+      end
+    end
   end
 
   private
@@ -93,7 +94,7 @@ class Myaso::Morphology
 
       query(store.rule_forms, proc { |query|
         if suffix_id
-          query.addcond('suffix_id', TDBQRY::QCNUMEQ, suffix_id)
+          query.addcond('suffix_id', TDBQRY::QCSTREQ, suffix_id)
         else
           query.addcond('suffix_id', TDBQRY::QCSTRRX |
             TDBQRY::QCNEGATE, '^(.+)$')
@@ -113,7 +114,7 @@ class Myaso::Morphology
       rule_forms = []
 
       query(store.rule_forms, proc { |query|
-        query.addcond('rule_id', TDBQRY::QCNUMEQ, rule_id)
+        query.addcond('rule_id', TDBQRY::QCSTREQ, rule_id)
       }) { |found_id| rule_forms << found_id }
 
       rule_forms
