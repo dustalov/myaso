@@ -51,6 +51,13 @@ class Myaso::Store
           store.setindex 'parent_id', TDB::ITDECIMAL
         end
 
+        def store.each(&block)
+          return [] unless iterinit
+          while (key = iternext)
+            block.call(key)
+          end
+        end
+
         instance_variable_set(ivar, store)
     end
   end
