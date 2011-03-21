@@ -29,7 +29,7 @@ class Myaso::Morphology
   # actual word morphology.
   #
   def predict(word)
-    word = make_suitable(word)
+    word = drop_prefixes(make_suitable(word))
     suffixes = possible_suffixes(word)
 
     splits = suffixes.map do |suffix|
@@ -51,6 +51,7 @@ class Myaso::Morphology
         pattern_id = rule_form['pattern_id'].force_encoding('utf-8')
         store.patterns[pattern_id].tap do |pattern|
           pattern['grammemes'].force_encoding('utf-8')
+          pattern['grammemes'] = pattern['grammemes'].split(',')
           pattern['pos'].force_encoding('utf-8')
           rule_form['pattern'] = pattern
         end
@@ -61,6 +62,20 @@ class Myaso::Morphology
   private
     def make_suitable(word)
       word.strip.mb_chars.upcase.to_s
+    end
+
+    def drop_prefixes(word)
+      clean_word = word.dup
+
+      store.prefixes.each do |key|
+        record = store.prefixes[key]
+        prefix = record['prefix'].strip.force_encoding('utf-8')
+        if clean_word.start_with? prefix
+          clean_word = clean_word[prefix.length..-1]
+        end
+      end
+
+      clean_word == word ? word : clean_word
     end
 
     def possible_suffixes(normal_word)
