@@ -60,6 +60,14 @@ class Myaso::Morphology
 
     found.map do |rule_form_id|
       store.rule_forms[rule_form_id].tap do |rule_form|
+        rule_form['id'] = rule_form_id
+
+        rule_id = rule_form['rule_id']
+        store.rules[rule_id].tap do |rule|
+          rule['frequency'] = rule['frequency'].to_i
+          rule_form['rule'] = rule
+        end
+
         pattern_id = rule_form['pattern_id'].force_encoding('utf-8')
         store.patterns[pattern_id].tap do |pattern|
           pattern['grammemes'].force_encoding('utf-8')
@@ -67,8 +75,25 @@ class Myaso::Morphology
           pattern['pos'].force_encoding('utf-8')
           rule_form['pattern'] = pattern
         end
+
+        suffix = suffix_trie.retrieve(rule_form['suffix_id'])
+        rule_form['suffix'] = suffix
+
+        # OCHOBA
+        stem = word.mb_chars.chomp(suffix).to_s
+        rule_form['stem'] = stem
+
+        # suffix of lemma
+        lemma_rule_form_id = [ rule_id, '1' ].join('-')
+        lemma_rule_form = store.rule_forms[lemma_rule_form_id]
+        lemma_suffix = suffix_trie.retrieve(lemma_rule_form['suffix_id'])
+        rule_form['lemma'] = [ stem,
+          lemma_suffix.force_encoding('UTF-8')
+        ].join
       end
-    end
+    end.sort do |rf1, rf2|
+      rf1['rule']['frequency'] <=> rf2['rule']['frequency']
+    end.reverse
   end
 
   private
