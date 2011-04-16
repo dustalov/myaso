@@ -13,7 +13,6 @@ Gem::Specification.new do |s|
   s.description  = 'Myaso is a nice morphological analyzer in Ruby.'
 
   s.executables  = [ 'myaso' ]
-  s.default_executable = 'myaso'
 
   s.files        = Dir.glob('lib/**/*.rb')
   s.platform     = Gem::Platform::RUBY
