@@ -40,13 +40,25 @@ class Myaso::Morphology
       [ stem_id, suffix_trie.find(suffix) ]
     end
 
-    known = splits.map do |stem_id, suffix_id|
+    found = splits.map do |stem_id, suffix_id|
       stem_forms = rule_forms_by_stem(stem_id)
       suffix_forms = rule_forms_by_suffix(suffix_id)
+      # if we have an intersection of
+      # word forms that found by splat stem
+      # and words forms that found by splat suffix
+      # then we got a dictionary words, this is awesome
       stem_forms & suffix_forms
     end.flatten
 
-    known.map do |rule_form_id|
+    # stem_forms.map do |rule_form_id|
+    #   suffix_trie.retrieve store.rule_forms[rule_form_id]['suffix_id']
+    # end
+
+    if found.empty?
+      # well, we got a deal with non-dictionary word
+    end
+
+    found.map do |rule_form_id|
       store.rule_forms[rule_form_id].tap do |rule_form|
         pattern_id = rule_form['pattern_id'].force_encoding('utf-8')
         store.patterns[pattern_id].tap do |pattern|
