@@ -67,11 +67,11 @@ easily, like this:
 
     % bin/myaso irb
     irb: warn: can't alias help from irb_help.
-    >> base = 'ЛОПАТ';
-    ?> store = Myaso::Store.new('share/ru');
+    >> base = 'ЛОПАТ'
+    ?> store = Myaso::Store.new('share/ru')
     ?> lemma = store.lemmas[base]
     => #<struct Myaso::Model::Lemma flexia_id=15>
-    >> flexia = store.flexias[lemma.flexia_id];
+    >> flexia = store.flexias[lemma.flexia_id]
     ?> words = flexia.forms.map do |form|
     ?>   [ form.prefix, base, form.suffix ].join
     >> end.inspect
@@ -81,7 +81,8 @@ easily, like this:
 
 ### Help viewing
 
-    Yeah! You can view basic help messages on myaso:
+Yeah! You can view basic help messages on myaso:
+
     % bin/myaso help
     Tasks:
       myaso convert STORAGE_PATH MORPHS GRAMTAB --encoding=ENCODING  # Convert ao...
