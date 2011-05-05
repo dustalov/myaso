@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'tokyocabinet', '~> 1.29'
   s.add_dependency 'i18n', '~> 0.5.0'
   s.add_dependency 'thor', '~> 0.14.0'
-  s.add_dependency 'rspec', '~> 2.4.0'
+  s.add_development_dependency 'rspec', '~> 2.5.0'
 
   s.required_rubygems_version = '>= 1.3.5'
 end
