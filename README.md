@@ -43,6 +43,7 @@ Here comes typical myaso use cases.
 ### Morphological Analysis
 
 Direct usage of Myaso, just check it out:
+
     % bin/myaso predict лопатка --store=share/ru
     [#<struct Myaso::Model::Gram
       normal="ЛОПАТКА",
@@ -54,6 +55,7 @@ Direct usage of Myaso, just check it out:
       method="predict_by_lemma('ЛОПАТКА')">]
 
 Obviously, this functionality can by accessed by API:
+
     store = Myaso::Store.new('share/ru')
     morph = Myaso::Morphology.new(store)
     p morph.predict('лопатка')
@@ -62,6 +64,7 @@ Obviously, this functionality can by accessed by API:
 
 Thanks to IRB, you can use Myaso classes to solve your tasks
 easily, like this:
+
     % bin/myaso irb
     irb: warn: can't alias help from irb_help.
     >> base = 'ЛОПАТ';
@@ -104,6 +107,7 @@ Let assume following:
 
 So run myaso like this and enjoy the resulting content of `ru`
 directory:
+
     % bin/myaso convert 'share/ru' \
         'share/dicts/ru/rmorphs.mrd' \
         'share/dicts/ru/rgramtab.tab' \
