@@ -16,4 +16,13 @@ Gem::Specification.new do |gem|
   gem.name          = 'myaso'
   gem.require_paths = [ 'lib' ]
   gem.version       = Myaso::VERSION
+
+  # FIXME: actually, all I need is mb_chars
+  gem.add_dependency 'activesupport', '~> 3'
+
+  gem.add_development_dependency 'activerecord', '~> 3'
+  gem.add_development_dependency 'tokyocabinet', '~> 1'
+
+  gem.add_development_dependency 'minitest', '~> 2.6'
+  gem.add_development_dependency 'rake', '~> 0.9'
 end
