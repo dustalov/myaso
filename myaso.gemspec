@@ -21,6 +21,8 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'activesupport', '~> 3'
 
   gem.add_development_dependency 'activerecord', '~> 3'
+  gem.add_development_dependency 'sqlite3', '~> 1.3'
+
   gem.add_development_dependency 'tokyocabinet', '~> 1'
 
   gem.add_development_dependency 'minitest', '~> 2.6'
