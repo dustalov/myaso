@@ -1,29 +1,19 @@
 # encoding: utf-8
 
-$:.unshift File.expand_path('../lib', __FILE__)
-require 'myaso/version'
+require File.expand_path('../lib/myaso/version', __FILE__)
 
-Gem::Specification.new do |s|
-  s.name         = 'myaso'
-  s.version      = Myaso::Version.to_s
-  s.authors      = [ 'Dmitry A. Ustalov' ]
-  s.email        = 'dmitry@eveel.ru'
-  s.homepage     = 'https://github.com/eveel/myaso'
-  s.summary      = 'Tasty myaso — a nice morphological analyzer in Ruby.'
-  s.description  = 'Myaso is a nice morphological analyzer in Ruby.'
+Gem::Specification.new do |gem|
+  gem.authors       = [ 'Dmitry A. Ustalov' ]
+  gem.email         = [ 'dmitry@eveel.ru' ]
+  gem.description   = 'Myaso is a morphological analysis library in Ruby.'
+  gem.summary       = 'Myaso is a morphological analysis and synthesis ' \
+                      'library in Ruby.'
+  gem.homepage      = 'http://myaso.eveel.ru'
 
-  s.executables  = [ 'myaso' ]
-
-  s.files        = Dir.glob('lib/**/*.rb')
-  s.platform     = Gem::Platform::RUBY
-  s.require_path = 'lib'
-  s.rubyforge_project = 'myaso'
-
-  s.add_dependency 'activesupport', '~> 3.0.0'
-  s.add_dependency 'tokyocabinet', '~> 1.29'
-  s.add_dependency 'i18n', '~> 0.5.0'
-  s.add_dependency 'thor', '~> 0.14.0'
-  s.add_development_dependency 'rspec', '~> 2.5.0'
-
-  s.required_rubygems_version = '>= 1.3.5'
+  gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  gem.files         = `git ls-files`.split("\n")
+  gem.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
+  gem.name          = 'myaso'
+  gem.require_paths = [ 'lib' ]
+  gem.version       = Myaso::VERSION
 end

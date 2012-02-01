@@ -1,43 +1,17 @@
-## MAC OS
-.DS_Store
-
-## TEXTMATE
-*.tmproj
-tmtags
-
-## EMACS
-*~
-\#*
-.\#*
-
-## VIM
-*.swp
-
-## RUBINIUS
+*.gem
 *.rbc
-
-## NETBEANS
-nbproject
-
-## REDCAR
-.redcar
-
-## RVM
-.rvmrc
-
-## BUNDLER
 .bundle
-
-## PROJECT::GENERAL
-coverage
-doc
-rdoc
+.config
 .yardoc
+Gemfile.lock
+InstalledFiles
+_yardoc
+coverage
+doc/
+lib/bundler/man
 pkg
-wiki
-
-## PROJECT::SPECIFIC
-*.tct
-*.lex
-*.dec
-*.tsv
+rdoc
+spec/reports
+test/tmp
+test/version_tmp
+tmp
