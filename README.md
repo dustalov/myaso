@@ -3,6 +3,8 @@
 Myaso [ˈmʲæ.sə] is a morphological analysis and synthesis library,
 written in Ruby.
 
+![Myaso](/eveel/myaso/raw/develop/myaso.jpg)
+
 ## Installation
 
 Add this line to your application's Gemfile:
