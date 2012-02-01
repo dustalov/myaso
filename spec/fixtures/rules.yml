@@ -1,0 +1,9 @@
+# empty prefix & suffix
+- id: 1
+  msd:
+  rule_set_id: 1
+# empty prefix & 's' suffix
+- id: 2
+  msd:
+  rule_set_id: 1
+  suffix: s
