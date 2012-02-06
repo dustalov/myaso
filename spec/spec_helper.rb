@@ -13,8 +13,10 @@ end
 require 'fileutils'
 require 'tmpdir'
 
-require 'simplecov'
-SimpleCov.start
+unless 'true' == ENV['TRAVIS']
+  require 'simplecov'
+  SimpleCov.start
+end
 
 require 'minitest/autorun'
 
