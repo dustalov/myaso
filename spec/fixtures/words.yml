@@ -1,8 +1,8 @@
 # cat
-- id: 1
+1:
   rule_id: 1
   stem_id: 1
 # cats
-- id: 2
+2:
   rule_id: 2
   stem_id: 1
