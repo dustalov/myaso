@@ -44,3 +44,11 @@ This work is supported by UrB RAS grants:
 
 I highly recommend you to use git flow to make development process much
 systematic and awesome.
+
+## Build Status [<img src="https://secure.travis-ci.org/eveel/serious.png"/>](http://travis-ci.org/eveel/serious)
+
+## Dependency Status [<img src="https://gemnasium.com/eveel/serious.png?travis"/>](https://gemnasium.com/eveel/serious)
+
+## Copyright
+
+Copyright (c) 2010-2012 Dmitry A. Ustalov. See LICENSE for details.
