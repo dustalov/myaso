@@ -2,9 +2,6 @@
 
 require 'myaso/version'
 
-module Myaso
-end
-
 require 'myaso/msd'
 require 'myaso/base'
 require 'myaso/active_record' if defined? ::ActiveRecord::Base
