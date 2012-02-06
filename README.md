@@ -25,8 +25,14 @@ TODO: Make it usable after year of stasis.
 
 ## Acknowledgement
 
-This work is supported by UrB RAS grant
-№[РЦП-12-П10](http://plove.eveel.ru/2012/01/20/morphological-grant).
+This work is supported by UrB RAS grants:
+
+* 12-С-1-1012 «Облачная платформа для разработки и использования пакетов
+прикладных программ и интеллектуальных систем»;
+* [РЦП-12-П10] «Разработка морфологического анализатора русского языка в
+качестве SaaS облачной платформы УрО РАН».
+
+[РЦП-12-П10]: http://plove.eveel.ru/2012/01/20/morphological-grant
 
 ## Contributing
 
