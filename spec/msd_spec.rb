@@ -10,7 +10,7 @@ module Myaso
       module InvalidFoo; end
 
       it 'should work when appropriate Language is given' do
-        MSD.new(ValidFoo).must_be :validate
+        MSD.new(ValidFoo).must_be :valid?
       end
 
       it 'should not work when Language has not CATEGORIES' do
@@ -18,8 +18,8 @@ module Myaso
       end
 
       it 'should work when Language is given with empty MSD line' do
-        MSD.new(ValidFoo, nil).must_be :validate
-        MSD.new(ValidFoo, '').must_be :validate
+        MSD.new(ValidFoo, nil).must_be :valid?
+        MSD.new(ValidFoo, '').must_be :valid?
       end
 
       it 'should have empty grammemes, virgin POS and defined language' do
@@ -63,12 +63,12 @@ module Myaso
 
       it 'can self-validate' do
         @msd[:pos] = :interjection
-        @msd.validate.must_equal true
+        @msd.must_be :valid?
       end
 
-      it 'should raise InvalidDescriptor when self-validation fails' do
+      it 'should break the validation when descriptors are invalid' do
         @msd[:pos] = :zalupa
-        lambda { @msd.validate }.must_raise MSD::InvalidDescriptor
+        @msd.wont_be :valid?
       end
 
       it 'can generate regexp based on POS and grammemes' do

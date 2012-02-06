@@ -17,11 +17,9 @@ class Myaso::MSD
       @tsv.close
     end
 
-    it 'should be parsed fine' do
+    it 'should be parsed' do
       until @tsv.eof?
-        line = @tsv.shift
-        ref_msd = Myaso::MSD.new(Russian, line[0])
-        ref_msd.validate.must_equal true
+        Myaso::MSD.new(Russian, @tsv.shift.first[0]).must_be :valid?
       end
     end
   end

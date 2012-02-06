@@ -146,8 +146,10 @@ class Myaso::MSD
     msd.map { |e| e || EMPTY_DESCRIPTOR }.join
   end
 
-  def validate
+  def valid?
     !!to_s
+  rescue InvalidDescriptor
+    false
   end
 
   protected
