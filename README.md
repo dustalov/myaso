@@ -26,7 +26,7 @@ TODO: Make it usable after year of stasis.
 ## Acknowledgement
 
 This work is supported by UrB RAS grant
-[№РЦП-12-П10](http://plove.eveel.ru/2012/01/20/morphological-grant).
+№[РЦП-12-П10](http://plove.eveel.ru/2012/01/20/morphological-grant).
 
 ## Contributing
 
