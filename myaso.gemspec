@@ -28,4 +28,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rake', '>= 0.8.7'
   gem.add_development_dependency 'rdoc'
   gem.add_development_dependency 'simplecov', '~> 0.5'
+  gem.add_development_dependency 'minitest', '~> 2.11'
 end
