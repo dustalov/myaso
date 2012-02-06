@@ -1,2 +1,6 @@
+branches:
+  only:
+    - develop
+    - master
 rvm:
   - 1.9.3
