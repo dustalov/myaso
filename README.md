@@ -45,9 +45,9 @@ This work is supported by UrB RAS grants:
 I highly recommend you to use git flow to make development process much
 systematic and awesome.
 
-## Build Status [<img src="https://secure.travis-ci.org/eveel/serious.png"/>](http://travis-ci.org/eveel/serious)
+## Build Status [<img src="https://secure.travis-ci.org/eveel/myaso.png"/>](http://travis-ci.org/eveel/myaso)
 
-## Dependency Status [<img src="https://gemnasium.com/eveel/serious.png?travis"/>](https://gemnasium.com/eveel/serious)
+## Dependency Status [<img src="https://gemnasium.com/eveel/myaso.png?travis"/>](https://gemnasium.com/eveel/myaso)
 
 ## Copyright
 
