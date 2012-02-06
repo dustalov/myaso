@@ -151,27 +151,27 @@ class Myaso::MSD
   end
 
   protected
-  def parse! msd_line # :nodoc:
-    msd = msd_line.mb_chars.split(//).map { |mb| mb.to_s }
-    category_code = msd.shift
+    def parse! msd_line # :nodoc:
+      msd = msd_line.mb_chars.split(//).map { |mb| mb.to_s }
+      category_code = msd.shift
 
-    @pos, category = language::CATEGORIES.find do |name, category|
-      category[:code] == category_code
+      @pos, category = language::CATEGORIES.find do |name, category|
+        category[:code] == category_code
+      end
+      raise InvalidDescriptor, msd_line unless @pos
+
+      attrs = category[:attrs]
+      msd.each_with_index do |value_code, i|
+        attr_name, values = attrs[i]
+        raise InvalidDescriptor, msd_line unless attr_name
+
+        next if :blank == attr_name
+        next if EMPTY_DESCRIPTOR == value_code
+
+        attribute = values.find { |name, code| code == value_code }
+        raise InvalidDescriptor, msd_line unless attribute
+
+        self[attr_name] = attribute.first
+      end
     end
-    raise InvalidDescriptor, msd_line unless @pos
-
-    attrs = category[:attrs]
-    msd.each_with_index do |value_code, i|
-      attr_name, values = attrs[i]
-      raise InvalidDescriptor, msd_line unless attr_name
-
-      next if :blank == attr_name
-      next if EMPTY_DESCRIPTOR == value_code
-
-      attribute = values.find { |name, code| code == value_code }
-      raise InvalidDescriptor, msd_line unless attribute
-
-      self[attr_name] = attribute.first
-    end
-  end
 end
