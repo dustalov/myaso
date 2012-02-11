@@ -2,6 +2,9 @@
 
 require 'rubygems'
 
+require 'tokyocabinet'
+require 'active_record'
+
 $:.unshift File.expand_path('../../lib', __FILE__)
 
 require 'myaso'
