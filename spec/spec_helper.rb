@@ -15,7 +15,9 @@ require 'tmpdir'
 
 unless 'true' == ENV['TRAVIS']
   require 'simplecov'
-  SimpleCov.start
+  SimpleCov.start do
+    add_filter '/spec/'
+  end
 end
 
 require 'minitest/autorun'
