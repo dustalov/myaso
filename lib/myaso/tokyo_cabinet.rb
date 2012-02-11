@@ -99,6 +99,14 @@ class Myaso::TokyoCabinet < Myaso::Base
     nil
   end
 
+  # Is our database closed?
+  #
+  def closed?
+    storages.inject(true) do |r, (_, storage)|
+      r && storage.path.nil?
+    end
+  end
+
   # Set our database free.
   #
   def close!

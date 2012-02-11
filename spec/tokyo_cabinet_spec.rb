@@ -21,6 +21,10 @@ module Myaso
         myaso.close!
         FileUtils.remove_entry_secure tmpdir
       end
+
+      # it 'is not closed after initialization' do
+      #   subject.closed?.must_equal false
+      # end
     end
 
     describe 'Management mode' do
@@ -44,15 +48,18 @@ module Myaso
         end
       end
 
+      it 'is not closed after initialization' do
+        subject.closed?.must_equal false
+      end
+
       it 'can be reindexed' do
         subject.reindex!.must_be_nil
       end
 
       it 'can be closed' do
+        subject.closed?.must_equal false
         subject.close!.must_be_nil
-        TokyoCabinet::STORAGES.each do |storage|
-          proc { subject.send(storage).find(1) }.must_raise NoMethodError
-        end
+        subject.closed?.must_equal true
       end
     end
   end
