@@ -39,11 +39,11 @@ class Myaso::TokyoCabinet < Myaso::Base
       end
 
       def storage.[] *args
-        cget(*args).each { |_, v| v.force_encoding 'UTF-8' }
+        (r = cget(*args)) && r.each { |_, v| v.force_encoding 'UTF-8' }
       end
 
       def storage.get *args
-        cget(*args).each { |_, v| v.force_encoding 'UTF-8' }
+        (r = cget(*args)) && r.each { |_, v| v.force_encoding 'UTF-8' }
       end
 
       # Tokyo Cabinet Extension has strange issues with
