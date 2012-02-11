@@ -7,8 +7,8 @@ class Myaso::TokyoCabinet::Prefixes < Myaso::Base::Adapter
     prefixes.get(id)
   end
 
-  def set id, rule
-    prefixes.put(id, rule)
+  def set id, prefix
+    prefixes.put(id, prefix)
   end
 
   def delete id
