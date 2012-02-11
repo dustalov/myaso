@@ -16,7 +16,7 @@ class Myaso::TokyoCabinet::Rules < Myaso::Base::Adapter
   end
 
   def find_rule rule_set_id, suffix, prefix = ''
-    TDBQRY.new(base.storages[:rules]).tap do |q|
+    TDBQRY.new(rules).tap do |q|
       q.addcond('rule_set_id', TDBQRY::QCNUMEQ, rule_set_id)
       q.addcond('suffix', TDBQRY::QCSTREQ, suffix.empty? ? nil : suffix)
       q.addcond('prefix', TDBQRY::QCSTREQ, prefix.empty? ? nil : prefix)
@@ -25,20 +25,20 @@ class Myaso::TokyoCabinet::Rules < Myaso::Base::Adapter
   end
 
   def has_suffix? suffix
-    TDBQRY.new(base.storages[:rules]).tap do |q|
+    TDBQRY.new(rules).tap do |q|
       q.addcond('suffix', TDBQRY::QCSTREQ, suffix.empty? ? nil : suffix)
       q.setlimit(1, 0)
     end.search.any?
   end
 
   def select_by_rule_set rule_set_id
-    TDBQRY.new(base.storages[:rules]).tap do |q|
+    TDBQRY.new(rules).tap do |q|
       q.addcond('rule_set_id', TDBQRY::QCNUMEQ, rule_set_id)
     end.search
   end
 
   def select_by_prefix prefix, rule_set_id = nil
-    TDBQRY.new(base.storages[:rules]).tap do |q|
+    TDBQRY.new(rules).tap do |q|
       q.addcond('prefix', TDBQRY::QCSTREQ, prefix.empty? ? nil : prefix)
       if rule_set_id
         q.addcond('rule_set_id', TDBQRY::QCNUMEQ, rule_set_id)
@@ -47,11 +47,16 @@ class Myaso::TokyoCabinet::Rules < Myaso::Base::Adapter
   end
 
   def select_by_suffix suffix, rule_set_id = nil
-    TDBQRY.new(base.storages[:rules]).tap do |q|
+    TDBQRY.new(rules).tap do |q|
       q.addcond('suffix', TDBQRY::QCSTREQ, suffix.empty? ? nil : suffix)
       if rule_set_id
         q.addcond('rule_set_id', TDBQRY::QCNUMEQ, rule_set_id)
       end
     end.search
   end
+
+  protected
+    def rules
+      @rules ||= base.storages[:rules]
+    end
 end
