@@ -16,7 +16,7 @@ class Myaso::TokyoCabinet::Stems < Myaso::Base::Adapter
   end
 
   def find_by_stem_and_rule_set_id stem, rule_set_id
-    TDBQRY.new(base.storages[:stems]).tap do |q|
+    TDBQRY.new(stems).tap do |q|
       q.addcond('stem', TDBQRY::QCSTREQ, stem.empty? ? nil : stem)
       q.addcond('rule_set_id', TDBQRY::QCNUMEQ, rule_set_id)
       q.setlimit(1, 0)
@@ -24,7 +24,7 @@ class Myaso::TokyoCabinet::Stems < Myaso::Base::Adapter
   end
 
   def has_stem? stem, rule_set_id = nil
-    TDBQRY.new(base.storages[:stems]).tap do |q|
+    TDBQRY.new(stems).tap do |q|
       q.addcond('stem', TDBQRY::QCSTREQ, stem.empty? ? nil : stem)
       if rule_set_id
         q.addcond('rule_set_id', TDBQRY::QCNUMEQ, rule_set_id)
@@ -34,17 +34,22 @@ class Myaso::TokyoCabinet::Stems < Myaso::Base::Adapter
   end
 
   def select stem
-    TDBQRY.new(base.storages[:stems]).tap do |q|
+    TDBQRY.new(stems).tap do |q|
       q.addcond('stem', TDBQRY::QCSTREQ, stem.empty? ? nil : stem)
     end.search
   end
 
   def select_by_ending ending, rule_set_id = nil
-    TDBQRY.new(base.storages[:stems]).tap do |q|
+    TDBQRY.new(stems).tap do |q|
       q.addcond('stem', TDBQRY::QCSTREW, ending)
       if rule_set_id
         q.addcond('rule_set_id', TDBQRY::QCNUMEQ, rule_set_id)
       end
     end.search
   end
+
+  protected
+    def stems
+      @stems ||= base.storages[:stems]
+    end
 end
