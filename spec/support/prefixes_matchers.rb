@@ -4,11 +4,11 @@ class MiniTest::Unit::TestCase
   def self.should_behave_like_a_prefixes!
     describe '#get' do
       it 'should fetch a prefix' do
-        subject.find(1).must_equal({'prefix' => 'sub'})
+        subject.find(1).must_equal('prefix' => 'sub')
       end
 
       it 'should fetch a prefix in UTF-8' do
-        subject.find(2).must_equal({'prefix' => 'bi'})
+        subject.find(2).must_equal('prefix' => 'би')
       end
 
       it 'should return nil when prefix is absent' do
