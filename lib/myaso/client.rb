@@ -1,11 +1,11 @@
 # encoding: utf-8
 
-# Core of the Myaso library.
+# Client for the Myaso::Adapter instances.
 #
-class Myaso::Base
+module Myaso::Client
   class << self
-    # Define a new method that will fetch the necessary namespace adapter
-    # for current Myaso::Base instance.
+    # Define a new method that will fetch the necessary adapter for
+    # current Myaso::Client mixed-in class.
     #
     def adapter_for *names
       names.each do |name|
@@ -20,16 +20,6 @@ class Myaso::Base
           instance_variable_set(ivar_name, ivar)
         end
       end
-    end
-  end
-
-  # Create an instance of Myaso::Base class, which is necessary to
-  # proper work of the other components of Myaso library.
-  #
-  def initialize
-    if Myaso::Base == self.class
-      raise 'You must not instantiate the Myaso::Base class! ' \
-            'Try to make instances of its ancestors instead.'
     end
   end
 

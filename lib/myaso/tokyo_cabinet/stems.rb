@@ -1,18 +1,16 @@
 # encoding: utf-8
 
-class Myaso::TokyoCabinet::Stems < Myaso::Base::Adapter
-  include TokyoCabinet
-
+class Myaso::TokyoCabinet::Stems < Myaso::Adapter
   def find id
-    base.storages[:stems][id]
+    stems.get(id)
   end
 
   def set id, rule
-    base.storages[:stems][id] = rule
+    stems.put(id, rule)
   end
 
   def delete id
-    base.storages[:stems].delete id
+    stems.delete(id)
   end
 
   def find_by_stem_and_rule_set_id stem, rule_set_id
@@ -50,6 +48,6 @@ class Myaso::TokyoCabinet::Stems < Myaso::Base::Adapter
 
   protected
     def stems
-      @stems ||= base.storages[:stems]
+      @stems ||= client.storages[:stems]
     end
 end

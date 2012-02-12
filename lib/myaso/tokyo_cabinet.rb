@@ -1,6 +1,7 @@
 # encoding: utf-8
 
-class Myaso::TokyoCabinet < Myaso::Base
+class Myaso::TokyoCabinet
+  include Myaso::Client
   include TokyoCabinet
 
   STORAGES = [ :prefixes, :stems, :rules, :words ] # :nodoc:

@@ -1,6 +1,7 @@
 # encoding: utf-8
 
-class Myaso::ActiveRecord < Myaso::Base
+class Myaso::ActiveRecord
+  include Myaso::Client
 end
 
 require 'myaso/active_record/prefix'

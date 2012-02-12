@@ -1,18 +1,16 @@
 # encoding: utf-8
 
-class Myaso::TokyoCabinet::Rules < Myaso::Base::Adapter
-  include TokyoCabinet
-
+class Myaso::TokyoCabinet::Rules < Myaso::Adapter
   def find id
-    base.storages[:rules][id]
+    rules.get(id)
   end
 
   def set id, rule
-    base.storages[:rules][id] = rule
+    rules.put(id, rule)
   end
 
   def delete id
-    base.storages[:rules].delete id
+    rules.delete(id)
   end
 
   def find_rule rule_set_id, suffix, prefix = ''
@@ -57,6 +55,6 @@ class Myaso::TokyoCabinet::Rules < Myaso::Base::Adapter
 
   protected
     def rules
-      @rules ||= base.storages[:rules]
+      @rules ||= client.storages[:rules]
     end
 end

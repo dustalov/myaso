@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Myaso::TokyoCabinet::Prefixes < Myaso::Base::Adapter
-  include TokyoCabinet
-
+class Myaso::TokyoCabinet::Prefixes < Myaso::Adapter
   def find id
     prefixes.get(id)
   end
@@ -17,6 +15,6 @@ class Myaso::TokyoCabinet::Prefixes < Myaso::Base::Adapter
 
   protected
     def prefixes
-      @prefixes ||= base.storages[:prefixes]
+      @prefixes ||= client.storages[:prefixes]
     end
 end

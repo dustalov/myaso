@@ -1,8 +1,10 @@
 # encoding: utf-8
 
-class Myaso::AllYourBaseAreBelongToUs < Myaso::Base
-  class Prefixes < Myaso::Base::Adapter; end
-  class Stems < Myaso::Base::Adapter; end
-  class Rules < Myaso::Base::Adapter; end
-  class Words < Myaso::Base::Adapter; end
+class Myaso::AllYourBaseAreBelongToUs
+  include Myaso::Client
+
+  class Prefixes < Myaso::Adapter; end
+  class Stems < Myaso::Adapter; end
+  class Rules < Myaso::Adapter; end
+  class Words < Myaso::Adapter; end
 end
