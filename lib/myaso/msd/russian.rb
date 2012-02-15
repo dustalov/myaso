@@ -4,7 +4,7 @@
 # the scope of an effort to produce a publicly available tagged
 # corpus of Russian; this corpus and accompanying resources are
 # available from http://corpus.leeds.ac.uk/mocky/. The
-# morphosyntactic specifications and corpus are documented in: 
+# morphosyntactic specifications and corpus are documented in:
 # Serge Sharoff, Mikhail Kopotev, Tomaž Erjavec, Anna Feldman,
 # Dagmar Divjak. Designing and evaluating Russian tagsets.
 # In Proc. LREC 2008, Marrakech, May, 2008.
