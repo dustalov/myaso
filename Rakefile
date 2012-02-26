@@ -17,3 +17,13 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
+
+begin
+  require 'reek/rake/task'
+
+  Reek::Rake::Task.new do |reek|
+    reek.fail_on_error = false
+  end
+rescue LoadError
+  # okay
+end
