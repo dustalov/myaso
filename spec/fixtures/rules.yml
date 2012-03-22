@@ -1,9 +1,7 @@
 # empty prefix & suffix
 1:
- msd:
  rule_set_id: 1
 # empty prefix & 's' suffix
 2:
- msd:
  rule_set_id: 1
  suffix: s
