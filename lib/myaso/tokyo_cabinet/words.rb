@@ -1,6 +1,8 @@
 # encoding: utf-8
 
 class Myaso::TokyoCabinet::Words < Myaso::Adapter
+  include TokyoCabinet
+
   def find id
     words.get(id)
   end
@@ -11,6 +13,25 @@ class Myaso::TokyoCabinet::Words < Myaso::Adapter
 
   def delete id
     words.delete(id)
+  end
+
+  def select stem_id, rule_id
+    TDBQRY.new(words).tap do |q|
+      q.addcond('stem_id', TDBQRY::QCNUMEQ, stem_id)
+      q.addcond('rule_id', TDBQRY::QCNUMEQ, rule_id)
+    end.search.map { |id| find(id) }
+  end
+
+  def select_by_stem_id stem_id
+    TDBQRY.new(words).tap do |q|
+      q.addcond('stem_id', TDBQRY::QCNUMEQ, stem_id)
+    end.search.map { |id| find(id) }
+  end
+
+  def select_by_rule_id rule_id
+    TDBQRY.new(words).tap do |q|
+      q.addcond('rule_id', TDBQRY::QCNUMEQ, rule_id)
+    end.search.map { |id| find(id) }
   end
 
   protected
