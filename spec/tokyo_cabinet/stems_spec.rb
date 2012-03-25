@@ -7,7 +7,7 @@ class Myaso::TokyoCabinet
     let(:tmpdir) { Dir.mktmpdir }
     let(:myaso) { Myaso::TokyoCabinet.new(tmpdir, :manage) }
 
-    subject { myaso.prefixes }
+    subject { myaso.stems }
 
     before { populate_tokyo_cabinet! myaso }
 
