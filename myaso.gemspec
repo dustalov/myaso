@@ -17,8 +17,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = [ 'lib' ]
   gem.version       = Myaso::VERSION
 
-  # FIXME: actually, all I need is mb_chars
-  gem.add_dependency 'activesupport', '~> 3'
+  gem.add_dependency 'unicode_utils', '~> 1.3'
 
   gem.add_development_dependency 'activerecord', '~> 3'
   gem.add_development_dependency 'sqlite3', '~> 1.3'
