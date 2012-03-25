@@ -36,5 +36,22 @@ class MiniTest::Unit::TestCase
         subject.find(3).must_equal new_rule
       end
     end
+
+    describe '#delete' do
+      let(:rule) { { 'rule_set_id' => '1' } }
+
+      it 'should remove an existent rule' do
+        subject.find(3).must_be_nil
+        subject.set(3, rule)
+        subject.find(3).must_equal rule
+        subject.delete(3).must_equal true
+        subject.find(3).must_be_nil
+      end
+
+      it 'should not remove an existent rule' do
+        subject.find(3).must_be_nil
+        subject.delete(3).must_equal false
+      end
+    end
   end
 end
