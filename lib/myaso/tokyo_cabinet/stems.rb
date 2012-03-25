@@ -1,6 +1,8 @@
 # encoding: utf-8
 
 class Myaso::TokyoCabinet::Stems < Myaso::Adapter
+  include TokyoCabinet
+  
   def find id
     stems.get(id)
   end
@@ -14,16 +16,29 @@ class Myaso::TokyoCabinet::Stems < Myaso::Adapter
   end
 
   def find_by_stem_and_rule_set_id stem, rule_set_id
-    TDBQRY.new(stems).tap do |q|
-      q.addcond('stem', TDBQRY::QCSTREQ, stem.empty? ? nil : stem)
+    stem_id = TDBQRY.new(stems).tap do |q|
+      if stem && !stem.empty?
+        q.addcond('stem', TDBQRY::QCSTREQ, stem)
+      else
+        q.addcond('stem', TDBQRY::QCSTRRX | TDBQRY::QCNEGATE, '')
+      end
+
       q.addcond('rule_set_id', TDBQRY::QCNUMEQ, rule_set_id)
+
       q.setlimit(1, 0)
     end.search.first
+
+    stem_id && find(stem_id)
   end
 
   def has_stem? stem, rule_set_id = nil
     TDBQRY.new(stems).tap do |q|
-      q.addcond('stem', TDBQRY::QCSTREQ, stem.empty? ? nil : stem)
+      if stem && !stem.empty?
+        q.addcond('stem', TDBQRY::QCSTREQ, stem)
+      else
+        q.addcond('stem', TDBQRY::QCSTRRX | TDBQRY::QCNEGATE, '')
+      end
+
       if rule_set_id
         q.addcond('rule_set_id', TDBQRY::QCNUMEQ, rule_set_id)
       end
@@ -33,17 +48,22 @@ class Myaso::TokyoCabinet::Stems < Myaso::Adapter
 
   def select stem
     TDBQRY.new(stems).tap do |q|
-      q.addcond('stem', TDBQRY::QCSTREQ, stem.empty? ? nil : stem)
-    end.search
+      if stem && !stem.empty?
+        q.addcond('stem', TDBQRY::QCSTREQ, stem)
+      else
+        q.addcond('stem', TDBQRY::QCSTRRX | TDBQRY::QCNEGATE, '')
+      end
+    end.search.map { |id| find(id) }
   end
 
   def select_by_ending ending, rule_set_id = nil
     TDBQRY.new(stems).tap do |q|
       q.addcond('stem', TDBQRY::QCSTREW, ending)
+
       if rule_set_id
         q.addcond('rule_set_id', TDBQRY::QCNUMEQ, rule_set_id)
       end
-    end.search
+    end.search.map { |id| find(id) }
   end
 
   protected
