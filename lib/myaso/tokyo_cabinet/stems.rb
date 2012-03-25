@@ -53,7 +53,7 @@ class Myaso::TokyoCabinet::Stems < Myaso::Adapter
       else
         q.addcond('stem', TDBQRY::QCSTRRX | TDBQRY::QCNEGATE, '')
       end
-    end.search.map { |id| find(id) }
+    end.search
   end
 
   def select_by_ending ending, rule_set_id = nil
@@ -63,7 +63,7 @@ class Myaso::TokyoCabinet::Stems < Myaso::Adapter
       if rule_set_id
         q.addcond('rule_set_id', TDBQRY::QCNUMEQ, rule_set_id)
       end
-    end.search.map { |id| find(id) }
+    end.search
   end
 
   protected

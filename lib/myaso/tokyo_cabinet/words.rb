@@ -19,19 +19,19 @@ class Myaso::TokyoCabinet::Words < Myaso::Adapter
     TDBQRY.new(words).tap do |q|
       q.addcond('stem_id', TDBQRY::QCNUMEQ, stem_id)
       q.addcond('rule_id', TDBQRY::QCNUMEQ, rule_id)
-    end.search.map { |id| find(id) }
+    end.search
   end
 
   def select_by_stem_id stem_id
     TDBQRY.new(words).tap do |q|
       q.addcond('stem_id', TDBQRY::QCNUMEQ, stem_id)
-    end.search.map { |id| find(id) }
+    end.search
   end
 
   def select_by_rule_id rule_id
     TDBQRY.new(words).tap do |q|
       q.addcond('rule_id', TDBQRY::QCNUMEQ, rule_id)
-    end.search.map { |id| find(id) }
+    end.search
   end
 
   protected

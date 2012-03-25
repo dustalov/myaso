@@ -52,7 +52,7 @@ class Myaso::TokyoCabinet::Rules < Myaso::Adapter
   def select_by_rule_set rule_set_id
     TDBQRY.new(rules).tap do |q|
       q.addcond('rule_set_id', TDBQRY::QCNUMEQ, rule_set_id)
-    end.search.map { |id| find(id) }
+    end.search
   end
 
   def select_by_prefix prefix, rule_set_id = nil
@@ -66,7 +66,7 @@ class Myaso::TokyoCabinet::Rules < Myaso::Adapter
       if rule_set_id
         q.addcond('rule_set_id', TDBQRY::QCNUMEQ, rule_set_id)
       end
-    end.search.map { |id| find(id) }
+    end.search
   end
 
   def select_by_suffix suffix, rule_set_id = nil
@@ -80,7 +80,7 @@ class Myaso::TokyoCabinet::Rules < Myaso::Adapter
       if rule_set_id
         q.addcond('rule_set_id', TDBQRY::QCNUMEQ, rule_set_id)
       end
-    end.search.map { |id| find(id) }
+    end.search
   end
 
   protected
