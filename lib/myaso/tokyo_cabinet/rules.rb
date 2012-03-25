@@ -1,6 +1,8 @@
 # encoding: utf-8
 
 class Myaso::TokyoCabinet::Rules < Myaso::Adapter
+  include TokyoCabinet
+
   def find id
     rules.get(id)
   end
@@ -14,12 +16,25 @@ class Myaso::TokyoCabinet::Rules < Myaso::Adapter
   end
 
   def find_rule rule_set_id, suffix, prefix = ''
-    TDBQRY.new(rules).tap do |q|
+    rule_id = TDBQRY.new(rules).tap do |q|
       q.addcond('rule_set_id', TDBQRY::QCNUMEQ, rule_set_id)
-      q.addcond('suffix', TDBQRY::QCSTREQ, suffix.empty? ? nil : suffix)
-      q.addcond('prefix', TDBQRY::QCSTREQ, prefix.empty? ? nil : prefix)
+
+      if suffix && !suffix.empty?
+        q.addcond('suffix', TDBQRY::QCSTREQ, suffix)
+      else
+        q.addcond('suffix', TDBQRY::QCSTRRX | TDBQRY::QCNEGATE, '')
+      end
+
+      if prefix && !prefix.empty?
+        q.addcond('prefix', TDBQRY::QCSTREQ, prefix)
+      else
+        q.addcond('prefix', TDBQRY::QCSTRRX | TDBQRY::QCNEGATE, '')
+      end
+
       q.setlimit(1, 0)
     end.search.first
+
+    rule_id && find(rule_id)
   end
 
   def has_suffix? suffix
