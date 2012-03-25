@@ -53,6 +53,16 @@ class MiniTest::Unit::TestCase
       end
     end
 
+    describe '#find_by_stem_id_and_rule_id' do
+      it 'should select existent words' do
+        subject.find_by_stem_id_and_rule_id(1, 1).must_equal('1')
+      end
+
+      it 'should not select absent words' do
+        subject.find_by_stem_id_and_rule_id(2, 1).must_be_nil
+      end
+    end
+
     describe '#select' do
       it 'should select existent words' do
         subject.select(1, 1).size.must_equal 1

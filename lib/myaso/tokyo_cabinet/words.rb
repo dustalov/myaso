@@ -15,6 +15,14 @@ class Myaso::TokyoCabinet::Words < Myaso::Adapter
     words.delete(id)
   end
 
+  def find_by_stem_id_and_rule_id stem_id, rule_id
+    TDBQRY.new(words).tap do |q|
+      q.addcond('stem_id', TDBQRY::QCNUMEQ, stem_id)
+      q.addcond('rule_id', TDBQRY::QCNUMEQ, rule_id)
+      q.setlimit(1, 0)
+    end.search.first
+  end
+
   def select stem_id, rule_id
     TDBQRY.new(words).tap do |q|
       q.addcond('stem_id', TDBQRY::QCNUMEQ, stem_id)
