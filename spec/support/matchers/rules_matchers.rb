@@ -4,7 +4,8 @@ class MiniTest::Unit::TestCase
   def self.should_behave_like_a_rules!
     describe '#get' do
       it 'should fetch a rule' do
-        subject.find(1).must_equal('rule_set_id' => '1')
+        subject.find(1).must_equal('rule_set_id' => '1',
+                                   'msd' => 'Nc-s')
       end
 
       it 'should return nil when rule is absent' do
@@ -51,12 +52,16 @@ class MiniTest::Unit::TestCase
 
     describe '#find_rule' do
       it 'should find rules without suffix' do
-        subject.find_rule('1', nil).must_equal('rule_set_id' => '1')
+        subject.find_rule('1', nil).
+          must_equal('rule_set_id' => '1',
+                     'msd' => 'Nc-s')
       end
 
       it 'should find an existent rule by required arguments' do
-        subject.find_rule('1', 's').must_equal('rule_set_id' => '1',
-                                               'suffix' => 's')
+        subject.find_rule('1', 's').
+          must_equal('rule_set_id' => '1',
+                     'suffix' => 's',
+                     'msd' => 'Nc-p')
       end
 
       it 'should not find absent rule by required arguments' do
