@@ -16,4 +16,16 @@ Gem::Specification.new do |gem|
   gem.name          = 'myaso'
   gem.require_paths = [ 'lib' ]
   gem.version       = Myaso::VERSION
+
+  gem.add_dependency 'unicode_utils', '~> 1.3'
+
+  gem.add_development_dependency 'activerecord', '~> 3'
+  gem.add_development_dependency 'sqlite3', '~> 1.3'
+
+  gem.add_development_dependency 'tokyocabinet', '~> 1'
+
+  gem.add_development_dependency 'rake', '>= 0.8.7'
+  gem.add_development_dependency 'rdoc'
+  gem.add_development_dependency 'simplecov', '~> 0.6'
+  gem.add_development_dependency 'minitest', '~> 2.11'
 end

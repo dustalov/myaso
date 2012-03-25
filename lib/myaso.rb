@@ -2,5 +2,12 @@
 
 require 'myaso/version'
 
-module Myaso
-end
+require 'myaso/msd'
+
+require 'myaso/client'
+require 'myaso/adapter'
+
+require 'myaso/active_record' if defined? ::ActiveRecord::Base
+require 'myaso/tokyo_cabinet' if defined? ::TokyoCabinet::TDB
+
+require 'myaso/analyzer'

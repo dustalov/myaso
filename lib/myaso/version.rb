@@ -1,5 +1,9 @@
 # encoding: utf-8
 
+# Myaso is a morphological analysis and synthesis library in Ruby.
+#
 module Myaso
-  VERSION = '0.3.0'
+  # Myaso version string.
+  #
+  VERSION = '0.3.0.pre1'
 end
