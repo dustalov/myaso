@@ -52,7 +52,7 @@ class Myaso::TokyoCabinet::Words < Myaso::Adapter
     stem = client.storages[:stems].get(word['stem_id'])
     rule = client.storages[:rules].get(word['rule_id'])
 
-    [rule['prefix'], stem['stem'], rule['suffix']].join
+    [rule['prefix'] || '', stem['stem'] || '', rule['suffix'] || ''].join
   end
 
   protected

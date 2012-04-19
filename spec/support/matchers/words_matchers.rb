@@ -98,6 +98,10 @@ class MiniTest::Unit::TestCase
       it 'should assemble words' do
         subject.assemble(2).must_equal 'cats'
       end
+
+      it 'should assemble words without suffix' do
+        subject.assemble(1).must_equal 'cat'
+      end
     end
 
     describe '#size' do
