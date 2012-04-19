@@ -94,6 +94,12 @@ class MiniTest::Unit::TestCase
       end
     end
 
+    describe '#assemble' do
+      it 'should assemble words' do
+        subject.assemble(2).must_equal 'cats'
+      end
+    end
+
     describe '#size' do
       it 'should be valid' do
         subject.size.must_equal 2
