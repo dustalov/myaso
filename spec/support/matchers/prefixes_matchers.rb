@@ -52,5 +52,11 @@ class MiniTest::Unit::TestCase
         subject.delete(3).must_equal false
       end
     end
+
+    describe '#size' do
+      it 'should be valid' do
+        subject.size.must_equal 2
+      end
+    end
   end
 end

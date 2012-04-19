@@ -93,5 +93,11 @@ class MiniTest::Unit::TestCase
         subject.select_by_rule_id(3).size.must_equal 0
       end
     end
+
+    describe '#size' do
+      it 'should be valid' do
+        subject.size.must_equal 2
+      end
+    end
   end
 end

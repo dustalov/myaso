@@ -66,6 +66,10 @@ class Myaso::TokyoCabinet::Stems < Myaso::Adapter
     end.search
   end
 
+  def size
+    stems.size
+  end
+
   protected
     def stems
       @stems ||= client.storages[:stems]

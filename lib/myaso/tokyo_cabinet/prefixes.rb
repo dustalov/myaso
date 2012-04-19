@@ -13,6 +13,10 @@ class Myaso::TokyoCabinet::Prefixes < Myaso::Adapter
     prefixes.out(id)
   end
 
+  def size
+    prefixes.size
+  end
+
   protected
     def prefixes
       @prefixes ||= client.storages[:prefixes]

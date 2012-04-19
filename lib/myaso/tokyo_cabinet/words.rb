@@ -42,6 +42,10 @@ class Myaso::TokyoCabinet::Words < Myaso::Adapter
     end.search
   end
 
+  def size
+    words.size
+  end
+
   protected
     def words
       @words ||= client.storages[:words]
