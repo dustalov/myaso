@@ -83,12 +83,12 @@ class Myaso::TokyoCabinet
     storages[:prefixes].setindex 'prefix', TDB::ITLEXICAL
 
     # stems index
-    storages[:stems].setindex 'msd_id', TDB::ITDECIMAL
+    storages[:stems].setindex 'msd', TDB::ITLEXICAL
     storages[:stems].setindex 'rule_set_id', TDB::ITDECIMAL
     storages[:stems].setindex 'stem', TDB::ITLEXICAL
 
     # rules index
-    storages[:rules].setindex 'msd_id', TDB::ITDECIMAL
+    storages[:rules].setindex 'msd', TDB::ITLEXICAL
     storages[:rules].setindex 'rule_set_id', TDB::ITDECIMAL
     storages[:rules].setindex 'prefix', TDB::ITLEXICAL
     storages[:rules].setindex 'suffix', TDB::ITLEXICAL

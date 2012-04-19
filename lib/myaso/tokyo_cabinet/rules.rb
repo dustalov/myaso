@@ -83,6 +83,10 @@ class Myaso::TokyoCabinet::Rules < Myaso::Adapter
     end.search
   end
 
+  def size
+    rules.size
+  end
+
   protected
     def rules
       @rules ||= client.storages[:rules]

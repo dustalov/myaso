@@ -93,5 +93,21 @@ class MiniTest::Unit::TestCase
         subject.select_by_rule_id(3).size.must_equal 0
       end
     end
+
+    describe '#assemble' do
+      it 'should assemble words' do
+        subject.assemble(2).must_equal 'cats'
+      end
+
+      it 'should assemble words without suffix' do
+        subject.assemble(1).must_equal 'cat'
+      end
+    end
+
+    describe '#size' do
+      it 'should be valid' do
+        subject.size.must_equal 2
+      end
+    end
   end
 end

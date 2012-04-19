@@ -155,5 +155,11 @@ class MiniTest::Unit::TestCase
     #     subject.select_by_suffix('s', 2).size.must_equal 0
     #   end
     # end
+
+    describe '#size' do
+      it 'should be valid' do
+        subject.size.must_equal 1
+      end
+    end
   end
 end

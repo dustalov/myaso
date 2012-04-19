@@ -42,6 +42,19 @@ class Myaso::TokyoCabinet::Words < Myaso::Adapter
     end.search
   end
 
+  def size
+    words.size
+  end
+
+  def assemble id
+    word = find(id)
+
+    stem = client.storages[:stems].get(word['stem_id'])
+    rule = client.storages[:rules].get(word['rule_id'])
+
+    [rule['prefix'] || '', stem['stem'] || '', rule['suffix'] || ''].join
+  end
+
   protected
     def words
       @words ||= client.storages[:words]
