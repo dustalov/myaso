@@ -54,9 +54,12 @@ class Myaso::MSD
   #
   def initialize(language, msd = '')
     @language, @pos, @grammemes = language, nil, {}
-    unless defined? language::CATEGORIES
-      raise ArgumentError, 'given language has no CATEGORIES'
+
+    unless language.const_defined? 'CATEGORIES'
+      raise ArgumentError,
+        'given language has no morphosyntactic descriptions'
     end
+
     parse! msd if msd && !msd.empty?
   end
 
