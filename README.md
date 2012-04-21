@@ -21,7 +21,32 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Make it usable after year of stasis.
+It is possible to perform morphological analysis with Myaso. In this
+example, a dictionary in the Tokyo Cabinet format is stored in
+`../myasorubka` path:
+
+    $ myaso --tc-path ../myasorubka --tc-mode read -i
+    @tokyocabinet = #<Myaso::TokyoCabinet path="../myasorubka" mode=:read>
+    >> # load the Russian morphosyntactic descriptions
+    >> require 'myaso/msd/russian'
+    true
+    >> # initialize the analyzer
+    >> analyzer = Analyzer.new(@tokyocabinet, MSD::Russian)
+    #<Myaso::Analyzer:0x00000002a3b310 @myaso=#<...>, @language=Myaso::MSD::Russian>
+    >> # analyze the word
+    >> pp analyzer.analyze 'бублик'
+    [#<struct Myaso::Analyzer::Result
+      word_id="410728",
+      stem={"rule_set_id"=>"21", "stem"=>"бублик", "msd_id"=>"687", "id"=>"18572"},
+      rule={"msd"=>"Ncmsn", "rule_set_id"=>"21", "id"=>"502"},
+      msd=
+       #<Myaso::MSD:0x2b04e68 language=Myaso::MSD::Russian pos=:noun grammemes={:type=>:common, :gender=>:masculine, :number=>:singular, :case=>:nominative}>>,
+     #<struct Myaso::Analyzer::Result
+      word_id="410731",
+      stem={"rule_set_id"=>"21", "stem"=>"бублик", "msd_id"=>"687", "id"=>"18572"},
+      rule={"msd"=>"Ncmsa", "rule_set_id"=>"21", "id"=>"505"},
+      msd=
+       #<Myaso::MSD:0x2b03608 language=Myaso::MSD::Russian pos=:noun grammemes={:type=>:common, :gender=>:masculine, :number=>:singular, :case=>:accusative}>>]
 
 ## Acknowledgement
 
