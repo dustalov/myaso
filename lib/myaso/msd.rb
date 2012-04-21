@@ -123,7 +123,7 @@ class Myaso::MSD
       raise InvalidDescriptor, "category is nil"
     end
 
-    msd = [ category[:code] ]
+    msd = [category[:code]]
 
     attrs = category[:attrs]
     grammemes.each do |attr_name, value|
