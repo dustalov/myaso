@@ -21,10 +21,9 @@ class Myaso::Analyzer
     # collect the possible stem/suffix splits
     splits = suffixes.map do |suffix|
       stems = possible_stems(word, suffix)
+
       unless stems.empty?
-        stems.map do |stem_id|
-          [stem_id, suffix]
-        end
+        stems.map { |stem_id| [stem_id, suffix] }
       else
         [[nil, suffix]]
       end
@@ -33,6 +32,7 @@ class Myaso::Analyzer
         stem = myaso.stems.find(stem_id)
         stem['rule_set_id']
       end
+
       rules_ids = myaso.rules.select_by_suffix(suffix, rule_set_id)
       [stem_id, rules_ids]
     end
@@ -48,7 +48,7 @@ class Myaso::Analyzer
         word_id = myaso.words.find_by_stem_id_and_rule_id(stem_id, rule_id)
         next unless word_id
 
-        # # we need to merge the stem and rule MSDs
+        # we need to merge the stem and rule MSDs
         rule = myaso.rules.find(rule_id)
         rule['id'] = rule_id
 
@@ -56,6 +56,7 @@ class Myaso::Analyzer
         stem['id'] = stem_id
 
         msd = Myaso::MSD.new(language, rule['msd'])
+
         if stem['msd']
           msd.merge! Myaso::MSD.new(language, stem['msd']).grammemes
         end
