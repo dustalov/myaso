@@ -25,7 +25,7 @@ It is possible to perform morphological analysis with Myaso. In this
 example, a dictionary in the Tokyo Cabinet format is stored in
 `../myasorubka` path:
 
-    $ myaso --tc-path ../myasorubka
+    $ myaso --tc-path ../myasorubka -i
 
 After this, the `@tokyocabinet` variable will be allocated as a
 ready for use `Myaso::TokyoCabinet` instance. All you need is
