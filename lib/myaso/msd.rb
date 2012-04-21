@@ -157,15 +157,18 @@ class Myaso::MSD
 
   protected
     def parse! msd_line # :nodoc:
-      msd = msd_line.mb_chars.split(//).map { |mb| mb.to_s }
+      msd = msd_line.chars.to_a
+
       category_code = msd.shift
 
       @pos, category = language::CATEGORIES.find do |name, category|
         category[:code] == category_code
       end
+
       raise InvalidDescriptor, msd_line unless @pos
 
       attrs = category[:attrs]
+
       msd.each_with_index do |value_code, i|
         attr_name, values = attrs[i]
         raise InvalidDescriptor, msd_line unless attr_name
