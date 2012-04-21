@@ -41,6 +41,10 @@ optparse = OptionParser.new do |opts|
     options[:irb] = i
   end
 
+  opts.on_tail '-e', '--eval [code]', 'Evaluate the given code and exit' do |e|
+    options[:eval] = e
+  end
+
   opts.on_tail '-b', '--backends', 'List the available backends' do |b|
     p BACKENDS
     exit
@@ -76,6 +80,12 @@ if options[:irb]
   include Myaso
   IRB.start_session(binding)
 
+  exit
+end
+
+if options[:eval]
+  include Myaso
+  eval(options[:eval], binding, __FILE__, __LINE__)
   exit
 end
 
