@@ -68,6 +68,40 @@ class Myaso::Analyzer
     result
   end
 
+  # Perform the word lemmatization basen on its +stem_id+.
+  #
+  # Lemmatization is the process of grouping together the different
+  # inflected forms of a word so they can be analysed as a single item.
+  #
+  def lemmatize stem_id
+    stem = myaso.stems.find(stem_id)
+
+    rules = myaso.rules.
+      select_by_rule_set(stem['rule_set_id']).
+      map { |id| [id, myaso.rules.find(id)] }
+
+    rule_id = rules.sort do |(id1, rule1), (id2, rule2)|
+      msd1, msd2 = Myaso::MSD.new(language, rule1['msd']),
+                   Myaso::MSD.new(language, rule2['msd'])
+
+      length_criteria = msd1.grammemes.length <=> msd2.grammemes.length
+
+      next length_criteria unless length_criteria == 0
+
+      positions1 = msd1.grammemes.inject(0) do |cost, (k, v)|
+        attributes = language::CATEGORIES[msd1.pos][:attrs]
+        attribute = attributes.find { |a| a.first == k }
+
+        cost + attribute.last.keys.index { |a| a == v }
+      end
+
+      positions_cost(msd1) <=> positions_cost(msd2)
+    end.first[0]
+
+    word_id = myaso.words.find_by_stem_id_and_rule_id(stem_id, rule_id)
+    myaso.words.assemble(word_id)
+  end
+
   protected
     # Normalize +word+: strip unnecessary left and right characters
     # and downcase it.
@@ -110,5 +144,16 @@ class Myaso::Analyzer
     #
     def possible_stems(word, suffix)
       myaso.stems.select cut_stem(word, suffix)
+    end
+
+    # Compute the MSD positions cost for lemmatization purposes.
+    #
+    def positions_cost(msd)
+      msd.grammemes.inject(0) do |cost, (k, v)|
+        attributes = language::CATEGORIES[msd.pos][:attrs]
+        attribute = attributes.find { |a| a.first == k }
+
+        cost + attribute.last.keys.index { |a| a == v }
+      end
     end
 end

@@ -25,7 +25,7 @@ It is possible to perform morphological analysis with Myaso. In this
 example, a dictionary in the Tokyo Cabinet format is stored in
 `../myasorubka` path:
 
-    $ myaso --tc-path ../myasorubka
+    $ myaso --tc-path ../myasorubka -i
 
 After this, the `@tokyocabinet` variable will be allocated as a
 ready for use `Myaso::TokyoCabinet` instance. All you need is
@@ -50,13 +50,13 @@ The analysis results for word *бублик* are looking like this:
   stem={"rule_set_id"=>"21", "stem"=>"бублик", "msd_id"=>"687", "id"=>"18572"},
   rule={"msd"=>"Ncmsn", "rule_set_id"=>"21", "id"=>"502"},
   msd=
-   #<Myaso::MSD:0x2b04e68 language=Myaso::MSD::Russian pos=:noun grammemes={:type=>:common, :gender=>:masculine, :number=>:singular, :case=>:nominative}>>,
+   #<Myaso::MSD:0x2b04e68 language=Myaso::MSD::Russian pos=:noun grammemes={:type=>:common, :gender=>:masculine, :number=>:singular, :case=>:nominative, :animate=>:no}>>,
  #<struct Myaso::Analyzer::Result
   word_id="410731",
   stem={"rule_set_id"=>"21", "stem"=>"бублик", "msd_id"=>"687", "id"=>"18572"},
   rule={"msd"=>"Ncmsa", "rule_set_id"=>"21", "id"=>"505"},
   msd=
-   #<Myaso::MSD:0x2b03608 language=Myaso::MSD::Russian pos=:noun grammemes={:type=>:common, :gender=>:masculine, :number=>:singular, :case=>:accusative}>>]
+   #<Myaso::MSD:0x2b03608 language=Myaso::MSD::Russian pos=:noun grammemes={:type=>:common, :gender=>:masculine, :number=>:singular, :case=>:accusative, :animate=>:no}>>]
 ```
 
 ## Further Work
