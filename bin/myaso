@@ -1,0 +1,83 @@
+#!/usr/bin/env ruby
+# encoding: utf-8
+
+require 'optparse'
+
+require 'rubygems'
+
+$:.unshift File.expand_path('../../lib', __FILE__)
+
+BACKENDS = Hash[%w(tokyocabinet active_record).map do |backend|
+  success = begin
+    require backend
+    true
+  rescue LoadError
+    false
+  end
+
+  [backend.to_sym, success]
+end]
+
+require 'myaso'
+
+options = {}
+
+optparse = OptionParser.new do |opts|
+  opts.banner = 'Usage: %s [options]' % $0
+
+  if BACKENDS[:tokyocabinet]
+    opts.on '--tc-path [path]',
+            'TokyoCabinet: path to database' do |d|
+      d and options[:tc_path] = d
+    end
+
+    opts.on '--tc-mode [mode]', [:read, :manage],
+            'TokyoCabinet: mode (read or manage)' do |m|
+      m and options[:tc_mode] = m
+    end
+  end
+
+  opts.on_tail '-i', '--irb', 'Start an IRB session' do |i|
+    options[:irb] = i
+  end
+
+  opts.on_tail '-b', '--backends', 'List the available backends' do |b|
+    p BACKENDS
+    exit
+  end
+
+  opts.on_tail '-h', '--help', 'Display this help and exit' do
+    puts opts
+    exit
+  end
+
+  opts.on_tail '-v', '--version', 'Output version infomation and exit' do
+    puts 'Myaso v%s' % Myaso::VERSION
+    puts 'Copyright (c) 2010-2012 Dmitry A. Ustalov'
+    exit
+  end
+end.tap { |opts| opts.parse! }
+
+if BACKENDS[:tokyocabinet] && options[:tc_path]
+  options[:tc_mode] = :read unless options[:tc_mode] == :manage
+
+  @tokyocabinet = Myaso::TokyoCabinet.new(
+    *options.values_at(:tc_path, :tc_mode)
+  )
+end
+
+if options[:irb]
+  require 'myaso/core_ext/irb'
+
+  if @tokyocabinet
+    puts '@tokyocabinet = %s' % @tokyocabinet.inspect
+  end
+
+  include Myaso
+  IRB.start_session(binding)
+
+  exit
+end
+
+puts optparse
+exit 1
