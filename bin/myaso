@@ -27,12 +27,12 @@ optparse = OptionParser.new do |opts|
 
   if BACKENDS[:tokyocabinet]
     opts.on '--tc-path [path]',
-            'TokyoCabinet: path to database' do |d|
+            'Tokyo Cabinet: path to database' do |d|
       d and options[:tc_path] = d
     end
 
     opts.on '--tc-mode [mode]', [:read, :manage],
-            'TokyoCabinet: mode (read or manage)' do |m|
+            'Tokyo Cabinet: mode (read or manage)' do |m|
       m and options[:tc_mode] = m
     end
   end
