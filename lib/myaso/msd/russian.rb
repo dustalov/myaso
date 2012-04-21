@@ -366,6 +366,73 @@ module Myaso::MSD::Russian
     attrs: []
   }
 
+  # Russian Crutch.
+  #
+  # Some AOT definitions are written for meta <tt>*</tt> part of speech,
+  # so we have to implement it.
+  #
+  CRUTCH = {
+    code: '*',
+    attrs: [
+      [ :gender, {
+        masculine: 'm',
+        feminine: 'f',
+        neuter: 'n',
+        common: 'c'
+      } ],
+      [ :animate, {
+        no: 'n',
+        yes: 'y'
+      } ],
+      [ :number, {
+        singular: 's',
+        plural: 'p'
+      } ],
+      [ :case, {
+        nominative: 'n',
+        genitive: 'g',
+        dative: 'd',
+        accusative: 'a',
+        vocative: 'v',
+        locative: 'l',
+        instrumental: 'i'
+      } ],
+      [ :case2, {
+        partitive: 'p',
+        locative: 'l'
+      } ],
+      [ :aspect, {
+        progressive: 'p',
+        perfective: 'e',
+        biaspectual: 'b'
+      } ],
+      [ :voice, {
+        active: 'a',
+        passive: 'p',
+        medial: 'm'
+      } ],
+      [ :tense, {
+        present: 'p',
+        future: 'f',
+        past: 's'
+      } ],
+      [ :person, {
+        first: '1',
+        second: '2',
+        third: '3'
+      } ],
+      [ :definiteness, {
+        short_art: 's',
+        full_art: 'f'
+      } ],
+      [ :degree, {
+        positive: 'p',
+        comparative: 'c',
+        superlative: 's'
+      } ]
+    ]
+  }
+
   # Actual part-of-speech mapping.
   #
   CATEGORIES = {
@@ -380,6 +447,7 @@ module Myaso::MSD::Russian
     particle: PARTICLE,
     interjection: INTERJECTION,
     abbreviation: ABBREVIATION,
-    residual: RESIDUAL
+    residual: RESIDUAL,
+    crutch: CRUTCH
   }
 end
