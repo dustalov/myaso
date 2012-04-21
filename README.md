@@ -59,6 +59,17 @@ The analysis results for word *бублик* are looking like this:
    #<Myaso::MSD:0x2b03608 language=Myaso::MSD::Russian pos=:noun grammemes={:type=>:common, :gender=>:masculine, :number=>:singular, :case=>:accusative, :animate=>:no}>>]
 ```
 
+Also, it is possible to perform the word lemmatization. At this moment,
+Myaso analyzer is able to lemmatize by word stem identifier:
+
+```ruby
+# take the first Myaso::Result of analysis
+result = analyzer.analyze('люди').first
+
+# lemmatize
+analyzer.lemmatize(result.stem['id']) # => человек
+```
+
 ## Further Work
 
 I guess, the following things would be nice:
