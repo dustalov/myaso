@@ -23,10 +23,10 @@ class Myaso::Analyzer
       stems = possible_stems(word, suffix)
       unless stems.empty?
         stems.map do |stem_id|
-          [ stem_id, suffix ]
+          [stem_id, suffix]
         end
       else
-        [ [ nil, suffix ] ]
+        [[nil, suffix]]
       end
     end.flatten(1).map do |stem_id, suffix|
       rule_set_id = if stem_id
@@ -34,7 +34,7 @@ class Myaso::Analyzer
         stem['rule_set_id']
       end
       rules_ids = myaso.rules.select_by_suffix(suffix, rule_set_id)
-      [ stem_id, rules_ids ]
+      [stem_id, rules_ids]
     end
 
     # word candidates
@@ -93,7 +93,7 @@ class Myaso::Analyzer
       return [] unless word && !word.empty?
 
       # empty suffix is a suffix, too
-      suffixes = [ '' ]
+      suffixes = ['']
 
       word.length.times do |i|
         break unless slice = word[-i..-1].to_s
