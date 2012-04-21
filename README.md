@@ -105,4 +105,6 @@ systematic and awesome.
 
 ## Copyright
 
-Copyright (c) 2010-2012 Dmitry A. Ustalov. See LICENSE for details.
+Copyright (c) 2010-2012 [Dmitry A. Ustalov]. See LICENSE for details.
+
+[Dmitry A. Ustalov]: http://eveel.ru
