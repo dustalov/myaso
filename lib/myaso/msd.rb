@@ -41,7 +41,7 @@ class Myaso::MSD
   # this problem is caused by inappropriate language selection
   # or just typos.
   #
-  class InvalidDescriptor < Exception; end
+  class InvalidDescriptor < RuntimeError; end
 
   attr_reader :pos, :grammemes, :language
 
@@ -54,9 +54,12 @@ class Myaso::MSD
   #
   def initialize(language, msd = '')
     @language, @pos, @grammemes = language, nil, {}
-    unless defined? language::CATEGORIES
-      raise ArgumentError, 'given language has no CATEGORIES'
+
+    unless language.const_defined? 'CATEGORIES'
+      raise ArgumentError,
+        'given language has no morphosyntactic descriptions'
     end
+
     parse! msd if msd && !msd.empty?
   end
 
@@ -120,7 +123,7 @@ class Myaso::MSD
       raise InvalidDescriptor, "category is nil"
     end
 
-    msd = [ category[:code] ]
+    msd = [category[:code]]
 
     attrs = category[:attrs]
     grammemes.each do |attr_name, value|
@@ -154,15 +157,18 @@ class Myaso::MSD
 
   protected
     def parse! msd_line # :nodoc:
-      msd = msd_line.mb_chars.split(//).map { |mb| mb.to_s }
+      msd = msd_line.chars.to_a
+
       category_code = msd.shift
 
       @pos, category = language::CATEGORIES.find do |name, category|
         category[:code] == category_code
       end
+
       raise InvalidDescriptor, msd_line unless @pos
 
       attrs = category[:attrs]
+
       msd.each_with_index do |value_code, i|
         attr_name, values = attrs[i]
         raise InvalidDescriptor, msd_line unless attr_name
