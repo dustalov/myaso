@@ -48,6 +48,13 @@ example, a dictionary in the Tokyo Cabinet format is stored in
       msd=
        #<Myaso::MSD:0x2b03608 language=Myaso::MSD::Russian pos=:noun grammemes={:type=>:common, :gender=>:masculine, :number=>:singular, :case=>:accusative}>>]
 
+## Further Work
+
+I guess, the following things would be nice:
+
+1. Implement backends for Sequel and ActiveRecord;
+2. An algorithm of unknown word prediction.
+
 ## Acknowledgement
 
 This work is supported by UrB RAS grants:
