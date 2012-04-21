@@ -45,5 +45,12 @@ module Myaso
       analysis.must_be_kind_of Array
       analysis.size.must_equal 0
     end
+
+    it 'should lemmatize by stem' do
+      analysis = subject.analyze('cats').first
+
+      lemma = subject.lemmatize(analysis.stem['id'])
+      lemma.must_equal 'cat'
+    end
   end
 end
