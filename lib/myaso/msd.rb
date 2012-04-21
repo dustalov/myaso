@@ -41,7 +41,7 @@ class Myaso::MSD
   # this problem is caused by inappropriate language selection
   # or just typos.
   #
-  class InvalidDescriptor < Exception; end
+  class InvalidDescriptor < RuntimeError; end
 
   attr_reader :pos, :grammemes, :language
 
