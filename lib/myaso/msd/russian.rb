@@ -18,38 +18,38 @@ module Myaso::MSD::Russian
   # Russian Noun.
   #
   NOUN = {
-    :code => 'N',
-    :attrs => [
+    code: 'N',
+    attrs: [
       [ :type, {
-        :common => 'c',
-        :proper => 'p'
+        common: 'c',
+        proper: 'p'
       } ],
       [ :gender, {
-        :masculine => 'm',
-        :feminine => 'f',
-        :neuter => 'n',
-        :common => 'c'
+        masculine: 'm',
+        feminine: 'f',
+        neuter: 'n',
+        common: 'c'
       } ],
       [ :number, {
-        :singular => 's',
-        :plural => 'p'
+        singular: 's',
+        plural: 'p'
       } ],
       [ :case, {
-        :nominative => 'n',
-        :genitive => 'g',
-        :dative => 'd',
-        :accusative => 'a',
-        :vocative => 'v',
-        :locative => 'l',
-        :instrumental => 'i'
+        nominative: 'n',
+        genitive: 'g',
+        dative: 'd',
+        accusative: 'a',
+        vocative: 'v',
+        locative: 'l',
+        instrumental: 'i'
       } ],
       [ :animate, {
-        :no => 'n',
-        :yes => 'y'
+        no: 'n',
+        yes: 'y'
       } ],
       [ :case2, {
-        :partitive => 'p',
-        :locative => 'l'
+        partitive: 'p',
+        locative: 'l'
       } ]
     ]
   }
@@ -57,60 +57,60 @@ module Myaso::MSD::Russian
   # Russian Verb.
   #
   VERB = {
-    :code => 'V',
-    :attrs => [
+    code: 'V',
+    attrs: [
       [ :type, {
-        :main => 'm',
-        :auxiliary => 'a'
+        main: 'm',
+        auxiliary: 'a'
       } ],
       [ :vform, {
-        :indicative => 'i',
-        :imperative => 'm',
-        :conditional => 'c',
-        :infinitive => 'n',
-        :participle => 'p',
-        :gerund => 'g'
+        indicative: 'i',
+        imperative: 'm',
+        conditional: 'c',
+        infinitive: 'n',
+        participle: 'p',
+        gerund: 'g'
       } ],
       [ :tense, {
-        :present => 'p',
-        :future => 'f',
-        :past => 's'
+        present: 'p',
+        future: 'f',
+        past: 's'
       } ],
       [ :person, {
-        :first => '1',
-        :second => '2',
-        :third => '3'
+        first: '1',
+        second: '2',
+        third: '3'
       } ],
       [ :number, {
-        :singular => 's',
-        :plural => 'p'
+        singular: 's',
+        plural: 'p'
       } ],
       [ :gender, {
-        :masculine => 'm',
-        :feminine => 'f',
-        :neuter => 'n'
+        masculine: 'm',
+        feminine: 'f',
+        neuter: 'n'
       } ],
       [ :voice, {
-        :active => 'a',
-        :passive => 'p',
-        :medial => 'm'
+        active: 'a',
+        passive: 'p',
+        medial: 'm'
       } ],
       [ :definiteness, {
-        :short_art => 's',
-        :full_art => 'f'
+        short_art: 's',
+        full_art: 'f'
       } ],
       [ :aspect, {
-        :progressive => 'p',
-        :perfective => 'e',
-        :biaspectual => 'b'
+        progressive: 'p',
+        perfective: 'e',
+        biaspectual: 'b'
       } ],
       [ :case, {
-        :nominative => 'n',
-        :genitive => 'g',
-        :dative => 'd',
-        :accusative => 'a',
-        :locative => 'l',
-        :instrumental => 'i'
+        nominative: 'n',
+        genitive: 'g',
+        dative: 'd',
+        accusative: 'a',
+        locative: 'l',
+        instrumental: 'i'
       } ]
     ]
   }
@@ -118,37 +118,37 @@ module Myaso::MSD::Russian
   # Russian Adjective.
   #
   ADJECTIVE = {
-    :code => 'A',
-    :attrs => [
+    code: 'A',
+    attrs: [
       [ :type, {
-        :qualificative => 'f',
-        :possessive => 's'
+        qualificative: 'f',
+        possessive: 's'
       } ],
       [ :degree, {
-        :positive => 'p',
-        :comparative => 'c',
-        :superlative => 's'
+        positive: 'p',
+        comparative: 'c',
+        superlative: 's'
       } ],
       [ :gender, {
-        :masculine => 'm',
-        :feminine => 'f',
-        :neuter => 'n'
+        masculine: 'm',
+        feminine: 'f',
+        neuter: 'n'
       } ],
       [ :number, {
-        :singular => 's',
-        :plural => 'p'
+        singular: 's',
+        plural: 'p'
       } ],
       [ :case, {
-        :nominative => 'n',
-        :genitive => 'g',
-        :dative => 'd',
-        :accusative => 'a',
-        :locative => 'l',
-        :instrumental => 'i'
+        nominative: 'n',
+        genitive: 'g',
+        dative: 'd',
+        accusative: 'a',
+        locative: 'l',
+        instrumental: 'i'
       } ],
       [ :definiteness, {
-        :short_art => 's',
-        :full_art => 'f'
+        short_art: 's',
+        full_art: 'f'
       } ]
     ]
   }
@@ -156,50 +156,50 @@ module Myaso::MSD::Russian
   # Russian Pronoun.
   #
   PRONOUN = {
-    :code => 'P',
-    :attrs => [
+    code: 'P',
+    attrs: [
       [ :type, {
-        :personal => 'p',
-        :demonstrative => 'd',
-        :indefinite => 'i',
-        :possessive => 's',
-        :interrogative => 'q',
-        :relative => 'r',
-        :reflexive => 'x',
-        :negative => 'z',
-        :nonspecific => 'n'
+        personal: 'p',
+        demonstrative: 'd',
+        indefinite: 'i',
+        possessive: 's',
+        interrogative: 'q',
+        relative: 'r',
+        reflexive: 'x',
+        negative: 'z',
+        nonspecific: 'n'
       } ],
       [ :person, {
-        :first => '1',
-        :second => '2',
-        :third => '3'
+        first: '1',
+        second: '2',
+        third: '3'
       } ],
       [ :gender, {
-        :masculine => 'm',
-        :feminine => 'f',
-        :neuter => 'n'
+        masculine: 'm',
+        feminine: 'f',
+        neuter: 'n'
       } ],
       [ :number, {
-        :singular => 's',
-        :plural => 'p'
+        singular: 's',
+        plural: 'p'
       } ],
       [ :case, {
-        :nominative => 'n',
-        :genitive => 'g',
-        :dative => 'd',
-        :accusative => 'a',
-        :vocative => 'v',
-        :locative => 'l',
-        :instrumental => 'i'
+        nominative: 'n',
+        genitive: 'g',
+        dative: 'd',
+        accusative: 'a',
+        vocative: 'v',
+        locative: 'l',
+        instrumental: 'i'
       } ],
       [ :syntactic_type, {
-        :nominal => 'n',
-        :adjectival => 'a',
-        :adverbial => 'r'
+        nominal: 'n',
+        adjectival: 'a',
+        adverbial: 'r'
       } ],
       [ :animate, {
-        :no => 'n',
-        :yes => 'y'
+        no: 'n',
+        yes: 'y'
       } ]
     ]
   }
@@ -207,12 +207,12 @@ module Myaso::MSD::Russian
   # Russian Adverb.
   #
   ADVERB = {
-    :code => 'R',
-    :attrs => [
+    code: 'R',
+    attrs: [
       [ :degree, {
-        :positive => 'p',
-        :comparative => 'c',
-        :superlative => 's'
+        positive: 'p',
+        comparative: 'c',
+        superlative: 's'
       } ]
     ]
   }
@@ -220,21 +220,21 @@ module Myaso::MSD::Russian
   # Russian Adposition.
   #
   ADPOSITION = {
-    :code => 'S',
-    :attrs => [
+    code: 'S',
+    attrs: [
       [ :type, {
-        :preposition => 'p'
+        preposition: 'p'
       } ],
       [ :formation, {
-        :simple => 's',
-        :compound => 'c'
+        simple: 's',
+        compound: 'c'
       } ],
       [ :case, {
-        :genitive => 'g',
-        :dative => 'd',
-        :accusative => 'a',
-        :locative => 'l',
-        :instrumental => 'i'
+        genitive: 'g',
+        dative: 'd',
+        accusative: 'a',
+        locative: 'l',
+        instrumental: 'i'
       } ]
     ]
   }
@@ -242,23 +242,23 @@ module Myaso::MSD::Russian
   # Russian Conjunction.
   #
   CONJUNCTION = {
-    :code => 'C',
-    :attrs => [
+    code: 'C',
+    attrs: [
       [ :type, {
-        :coordinating => 'c',
-        :subordinating => 's'
+        coordinating: 'c',
+        subordinating: 's'
       } ],
       [ :formation, {
-        :simple => 's',
-        :compound => 'c'
+        simple: 's',
+        compound: 'c'
       } ],
       [ :coord_type, {
-        :sentence => 'p',
-        :words => 'w'
+        sentence: 'p',
+        words: 'w'
       } ],
       [ :sub_type, {
-        :negative => 'z',
-        :positive => 'p'
+        negative: 'z',
+        positive: 'p'
       } ],
     ]
   }
@@ -266,42 +266,42 @@ module Myaso::MSD::Russian
   # Russian Numeral.
   #
   NUMERAL = {
-    :code => 'M',
-    :attrs => [
+    code: 'M',
+    attrs: [
       [ :type, {
-        :cardinal => 'c',
-        :ordinal => 'o',
-        :multiple => 'm',
-        :collect => 'l'
+        cardinal: 'c',
+        ordinal: 'o',
+        multiple: 'm',
+        collect: 'l'
       } ],
       [ :gender, {
-        :masculine => 'm',
-        :feminine => 'f',
-        :neuter => 'n'
+        masculine: 'm',
+        feminine: 'f',
+        neuter: 'n'
       } ],
       [ :number, {
-        :singular => 's',
-        :plural => 'p'
+        singular: 's',
+        plural: 'p'
       } ],
       [ :case, {
-        :nominative => 'n',
-        :genitive => 'g',
-        :dative => 'd',
-        :accusative => 'a',
-        :locative => 'l',
-        :instrumental => 'i'
+        nominative: 'n',
+        genitive: 'g',
+        dative: 'd',
+        accusative: 'a',
+        locative: 'l',
+        instrumental: 'i'
       } ],
       [ :form, {
-        :digit => 'd',
-        :roman => 'r',
-        :letter => 'l'
+        digit: 'd',
+        roman: 'r',
+        letter: 'l'
       } ],
       [ :blank, {} ],
       [ :blank, {} ],
       [ :blank, {} ],
       [ :animate, {
-        :no => 'n',
-        :yes => 'y'
+        no: 'n',
+        yes: 'y'
       } ]
     ]
   }
@@ -309,11 +309,11 @@ module Myaso::MSD::Russian
   # Russian Particle.
   #
   PARTICLE = {
-    :code => 'Q',
-    :attrs => [
+    code: 'Q',
+    attrs: [
       [ :formation, {
-        :simple => 's',
-        :compound => 'c'
+        simple: 's',
+        compound: 'c'
       } ]
     ]
   }
@@ -321,11 +321,11 @@ module Myaso::MSD::Russian
   # Russian Interjection.
   #
   INTERJECTION = {
-    :code => 'I',
-    :attrs => [
+    code: 'I',
+    attrs: [
       [ :formation, {
-        :simple => 's',
-        :compound => 'c'
+        simple: 's',
+        compound: 'c'
       } ]
     ]
   }
@@ -333,28 +333,28 @@ module Myaso::MSD::Russian
   # Russian Abbreviation.
   #
   ABBREVIATION = {
-    :code => 'Y',
-    :attrs => [
+    code: 'Y',
+    attrs: [
       [ :syntactic_type, {
-        :nominal => 'n',
-        :adverbial => 'r'
+        nominal: 'n',
+        adverbial: 'r'
       } ],
       [ :gender, {
-        :masculine => 'm',
-        :feminine => 'f',
-        :neuter => 'n'
+        masculine: 'm',
+        feminine: 'f',
+        neuter: 'n'
       } ],
       [ :number, {
-        :singular => 's',
-        :plural => 'p'
+        singular: 's',
+        plural: 'p'
       } ],
       [ :case, {
-        :nominative => 'n',
-        :genitive => 'g',
-        :dative => 'd',
-        :accusative => 'a',
-        :locative => 'l',
-        :instrumental => 'i'
+        nominative: 'n',
+        genitive: 'g',
+        dative: 'd',
+        accusative: 'a',
+        locative: 'l',
+        instrumental: 'i'
       } ]
     ]
   }
@@ -362,24 +362,24 @@ module Myaso::MSD::Russian
   # Russian Residual.
   #
   RESIDUAL = {
-    :code => 'X',
-    :attrs => []
+    code: 'X',
+    attrs: []
   }
 
   # Actual part-of-speech mapping.
   #
   CATEGORIES = {
-    :noun => NOUN,
-    :verb => VERB,
-    :adjective => ADJECTIVE,
-    :pronoun => PRONOUN,
-    :adverb => ADVERB,
-    :adposition => ADPOSITION,
-    :conjunction => CONJUNCTION,
-    :numeral => NUMERAL,
-    :particle => PARTICLE,
-    :interjection => INTERJECTION,
-    :abbreviation => ABBREVIATION,
-    :residual => RESIDUAL
+    noun: NOUN,
+    verb: VERB,
+    adjective: ADJECTIVE,
+    pronoun: PRONOUN,
+    adverb: ADVERB,
+    adposition: ADPOSITION,
+    conjunction: CONJUNCTION,
+    numeral: NUMERAL,
+    particle: PARTICLE,
+    interjection: INTERJECTION,
+    abbreviation: ABBREVIATION,
+    residual: RESIDUAL
   }
 end

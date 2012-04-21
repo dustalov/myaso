@@ -12,20 +12,20 @@ module Myaso::MSD::English
   # English Noun.
   #
   NOUN = {
-    :code => 'N',
-    :attrs => [
+    code: 'N',
+    attrs: [
       [ :type, {
-        :common => 'c',
-        :proper => 'p'
+        common: 'c',
+        proper: 'p'
       } ],
       [ :gender, {
-        :masculine => 'm',
-        :feminine => 'f',
-        :neuter => 'n'
+        masculine: 'm',
+        feminine: 'f',
+        neuter: 'n'
       } ],
       [ :number, {
-        :singular => 's',
-        :plural => 'p'
+        singular: 's',
+        plural: 'p'
       } ]
     ]
   }
@@ -33,32 +33,32 @@ module Myaso::MSD::English
   # English Verb.
   #
   VERB = {
-    :code => 'V',
-    :attrs => [
+    code: 'V',
+    attrs: [
       [ :type, {
-        :main => 'm',
-        :auxiliary => 'a',
-        :modal => 'o',
-        :base => 'b'
+        main: 'm',
+        auxiliary: 'a',
+        modal: 'o',
+        base: 'b'
       } ],
       [ :vform, {
-        :indicative => 'i',
-        :conditional => 'c',
-        :infinitive => 'n',
-        :participle => 'p'
+        indicative: 'i',
+        conditional: 'c',
+        infinitive: 'n',
+        participle: 'p'
       } ],
       [ :tense, {
-        :present => 'p',
-        :past => 's'
+        present: 'p',
+        past: 's'
       } ],
       [ :person, {
-        :first => '1',
-        :second => '2',
-        :third => '3'
+        first: '1',
+        second: '2',
+        third: '3'
       } ],
       [ :number, {
-        :singular => 's',
-        :plural => 'p'
+        singular: 's',
+        plural: 'p'
       } ]
     ]
   }
@@ -66,15 +66,15 @@ module Myaso::MSD::English
   # English Adjective.
   #
   ADJECTIVE = {
-    :code => 'A',
-    :attrs => [
+    code: 'A',
+    attrs: [
       [ :type, {
-        :qualificative => 'f'
+        qualificative: 'f'
       } ],
       [ :degree, {
-        :positive => 'p',
-        :comparative => 'c',
-        :superlative => 's'
+        positive: 'p',
+        comparative: 'c',
+        superlative: 's'
       } ]
     ]
   }
@@ -82,46 +82,46 @@ module Myaso::MSD::English
   # English Pronoun.
   #
   PRONOUN = {
-    :code => 'P',
-    :attrs => [
+    code: 'P',
+    attrs: [
       [ :type, {
-        :personal => 'p',
-        :possessive => 's',
-        :interrogative => 'q',
-        :relative => 'r',
-        :reflexive => 'x',
-        :general => 'g',
-        :ex_there => 't'
+        personal: 'p',
+        possessive: 's',
+        interrogative: 'q',
+        relative: 'r',
+        reflexive: 'x',
+        general: 'g',
+        ex_there: 't'
       } ],
       [ :person, {
-        :first => '1',
-        :second => '2',
-        :third => '3'
+        first: '1',
+        second: '2',
+        third: '3'
       } ],
       [ :gender, {
-        :masculine => 'm',
-        :feminine => 'f',
-        :neuter => 'n'
+        masculine: 'm',
+        feminine: 'f',
+        neuter: 'n'
       } ],
       [ :number, {
-        :singular => 's',
-        :plural => 'p'
+        singular: 's',
+        plural: 'p'
       } ],
       [ :case, {
-        :nominative => 'n',
-        :accusative => 'a'
+        nominative: 'n',
+        accusative: 'a'
       } ],
       [ :owner_number, {
-        :singular => 's',
-        :plural => 'p'
+        singular: 's',
+        plural: 'p'
       } ],
       [ :owner_gender, {
-        :masculine => 'm',
-        :feminine => 'f'
+        masculine: 'm',
+        feminine: 'f'
       } ],
       [ :wh_type, {
-        :relative => 'r',
-        :question => 'q'
+        relative: 'r',
+        question: 'q'
       } ],
     ]
   }
@@ -129,35 +129,35 @@ module Myaso::MSD::English
   # English Determiner.
   #
   DETERMINER = {
-    :code => 'D',
-    :attrs => [
+    code: 'D',
+    attrs: [
       [ :type, {
-        :demonstrative => 'd',
-        :indefinite => 'i',
-        :possessive => 's',
-        :general => 'g'
+        demonstrative: 'd',
+        indefinite: 'i',
+        possessive: 's',
+        general: 'g'
       } ],
       [ :person, {
-        :first => '1',
-        :second => '2',
-        :third => '3'
+        first: '1',
+        second: '2',
+        third: '3'
       } ],
       [ :number, {
-        :singular => 's',
-        :plural => 'p'
+        singular: 's',
+        plural: 'p'
       } ],
       [ :owner_number, {
-        :singular => 's',
-        :plural => 'p'
+        singular: 's',
+        plural: 'p'
       } ],
       [ :owner_gender, {
-        :masculine => 'm',
-        :feminine => 'f',
-        :neuter => 'n'
+        masculine: 'm',
+        feminine: 'f',
+        neuter: 'n'
       } ],
       [ :wh_type, {
-        :relative => 'r',
-        :question => 'q'
+        relative: 'r',
+        question: 'q'
       } ]
     ]
   }
@@ -165,20 +165,20 @@ module Myaso::MSD::English
   # English Adverb.
   #
   ADVERB = {
-    :code => 'R',
-    :attrs => [
+    code: 'R',
+    attrs: [
       [ :type, {
-        :modifier => 'm',
-        :specifier => 's'
+        modifier: 'm',
+        specifier: 's'
       } ],
       [ :degree, {
-        :positive => 'p',
-        :comparative => 'c',
-        :superlative => 's'
+        positive: 'p',
+        comparative: 'c',
+        superlative: 's'
       } ],
       [ :wh_type, {
-        :relative => 'r',
-        :question => 'q'
+        relative: 'r',
+        question: 'q'
       } ]
     ]
   }
@@ -186,11 +186,11 @@ module Myaso::MSD::English
   # English Adposition.
   #
   ADPOSITION = {
-    :code => 'S',
-    :attrs => [
+    code: 'S',
+    attrs: [
       [ :type, {
-        :preposition => 'p',
-        :postposition => 't'
+        preposition: 'p',
+        postposition: 't'
       } ]
     ]
   }
@@ -198,15 +198,15 @@ module Myaso::MSD::English
   # English Conjunction.
   #
   CONJUNCTION = {
-    :code => 'C',
-    :attrs => [
+    code: 'C',
+    attrs: [
       [ :type, {
-        :coordinating => 'c',
-        :subordinating => 's'
+        coordinating: 'c',
+        subordinating: 's'
       } ],
       [ :coord_type, {
-        :initial => 'i',
-        :non_initial => 'n'
+        initial: 'i',
+        non_initial: 'n'
       } ],
     ]
   }
@@ -214,11 +214,11 @@ module Myaso::MSD::English
   # English Numeral.
   #
   NUMERAL = {
-    :code => 'M',
-    :attrs => [
+    code: 'M',
+    attrs: [
       [ :type, {
-        :cardinal => 'c',
-        :ordinal => 'o'
+        cardinal: 'c',
+        ordinal: 'o'
       } ],
     ]
   }
@@ -226,38 +226,38 @@ module Myaso::MSD::English
   # English Interjection.
   #
   INTERJECTION = {
-    :code => 'I',
-    :attrs => []
+    code: 'I',
+    attrs: []
   }
 
   # English Abbreviation.
   #
   ABBREVIATION = {
-    :code => 'Y',
-    :attrs => []
+    code: 'Y',
+    attrs: []
   }
 
   # English Residual.
   #
   RESIDUAL = {
-    :code => 'X',
-    :attrs => []
+    code: 'X',
+    attrs: []
   }
 
   # Actual part-of-speech mapping.
   #
   CATEGORIES = {
-    :noun => NOUN,
-    :verb => VERB,
-    :adjective => ADJECTIVE,
-    :pronoun => PRONOUN,
-    :determiner => DETERMINER,
-    :adverb => ADVERB,
-    :adposition => ADPOSITION,
-    :conjunction => CONJUNCTION,
-    :numeral => NUMERAL,
-    :interjection => INTERJECTION,
-    :abbreviation => ABBREVIATION,
-    :residual => RESIDUAL
+    noun: NOUN,
+    verb: VERB,
+    adjective: ADJECTIVE,
+    pronoun: PRONOUN,
+    determiner: DETERMINER,
+    adverb: ADVERB,
+    adposition: ADPOSITION,
+    conjunction: CONJUNCTION,
+    numeral: NUMERAL,
+    interjection: INTERJECTION,
+    abbreviation: ABBREVIATION,
+    residual: RESIDUAL
   }
 end
