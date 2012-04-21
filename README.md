@@ -44,7 +44,7 @@ pp analyzer.analyze 'бублик'
 
 The analysis results for word *бублик* are looking like this:
 
-```ruby
+```
 [#<struct Myaso::Analyzer::Result
   word_id="410728",
   stem={"rule_set_id"=>"21", "stem"=>"бублик", "msd_id"=>"687", "id"=>"18572"},
