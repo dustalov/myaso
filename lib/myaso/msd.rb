@@ -86,7 +86,7 @@ class Myaso::MSD
   #
   # @param key [Symbol] a key to be set.
   # @param value [Symbol] a value to be assigned.
-  # @return value [Symbol] the assigned value.
+  # @return [Symbol] the assigned value.
   #
   def []= key, value
     return @pos = value if :pos == key
