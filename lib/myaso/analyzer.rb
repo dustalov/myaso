@@ -77,7 +77,7 @@ class Myaso::Analyzer
     stem = myaso.stems.find(stem_id)
 
     rules = myaso.rules.
-      select_by_rule_set(stem['rule_set_id']).
+      select_by_rule_set_id(stem['rule_set_id']).
       map { |id| [id, myaso.rules.find(id)] }
 
     rule_id = rules.sort do |(id1, rule1), (id2, rule2)|

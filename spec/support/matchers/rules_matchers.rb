@@ -50,22 +50,22 @@ class MiniTest::Unit::TestCase
       end
     end
 
-    describe '#find_rule' do
+    describe '#first' do
       it 'should find rules without suffix' do
-        subject.find_rule('1', nil).
+        subject.first('1', nil).
           must_equal('rule_set_id' => '1',
                      'msd' => 'Nc-s')
       end
 
       it 'should find an existent rule by required arguments' do
-        subject.find_rule('1', 's').
+        subject.first('1', 's').
           must_equal('rule_set_id' => '1',
                      'suffix' => 's',
                      'msd' => 'Nc-p')
       end
 
       it 'should not find absent rule by required arguments' do
-        subject.find_rule('1', 'r').must_be_nil
+        subject.first('1', 'r').must_be_nil
       end
     end
 
@@ -83,13 +83,13 @@ class MiniTest::Unit::TestCase
       end
     end
 
-    describe '#select_by_rule_set' do
+    describe '#select_by_rule_set_id' do
       it 'should select existent rules' do
-        subject.select_by_rule_set(1).size.must_equal 4
+        subject.select_by_rule_set_id(1).size.must_equal 4
       end
 
       it 'should not select absent rules' do
-        subject.select_by_rule_set(2).size.must_equal 0
+        subject.select_by_rule_set_id(2).size.must_equal 0
       end
     end
 
