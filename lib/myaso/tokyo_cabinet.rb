@@ -2,7 +2,7 @@
 
 class Myaso::TokyoCabinet
   include Myaso::Client
-  include TokyoCabinet
+  include ::TokyoCabinet
 
   STORAGES = [ :prefixes, :stems, :rules, :words ] # :nodoc:
   attr_reader :path, :mode, :storages
