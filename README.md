@@ -9,7 +9,9 @@ written in Ruby.
 
 Add this line to your application's Gemfile:
 
-    gem 'myaso'
+```ruby
+gem 'myaso'
+```
 
 And then execute:
 
