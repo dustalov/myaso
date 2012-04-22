@@ -1,6 +1,8 @@
 # encoding: utf-8
 
+# @private
 class Myaso::ActiveRecord::Stem < ActiveRecord::Base
+  # @private
   def self.table_name
     'myaso_stems'
   end
