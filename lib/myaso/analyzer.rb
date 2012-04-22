@@ -2,15 +2,68 @@
 
 require 'unicode_utils/downcase'
 
+# The Analyzer performs the morphological analysis and lemmatization
+# functions.
+#
 class Myaso::Analyzer
+  # A structure of analysis result.
+  #
   Result = Struct.new(:word_id, :stem, :rule, :msd)
 
   attr_reader :myaso, :language
 
+  # Create a new Analyzer instance.
+  #
+  # Analyzer should be initialized before use. It requires two
+  # things: a prepared Myaso::Client and preferred language to
+  # work on.
+  #
+  # ```ruby
+  # # prepare the Tokyo Cabinet client
+  # myaso = Myaso::TokyoCabinet.new('path/to/lexicon')
+  #
+  # # load the Russian morphosyntactic descriptions
+  # require 'myaso/msd/russian'
+  #
+  # # initialize the analyzer
+  # analyzer = Myaso::Analyzer.new(myaso, Myaso::MSD::Russian)
+  # ```
+  #
+  # After these steps Analyzer may be used to perform its duties.
+  #
+  # @param myaso [Myaso::Client] a client.
+  # @param language [Myaso::MSD::Language] a language to operate on.
+  #
   def initialize myaso, language
     @myaso, @language = myaso, language
   end
 
+  # Analyze the single word.
+  #
+  # ```ruby
+  # pp analyzer.analyze 'бублик'
+  # ```
+  #
+  # The analysis results for word *бублик* are looking like this:
+  #
+  # ```
+  # [#<struct Myaso::Analyzer::Result
+  #   word_id="410728",
+  #   stem={"rule_set_id"=>"21", "stem"=>"бублик", "msd_id"=>"687", "id"=>"18572"},
+  #   rule={"msd"=>"Ncmsn", "rule_set_id"=>"21", "id"=>"502"},
+  #   msd=
+  #    #<Myaso::MSD:0x2b04e68 language=Myaso::MSD::Russian pos=:noun grammemes={:type=>:common, :gender=>:masculine, :number=>:singular, :case=>:nominative, :animate=>:no}>>,
+  #  #<struct Myaso::Analyzer::Result
+  #   word_id="410731",
+  #   stem={"rule_set_id"=>"21", "stem"=>"бублик", "msd_id"=>"687", "id"=>"18572"},
+  #   rule={"msd"=>"Ncmsa", "rule_set_id"=>"21", "id"=>"505"},
+  #   msd=
+  #    #<Myaso::MSD:0x2b03608 language=Myaso::MSD::Russian pos=:noun grammemes={:type=>:common, :gender=>:masculine, :number=>:singular, :case=>:accusative, :animate=>:no}>>]
+  # ```
+  #
+  # @param word [String] a word to be analyzed.
+  # @return [Array<Result>] an array of analysis results.
+  #
   def analyze word
     return [] unless word
     word = normalize(word)
@@ -68,10 +121,23 @@ class Myaso::Analyzer
     result
   end
 
-  # Perform the word lemmatization basen on its +stem_id+.
+  # Perform the word lemmatization basen on its `stem_id`.
   #
   # Lemmatization is the process of grouping together the different
   # inflected forms of a word so they can be analysed as a single item.
+  #
+  # This can be done in the following way:
+  #
+  # ```ruby
+  # # take the first Myaso::Result of analysis
+  # result = analyzer.analyze('люди').first
+  #
+  # # lemmatize
+  # analyzer.lemmatize(result.stem['id']) # => человек
+  # ```
+  #
+  # @param stem_id [Fixnum] a stem identifier.
+  # @return [String] a lemma for the given stem.
   #
   def lemmatize stem_id
     stem = myaso.stems.find(stem_id)
@@ -103,26 +169,39 @@ class Myaso::Analyzer
   end
 
   protected
-    # Normalize +word+: strip unnecessary left and right characters
+    # Normalize `word`: strip unnecessary left and right characters
     # and downcase it.
+    #
+    # @param word [String] a word.
+    # @return [String] a normalized word.
     #
     def normalize(word)
       UnicodeUtils.downcase(word.strip)
     end
 
-    # Cuts a stem of the given +word+ with specified +suffix+.
+    # Cuts a stem of the given `word` with specified `suffix`.
     # This method cares only about the lengths and not about
     # contents.
     #
-    #   cut_stem('abc', 'c') # => 'ab'
+    # ```ruby
+    # cut_stem('abc', 'c') # => 'ab'
+    # ```
+    #
+    # @param word [String] a word.
+    # @param suffix [String] a suffix of this word.
+    # @return [String] a word without suffix.
     #
     def cut_stem(word, suffix)
       stem_length = word.length - suffix.length
       word[0...stem_length]
     end
 
-    # List of the possible suffixes of the +word+, which is ordered
+    # List of the possible suffixes of the `word`, which is ordered
     # by decreasing of the suffix length.
+    #
+    # @param word [String] a word.
+    # @return [Array<String>] a list of the possible suffixes of
+    #   the word.
     #
     def possible_suffixes(word)
       return [] unless word && !word.empty?
@@ -140,13 +219,21 @@ class Myaso::Analyzer
       suffixes
     end
 
-    # List of the possible stems of the +word+.
+    # List of the possible stems of the `word`.
+    #
+    # @param word [String] a word.
+    # @param suffix [String] a suffix of this word.
+    # @return [Array<String>] a list of the possible stems of
+    #   this word.
     #
     def possible_stems(word, suffix)
       myaso.stems.select cut_stem(word, suffix)
     end
 
     # Compute the MSD positions cost for lemmatization purposes.
+    #
+    # @param msd [Myaso::MSD] a MSD instance.
+    # @return a positions cost of this MSD.
     #
     def positions_cost(msd)
       msd.grammemes.inject(0) do |cost, (k, v)|
