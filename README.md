@@ -87,6 +87,11 @@ result = analyzer.analyze('люди').first
 analyzer.lemmatize(result.stem['id']) # => человек
 ```
 
+### Web Service
+
+A source code of the Myaso-Web application is available in
+the separate repository: <https://github.com/eveel/myaso-web>.
+
 ## Further Work
 
 I guess, the following things would be nice:
