@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+# @private
 class Myaso::TokyoCabinet::Words < Myaso::Adapter
   include TokyoCabinet
 

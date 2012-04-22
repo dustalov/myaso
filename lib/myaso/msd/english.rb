@@ -6,7 +6,7 @@
 # http://nl.ijs.si/ME/V4/msd/html/msd-en.html
 #
 # This specification was translated into Ruby language
-# by Dmitry A. Ustalov.
+# by [Dmitry A. Ustalov](http://eveel.ru).
 #
 module Myaso::MSD::English
   # English Noun.

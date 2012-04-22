@@ -120,42 +120,6 @@ class MiniTest::Unit::TestCase
       end
     end
 
-    # describe '#select_by_prefix' do
-    #   it 'should select existent stems without stem_set_id' do
-    #     subject.select_by_prefix('ani').size.must_equal 2
-    #   end
-
-    #   it 'should select existent stems with stem_set_id' do
-    #     subject.select_by_prefix('ani', 1).size.must_equal 2
-    #   end
-
-    #   it 'should not select absent stems without stem_set_id' do
-    #     subject.select_by_prefix('бля').size.must_equal 0
-    #   end
-
-    #   it 'should not select absent stems with stem_set_id' do
-    #     subject.select_by_prefix('ani', 2).size.must_equal 0
-    #   end
-    # end
-
-    # describe '#select_by_suffix' do
-    #   it 'should select existent stems without stem_set_id' do
-    #     subject.select_by_suffix('s').size.must_equal 2
-    #   end
-
-    #   it 'should select existent stems with stem_set_id' do
-    #     subject.select_by_suffix('s', 1).size.must_equal 2
-    #   end
-
-    #   it 'should not select absent stems without stem_set_id' do
-    #     subject.select_by_suffix('бля').size.must_equal 0
-    #   end
-
-    #   it 'should not select absent stems with stem_set_id' do
-    #     subject.select_by_suffix('s', 2).size.must_equal 0
-    #   end
-    # end
-
     describe '#size' do
       it 'should be valid' do
         subject.size.must_equal 1

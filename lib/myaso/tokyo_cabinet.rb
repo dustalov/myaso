@@ -1,18 +1,25 @@
 # encoding: utf-8
 
+# Interface to Tokyo Cabinet Table Database.
+#
 class Myaso::TokyoCabinet
   include Myaso::Client
-  include TokyoCabinet
+  include ::TokyoCabinet
 
-  STORAGES = [ :prefixes, :stems, :rules, :words ] # :nodoc:
+  # A list of storages. Each storage is a separate database file.
+  #
+  STORAGES = [ :prefixes, :stems, :rules, :words ]
+
   attr_reader :path, :mode, :storages
 
-  # Create a new instance of Database that is located at
-  # specified +path+. Also you may pass <tt>:manage</tt>
-  # option to the +mode+ argument and achieve a blocking,
-  # but total access to database internals.
+  # Create a new instance of Database that is located at the specified
+  # `path`. Also you may pass `:manage` option to the `mode` argument
+  # and achieve a blocking, but monopoly access to database internals.
   #
   # Please #close! the database after use.
+  #
+  # @param path [String] a path to the database directory.
+  # @param mode [:read, :manage] a database access mode.
   #
   def initialize(path, mode = :read)
     @path, @mode, @storages = path, mode, {}
@@ -35,21 +42,23 @@ class Myaso::TokyoCabinet
       end
 
       # Let there be more Unicode (actually, this solution is full of shit)
-      storage.class.class_eval do
-        alias_method :cget, :get
-      end
+      storage.class.class_eval { alias_method :cget, :get }
 
+      # @private
       def storage.[] *args
         (r = cget(*args)) && r.each { |_, v| v.force_encoding 'UTF-8' }
       end
 
+      # @private
       def storage.get *args
         (r = cget(*args)) && r.each { |_, v| v.force_encoding 'UTF-8' }
       end
 
       # Tokyo Cabinet Extension has strange issues with
       # DB#each method functionality, let's fix it.
-      def storage.each(&block) # :nodoc:
+
+      # @private
+      def storage.each(&block)
         return [] unless iterinit
         while (key = iternext)
           block.call(key)
@@ -64,20 +73,20 @@ class Myaso::TokyoCabinet
     super()
   end
 
-  def inspect # :nodoc:
+  # @private
+  def inspect
     "\#<#{self.class.name} path=\"#{path}\" mode=:#{mode}>"
   end
 
   # Perform a complete reindexing of this database. You should
-  # <tt>:manage</tt> this database to use this method.
+  # `:manage` this database to use this method.
+  #
+  # @return [nil] nothing.
   #
   def reindex!
     unless :manage == mode
       raise 'You need to :manage this database to reindex it!'
     end
-
-    # # morphosyntactic descriptors index
-    # storages[:msds].setindex 'pos', TDB::ITLEXICAL
 
     # prefixes index
     storages[:prefixes].setindex 'prefix', TDB::ITLEXICAL
@@ -102,6 +111,8 @@ class Myaso::TokyoCabinet
 
   # Is our database closed?
   #
+  # @return [true, false] a state of database.
+  #
   def closed?
     storages.inject(true) do |r, (_, storage)|
       r && storage.path.nil?
@@ -109,6 +120,8 @@ class Myaso::TokyoCabinet
   end
 
   # Set our database free.
+  #
+  # @return [nil] nothing.
   #
   def close!
     storages.each_value(&:close) and @storages = {}

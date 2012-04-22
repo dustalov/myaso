@@ -12,7 +12,7 @@
 # http://nl.ijs.si/ME/V4/msd/html/msd-ru.html
 #
 # This specification was translated into Ruby language
-# by Dmitry A. Ustalov.
+# by [Dmitry A. Ustalov](http://eveel.ru).
 #
 module Myaso::MSD::Russian
   # Russian Noun.
@@ -368,7 +368,7 @@ module Myaso::MSD::Russian
 
   # Russian Crutch.
   #
-  # Some AOT definitions are written for meta <tt>*</tt> part of speech,
+  # Some AOT definitions are written for meta `*` part of speech,
   # so we have to implement it.
   #
   CRUTCH = {

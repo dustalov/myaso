@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-# Myaso MSD (morposyntactic descriptor) model.
+# The Myaso MSD (morphosyntactic descriptor) model.
 #
 # This representation, with the concrete applications which
 # display and exemplify the attributes and values and provide
@@ -18,18 +18,22 @@
 #
 # You may use Myaso::MSD either as parser and generator.
 #
-#   msd = Myaso::MSD.new(Myaso::MSD::Russian)
-#   msd[:pos] = :noun
-#   msd[:type] = :common
-#   msd[:number] = :plural
-#   msd[:case] = :locative
-#   msd.to_s # => "Nc-pl"
+# ```ruby
+# msd = Myaso::MSD.new(Myaso::MSD::Russian)
+# msd[:pos] = :noun
+# msd[:type] = :common
+# msd[:number] = :plural
+# msd[:case] = :locative
+# msd.to_s # => "Nc-pl"
+# ```
 #
-#   msd = Myaso::MSD.new(Myaso::MSD::Russian, 'Vmps-snpfel')
-#   msd[:pos] # => :verb
-#   msd[:tense] # => :past
-#   msd[:person] # => nil
-#   msd.grammemes # => {:type=>:main, :vform=>:participle, ...}
+# ```ruby
+# msd = Myaso::MSD.new(Myaso::MSD::Russian, 'Vmps-snpfel')
+# msd[:pos] # => :verb
+# msd[:tense] # => :past
+# msd[:person] # => nil
+# msd.grammemes # => {:type=>:main, :vform=>:participle, ...}
+# ```
 #
 class Myaso::MSD
   # Empty descriptor character.
@@ -46,11 +50,14 @@ class Myaso::MSD
   attr_reader :pos, :grammemes, :language
 
   # Creates a new morphosyntactic descriptor model instance.
-  # Please specify a <tt>language</tt> module with defined
-  # <tt>CATEGORIES</tt>.
+  # Please specify a `language` module with defined
+  # `CATEGORIES`.
   #
   # Optionally, you can parse MSD string that is passed as
-  # <tt>msd</tt> argument.
+  # `msd` argument.
+  #
+  # @param language [Myaso::MSD::Language] a language to use.
+  # @param msd [String] a String to initialize new MSD.
   #
   def initialize(language, msd = '')
     @language, @pos, @grammemes = language, nil, {}
@@ -64,23 +71,30 @@ class Myaso::MSD
   end
 
   # Retrieves the morphosyntactic descriptor corresponding
-  # to the <tt>key</tt> object. If not found, returns
-  # <tt>nil</tt>.
+  # to the `key` object. If not, returns `nil`.
+  #
+  # @param key [Symbol] a key to look at.
+  # @return [Symbol] a value of `key`.
   #
   def [] key
     return pos if :pos == key
     grammemes[key]
   end
 
-  # Associates the morphosyntactic descriptor given by
-  # <tt>value</tt> with the key given by <tt>key</tt> object.
+  # Assignes the morphosyntactic descriptor given by
+  # `value` with the key given by `key` object.
+  #
+  # @param key [Symbol] a key to be set.
+  # @param value [Symbol] a value to be assigned.
+  # @return [Symbol] the assigned value.
   #
   def []= key, value
     return @pos = value if :pos == key
     grammemes[key] = value
   end
 
-  def inspect # :nodoc:
+  # @private
+  def inspect
     '#<%s:0x%x language=%s pos=%s grammemes=%s>' % [
       self.class.name,
       self.object_id * 2,
@@ -93,10 +107,14 @@ class Myaso::MSD
   # Generates Regexp from the MSD that is useful to perform
   # database queries.
   #
-  #   msd = Myaso::MSD.new(Myaso::MSD::Russian, 'Vm')
-  #   r = msd.to_regexp # => /^Vm.*$/
-  #   'Vmp' =~ r # 0
-  #   'Nc-pl' =~ r # nil
+  # ```ruby
+  # msd = Myaso::MSD.new(Myaso::MSD::Russian, 'Vm')
+  # r = msd.to_regexp # => /^Vm.*$/
+  # 'Vmp' =~ r # 0
+  # 'Nc-pl' =~ r # nil
+  # ```
+  #
+  # @return [Regexp] the correspondent regular expression.
   #
   def to_regexp
     Regexp.new([
@@ -107,16 +125,22 @@ class Myaso::MSD
     ].join)
   end
 
-  # Merges grammemes that are stored in +hash+ into MSD grammemes.
+  # Merges grammemes that are stored in `hash` into the
+  # MSD grammemes.
+  #
+  # @param hash [Hash<Symbol, Symbol>] a hash to be processed.
+  # @return [MSD] self.
   #
   def merge! hash
     hash.each do |key, value|
       self[key.to_sym] = value.to_sym
     end
+
     self
   end
 
-  def to_s # :nodoc:
+  # @private
+  def to_s
     return '' unless pos
 
     unless category = language::CATEGORIES[pos]
@@ -149,6 +173,10 @@ class Myaso::MSD
     msd.map { |e| e || EMPTY_DESCRIPTOR }.join
   end
 
+  # Validates the MSD instance.
+  #
+  # @return [true, false] validation state of the MSD instance.
+  #
   def valid?
     !!to_s
   rescue InvalidDescriptor
@@ -156,7 +184,8 @@ class Myaso::MSD
   end
 
   protected
-    def parse! msd_line # :nodoc:
+    # @private
+    def parse! msd_line
       msd = msd_line.chars.to_a
 
       category_code = msd.shift

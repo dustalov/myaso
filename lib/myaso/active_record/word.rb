@@ -1,6 +1,8 @@
 # encoding: utf-8
 
+# @private
 class Myaso::ActiveRecord::Word < ActiveRecord::Base
+  # @private
   def self.table_name
     'myaso_words'
   end

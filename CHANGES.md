@@ -1,8 +1,27 @@
-Changes in myaso
+Changes in Myaso
 ================
 
-Changes in myaso morphological analyzer releases
-are listed here.
+Version history of the Myaso morphological analyzer is presented in
+this document.
+
+v0.3.0
+------
+- Complete rewrite of Myaso.
+- Analyzer works with Tokyo Cabinet Table Database.
+- [MULTEXT-East] morphosyntactic model is used.
+- Test suite is based on `MiniSpec`.
+- Dropped the Ruby 1.8 support, but tested with Ruby 1.9 and
+Rubinius.
+- [Myasorubka] is used for dictionaries processing.
+- [Myaso-Web] interface is opened for everybody.
+
+[MULTEXT-East]: http://nl.ijs.si/ME/
+[Myasorubka]: https://github.com/eveel/myasorubka
+[Myaso-Web]: https://github.com/eveel/myaso-web
+
+v0.2
+----
+- Actually, I can't remember these changes.
 
 v0.1.2
 ------

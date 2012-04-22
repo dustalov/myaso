@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+# @private
 class Myaso::TokyoCabinet::Rules < Myaso::Adapter
   include TokyoCabinet
 
@@ -15,7 +16,7 @@ class Myaso::TokyoCabinet::Rules < Myaso::Adapter
     rules.delete(id)
   end
 
-  def find_rule rule_set_id, suffix, prefix = ''
+  def first rule_set_id, suffix, prefix = ''
     rule_id = TDBQRY.new(rules).tap do |q|
       q.addcond('rule_set_id', TDBQRY::QCNUMEQ, rule_set_id)
 
@@ -49,7 +50,7 @@ class Myaso::TokyoCabinet::Rules < Myaso::Adapter
     end.search.any?
   end
 
-  def select_by_rule_set rule_set_id
+  def select_by_rule_set_id rule_set_id
     TDBQRY.new(rules).tap do |q|
       q.addcond('rule_set_id', TDBQRY::QCNUMEQ, rule_set_id)
     end.search

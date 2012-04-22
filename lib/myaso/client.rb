@@ -1,11 +1,14 @@
 # encoding: utf-8
 
-# Client for the Myaso::Adapter instances.
+# Client of the Myaso::Adapter instances.
 #
 module Myaso::Client
   class << self
-    # Define a new method that will fetch the necessary adapter for
+    # Define a new method that will fetch the necessary adapter for the
     # current Myaso::Client mixed-in class.
+    #
+    # @param names [Array<Symbol>] an array of adapter names.
+    # @return [Adapter] an adapter instance.
     #
     def adapter_for *names
       names.each do |name|
