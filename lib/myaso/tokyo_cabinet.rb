@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-# Interface to Tokyo Cabinet Hash Database.
+# Interface to Tokyo Cabinet Table Database.
 #
 class Myaso::TokyoCabinet
   include Myaso::Client
