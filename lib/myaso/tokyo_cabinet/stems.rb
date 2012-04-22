@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+# @private
 class Myaso::TokyoCabinet::Stems < Myaso::Adapter
   include TokyoCabinet
   

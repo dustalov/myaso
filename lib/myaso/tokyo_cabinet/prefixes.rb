@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+# @private
 class Myaso::TokyoCabinet::Prefixes < Myaso::Adapter
   def find id
     prefixes.get(id)
