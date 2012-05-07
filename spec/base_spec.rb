@@ -3,7 +3,7 @@
 require File.expand_path('../spec_helper', __FILE__)
 
 module Myaso
-  describe Client do
+  describe Base do
     subject { Myaso::AllYourBaseAreBelongToUs.new }
 
     [ :prefixes, :rules, :stems, :words ].each do |name|

@@ -2,8 +2,7 @@
 
 # Interface to Tokyo Cabinet Table Database.
 #
-class Myaso::TokyoCabinet
-  include Myaso::Client
+class Myaso::TokyoCabinet < Myaso::Base
   include ::TokyoCabinet
 
   # A list of storages. Each storage is a separate database file.
