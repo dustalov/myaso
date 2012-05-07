@@ -73,6 +73,6 @@ class Myaso::TokyoCabinet::Stems < Myaso::Adapter
 
   protected
     def stems
-      @stems ||= client.storages[:stems]
+      @stems ||= base.storages[:stems]
     end
 end

@@ -7,13 +7,13 @@ module Myaso
     subject { Myaso::AllYourBaseAreBelongToUs.new }
 
     [ :prefixes, :rules, :stems, :words ].each do |name|
-      it "#{name} adapter has its own @client instance variable" do
-        subject.send(name).instance_variable_get(:@client).must_equal subject
+      it "#{name} adapter has its own @base instance variable" do
+        subject.send(name).instance_variable_get(:@base).must_equal subject
       end
 
       # TODO: accessing protected methods from tests is a bad practice
-      it "has client attribute accessor" do
-        subject.send(name).send(:client).must_equal subject
+      it "has base attribute accessor" do
+        subject.send(name).send(:base).must_equal subject
       end
     end
   end

@@ -90,6 +90,6 @@ class Myaso::TokyoCabinet::Rules < Myaso::Adapter
 
   protected
     def rules
-      @rules ||= client.storages[:rules]
+      @rules ||= base.storages[:rules]
     end
 end

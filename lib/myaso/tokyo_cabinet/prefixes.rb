@@ -20,6 +20,6 @@ class Myaso::TokyoCabinet::Prefixes < Myaso::Adapter
 
   protected
     def prefixes
-      @prefixes ||= client.storages[:prefixes]
+      @prefixes ||= base.storages[:prefixes]
     end
 end

@@ -50,14 +50,14 @@ class Myaso::TokyoCabinet::Words < Myaso::Adapter
   def assemble id
     word = find(id)
 
-    stem = client.storages[:stems].get(word['stem_id'])
-    rule = client.storages[:rules].get(word['rule_id'])
+    stem = base.storages[:stems].get(word['stem_id'])
+    rule = base.storages[:rules].get(word['rule_id'])
 
     [rule['prefix'] || '', stem['stem'] || '', rule['suffix'] || ''].join
   end
 
   protected
     def words
-      @words ||= client.storages[:words]
+      @words ||= base.storages[:words]
     end
 end
