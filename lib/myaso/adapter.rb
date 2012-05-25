@@ -1,16 +1,16 @@
 # encoding: utf-8
 
-# An Adapter that connects with {Myaso::Client Myaso::Clients}.
+# An Adapter that connects with {Myaso::Base Myaso::Bases}.
 #
 class Myaso::Adapter
-  attr_reader :client
-  protected :client
+  attr_reader :base
+  protected :base
 
   # Create a new instance of Myaso::Adapter.
   #
-  # @param client [Myaso::Client] a client to connect.
+  # @param base [Myaso::Base] a base to connect.
   #
-  def initialize client
-    @client = client
+  def initialize base
+    @base = base
   end
 end

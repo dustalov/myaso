@@ -4,7 +4,7 @@ require 'myaso/version'
 
 require 'myaso/msd'
 
-require 'myaso/client'
+require 'myaso/base'
 require 'myaso/adapter'
 
 require 'myaso/active_record' if defined? ::ActiveRecord::Base

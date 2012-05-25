@@ -1,11 +1,13 @@
 # encoding: utf-8
 
-# Client of the Myaso::Adapter instances.
+# A basic Myaso class which provides an interface to the
+# storage implemetations. This class is a client of the Myaso::Adapter
+# instances.
 #
-module Myaso::Client
+class Myaso::Base
   class << self
     # Define a new method that will fetch the necessary adapter for the
-    # current Myaso::Client mixed-in class.
+    # current Myaso::Base mixed-in class.
     #
     # @param names [Array<Symbol>] an array of adapter names.
     # @return [Adapter] an adapter instance.

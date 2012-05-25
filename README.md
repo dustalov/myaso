@@ -9,7 +9,9 @@ written in Ruby.
 
 Add this line to your application's Gemfile:
 
-    gem 'myaso'
+```ruby
+gem 'myaso'
+```
 
 And then execute:
 
@@ -30,6 +32,19 @@ example, a dictionary in the Tokyo Cabinet format is stored in
 After this, the `@tokyocabinet` variable will be allocated as a
 ready for use `Myaso::TokyoCabinet` instance. All you need is
 to prepare the analyzer and perform your tasks.
+
+#### Dictionaries
+
+Morphological dictionaries are preprocessed by the
+[Myasorubka](https://github.com/eveel/myasorubka) tool.
+
+These dictionaries are available in precompiled state
+and can be [downloaded](https://github.com/eveel/myasorubka/downloads).
+
+### Analysis
+
+Morphological analysis is a main purpose of any morphological
+analyzer. In Myaso this can be done in elegant way.
 
 ```ruby
 # load the Russian morphosyntactic descriptions
@@ -59,7 +74,9 @@ The analysis results for word *бублик* are looking like this:
    #<Myaso::MSD:0x2b03608 language=Myaso::MSD::Russian pos=:noun grammemes={:type=>:common, :gender=>:masculine, :number=>:singular, :case=>:accusative, :animate=>:no}>>]
 ```
 
-Also, it is possible to perform the word lemmatization. At this moment,
+### Lemmatization
+
+It is possible to perform the word lemmatization. At this moment,
 Myaso analyzer is able to lemmatize by word stem identifier:
 
 ```ruby
@@ -69,6 +86,11 @@ result = analyzer.analyze('люди').first
 # lemmatize
 analyzer.lemmatize(result.stem['id']) # => человек
 ```
+
+### Web Service
+
+A source code of the Myaso-Web application is available in
+the separate repository: <https://github.com/eveel/myaso-web>.
 
 ## Further Work
 
