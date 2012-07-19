@@ -173,7 +173,7 @@ class Myaso::Analyzer
   # result = analyzer.analyze('человек').first
   #
   # # inflect
-  # analyzer.inflect(result.stem['id'], 'Nc-p') # => люди
+  # analyzer.inflect(result.stem['id'], 'Nc-pn') # => люди
   # ```
   #
   # @param stem_id [Fixnum] a stem identifier.

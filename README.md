@@ -98,7 +98,7 @@ the required morphosyntactic descriptor:
 result = analyzer.analyze('человек').first
 
 # inflect
-analyzer.inflect(result.stem['id'], 'Nc-p') # => люди
+analyzer.inflect(result.stem['id'], 'Nc-pn') # => люди
 ```
 
 ### Web Service
