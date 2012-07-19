@@ -151,15 +151,7 @@ class Myaso::Analyzer
                    Myaso::MSD.new(language, rule2['msd'])
 
       length_criteria = msd1.grammemes.length <=> msd2.grammemes.length
-
       next length_criteria unless length_criteria == 0
-
-      positions1 = msd1.grammemes.inject(0) do |cost, (k, v)|
-        attributes = language::CATEGORIES[msd1.pos][:attrs]
-        attribute = attributes.find { |a| a.first == k }
-
-        cost + attribute.last.keys.index { |a| a == v }
-      end
 
       positions_cost(msd1) <=> positions_cost(msd2)
     end.first[0]
