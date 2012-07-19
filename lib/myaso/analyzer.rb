@@ -121,7 +121,7 @@ class Myaso::Analyzer
     result
   end
 
-  # Perform the word lemmatization basen on its `stem_id`.
+  # Perform the word lemmatization based on its `stem_id`.
   #
   # Lemmatization is the process of grouping together the different
   # inflected forms of a word so they can be analysed as a single item.
