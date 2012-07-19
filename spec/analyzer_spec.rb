@@ -52,5 +52,12 @@ module Myaso
       lemma = subject.lemmatize(analysis.stem['id'])
       lemma.must_equal 'cat'
     end
+
+    it 'should inflect words' do
+      analysis = subject.analyze('cat').first
+
+      inflection = subject.inflect(analysis.stem['id'], 'Nc-p')
+      inflection.must_equal 'cats'
+    end
   end
 end

@@ -49,9 +49,12 @@ class Myaso::TokyoCabinet::Words < Myaso::Adapter
 
   def assemble id
     word = find(id)
+    assemble_stem_rule(word['stem_id'], word['rule_id'])
+  end
 
-    stem = base.storages[:stems].get(word['stem_id'])
-    rule = base.storages[:rules].get(word['rule_id'])
+  def assemble_stem_rule stem_id, rule_id
+    stem = base.storages[:stems].get(stem_id)
+    rule = base.storages[:rules].get(rule_id)
 
     [rule['prefix'] || '', stem['stem'] || '', rule['suffix'] || ''].join
   end
