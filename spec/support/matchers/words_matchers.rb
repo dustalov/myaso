@@ -104,6 +104,12 @@ class MiniTest::Unit::TestCase
       end
     end
 
+    describe '#assemble_stem_rule' do
+      it 'should assemble stems with rules' do
+        subject.assemble_stem_rule(1, 2).must_equal 'cats'
+      end
+    end
+
     describe '#size' do
       it 'should be valid' do
         subject.size.must_equal 2
