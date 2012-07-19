@@ -87,6 +87,20 @@ result = analyzer.analyze('люди').first
 analyzer.lemmatize(result.stem['id']) # => человек
 ```
 
+### Inflection
+
+It is possible to perform the word inflection. At this moment,
+Myaso analyzer is able to lemmatize by word stem identifier with
+the required morphosyntactic descriptor:
+
+```ruby
+# take the first Myaso::Result of analysis
+result = analyzer.analyze('человек').first
+
+# inflect
+analyzer.inflect(result.stem['id'], 'Nc-p') # => люди
+```
+
 ### Web Service
 
 A source code of the Myaso-Web application is available in
