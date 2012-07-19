@@ -172,7 +172,7 @@ class Myaso::Analyzer
   # # take the first Myaso::Result of analysis
   # result = analyzer.analyze('человек').first
   #
-  # # lemmatize
+  # # inflect
   # analyzer.inflect(result.stem['id'], 'Nc-p') # => люди
   # ```
   #
