@@ -54,7 +54,7 @@ require 'myaso/msd/russian'
 analyzer = Analyzer.new(@tokyocabinet, MSD::Russian)
 
 # analyze something
-pp analyzer.analyze 'бублик'
+pp analyzer.lookup 'бублик'
 ```
 
 The analysis results for word *бублик* are looking like this:
@@ -81,7 +81,7 @@ Myaso analyzer is able to lemmatize by word stem identifier:
 
 ```ruby
 # take the first Myaso::Result of analysis
-result = analyzer.analyze('люди').first
+result = analyzer.lookup('люди').first
 
 # lemmatize
 analyzer.lemmatize(result.stem['id']) # => человек
@@ -95,7 +95,7 @@ the required morphosyntactic descriptor:
 
 ```ruby
 # take the first Myaso::Result of analysis
-result = analyzer.analyze('человек').first
+result = analyzer.lookup('человек').first
 
 # inflect
 analyzer.inflect(result.stem['id'], 'Nc-pn') # => люди
