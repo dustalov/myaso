@@ -4,8 +4,7 @@ class MiniTest::Unit::TestCase
   def self.should_behave_like_a_rules!
     describe '#get' do
       it 'should fetch a rule' do
-        subject.find(1).must_equal('rule_set_id' => '1',
-                                   'msd' => 'Nc-s')
+        subject.find(1).must_equal Myaso::Rule.new(1, '1', 'Nc-s')
       end
 
       it 'should return nil when rule is absent' do
@@ -14,31 +13,31 @@ class MiniTest::Unit::TestCase
     end
 
     describe '#set' do
-      let(:rule) { { 'rule_set_id' => '1' } }
+      let(:rule) { Myaso::Rule.new(5, '1') }
 
       it 'should set an empty rule' do
         subject.find(5).must_be_nil
-        subject.set(5, rule)
+        subject.set(rule, 5)
         subject.find(5).must_equal rule
       end
 
       it 'should replace an existent rule' do
-        new_rule = { 'rule_set_id' => '2' }
+        new_rule = Myaso::Rule.new(5, '2')
 
         subject.find(5).must_be_nil
-        subject.set(5, rule)
+        subject.set(rule, 5)
         subject.find(5).must_equal rule
-        subject.set(5, new_rule)
+        subject.set(new_rule, 5)
         subject.find(5).must_equal new_rule
       end
     end
 
     describe '#delete' do
-      let(:rule) { { 'rule_set_id' => '1' } }
+      let(:rule) { Myaso::Rule.new(5, '1') }
 
       it 'should remove an existent rule' do
         subject.find(5).must_be_nil
-        subject.set(5, rule)
+        subject.set(rule, 5)
         subject.find(5).must_equal rule
         subject.delete(5).must_equal true
         subject.find(5).must_be_nil
@@ -52,16 +51,15 @@ class MiniTest::Unit::TestCase
 
     describe '#first' do
       it 'should find rules without suffix' do
-        subject.first('1', nil).
-          must_equal('rule_set_id' => '1',
-                     'msd' => 'Nc-s')
+        subject.first('1', nil).must_equal Myaso::Rule.new(
+          1, '1', 'Nc-s'
+        )
       end
 
       it 'should find an existent rule by required arguments' do
-        subject.first('1', 's').
-          must_equal('rule_set_id' => '1',
-                     'suffix' => 's',
-                     'msd' => 'Nc-p')
+        subject.first('1', 's').must_equal Myaso::Rule.new(
+          2, '1', 'Nc-p', nil, 's'
+        )
       end
 
       it 'should not find absent rule by required arguments' do

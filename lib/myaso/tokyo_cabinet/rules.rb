@@ -5,11 +5,13 @@ class Myaso::TokyoCabinet::Rules < Myaso::Adapter
   include TokyoCabinet
 
   def find id
-    rules.get(id)
+    return unless rule = rules.get(id)
+    values = rule.values_at('rule_set_id', 'msd', 'prefix', 'suffix')
+    Myaso::Rule.new(id.to_i, *values)
   end
 
-  def set id, rule
-    rules.put(id, rule)
+  def set rule, id = nil
+    rules.put(id || rule.id, rule.to_h.tap { |r| r.delete('id') })
   end
 
   def delete id

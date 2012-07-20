@@ -5,11 +5,13 @@ class Myaso::TokyoCabinet::Words < Myaso::Adapter
   include TokyoCabinet
 
   def find id
-    words.get(id)
+    return unless word = words.get(id)
+    values = word.values_at('stem_id', 'rule_id')
+    Myaso::Word.new(id.to_i, *values)
   end
 
-  def set id, rule
-    words.put(id, rule)
+  def set word, id = nil
+    words.put(id || word.id, word.to_h.tap { |r| r.delete('id') })
   end
 
   def delete id
@@ -53,10 +55,8 @@ class Myaso::TokyoCabinet::Words < Myaso::Adapter
   end
 
   def assemble_stem_rule stem_id, rule_id
-    stem = base.storages[:stems].get(stem_id)
-    rule = base.storages[:rules].get(rule_id)
-
-    [rule['prefix'] || '', stem['stem'] || '', rule['suffix'] || ''].join
+    stem, rule = base.stems.find(stem_id), base.rules.find(rule_id)
+    [rule.prefix || '', stem.stem || '', rule.suffix || ''].join
   end
 
   protected

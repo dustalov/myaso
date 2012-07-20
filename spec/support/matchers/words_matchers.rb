@@ -4,11 +4,8 @@ class MiniTest::Unit::TestCase
   def self.should_behave_like_a_words!
     describe '#get' do
       it 'should fetch a word' do
-        subject.find(1).must_equal('stem_id' => '1',
-                                   'rule_id' => '1')
-
-        subject.find(2).must_equal('stem_id' => '1',
-                                   'rule_id' => '2')
+        subject.find(1).must_equal(Myaso::Word.new(1, '1', '1'))
+        subject.find(2).must_equal(Myaso::Word.new(2, '1', '2'))
       end
 
       it 'should return nil when word is absent' do
@@ -17,31 +14,31 @@ class MiniTest::Unit::TestCase
     end
 
     describe '#set' do
-      let(:word) { { 'stem_id' => '1', 'rule_id' => '1' } }
+      let(:word) { Myaso::Word.new(3, '1', '1') }
 
       it 'should set an empty word' do
         subject.find(3).must_be_nil
-        subject.set(3, word)
+        subject.set(word, 3)
         subject.find(3).must_equal word
       end
 
       it 'should replace an existent word' do
-        new_word = { 'stem_id' => '1', 'rule_id' => '1' }
+        new_word = Myaso::Word.new(3, '1', '2')
 
         subject.find(3).must_be_nil
-        subject.set(3, word)
+        subject.set(word, 3)
         subject.find(3).must_equal word
-        subject.set(3, new_word)
+        subject.set(new_word)
         subject.find(3).must_equal new_word
       end
     end
 
     describe '#delete' do
-      let(:word) { { 'stem_id' => '1', 'rule_id' => '1' } }
+      let(:word) { Myaso::Word.new(3, '1', '1') }
 
       it 'should remove an existent word' do
         subject.find(3).must_be_nil
-        subject.set(3, word)
+        subject.set(word, 3)
         subject.find(3).must_equal word
         subject.delete(3).must_equal true
         subject.find(3).must_be_nil
