@@ -1,8 +1,8 @@
 # encoding: utf-8
 
 class Myaso::AllYourBaseAreBelongToUs < Myaso::Base
-  class Prefixes < Myaso::Adapter; end
-  class Stems < Myaso::Adapter; end
-  class Rules < Myaso::Adapter; end
-  class Words < Myaso::Adapter; end
+  class Prefixes; def initialize(base) end end
+  class Stems; def initialize(base) end end
+  class Rules; def initialize(base) end end
+  class Words; def initialize(base) end end
 end
