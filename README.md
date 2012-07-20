@@ -133,7 +133,7 @@ the required morphosyntactic descriptor:
 result = analyzer.lookup('человек').first
 
 # inflect
-analyzer.inflect(result.stem.id, 'Nc-pn') # => люди
+analyzer.inflect(result.stem.id, 'Nc-pn')
 ```
 
 The inflection result would be presented in the following structure:
@@ -156,7 +156,7 @@ And it is possible to assemble the correspondent word:
 
 ```ruby
 inflection = analyzer.inflect(result.stem.id, 'Nc-pn')
-puts @tokyocabinet.words.assemble(inflection.word_id) # => человек
+puts @tokyocabinet.words.assemble(inflection.word_id) # => люди
 ```
 
 ### Web Service
