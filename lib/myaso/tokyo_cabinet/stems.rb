@@ -5,11 +5,13 @@ class Myaso::TokyoCabinet::Stems < Myaso::Adapter
   include TokyoCabinet
   
   def find id
-    stems.get(id)
+    return unless stem = stems.get(id)
+    values = stem.values_at('rule_set_id', 'msd', 'stem')
+    Myaso::Stem.new(id.to_i, *values)
   end
 
-  def set id, rule
-    stems.put(id, rule)
+  def set stem, id = nil
+    stems.put(id || stem.id, stem.to_h.tap { |r| r.delete('id') })
   end
 
   def delete id

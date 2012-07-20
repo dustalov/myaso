@@ -4,8 +4,7 @@ class MiniTest::Unit::TestCase
   def self.should_behave_like_a_stems!
     describe '#get' do
       it 'should fetch a stem' do
-        subject.find(1).must_equal('rule_set_id' => '1',
-                                   'stem' => 'cat')
+        subject.find(1).must_equal Myaso::Stem.new(1, '1', nil, 'cat')
       end
 
       it 'should return nil when stem is absent' do
@@ -14,31 +13,31 @@ class MiniTest::Unit::TestCase
     end
 
     describe '#set' do
-      let(:stem) { { 'stem_set_id' => '1' } }
+      let(:stem) { Myaso::Stem.new(2, '1') }
 
       it 'should set an empty stem' do
         subject.find(2).must_be_nil
-        subject.set(2, stem)
+        subject.set(stem, 2)
         subject.find(2).must_equal stem
       end
 
       it 'should replace an existent stem' do
-        new_stem = { 'stem_set_id' => '2' }
+        new_stem = Myaso::Stem.new(2, '2')
 
         subject.find(2).must_be_nil
-        subject.set(2, stem)
+        subject.set(stem, 2)
         subject.find(2).must_equal stem
-        subject.set(2, new_stem)
+        subject.set(new_stem, 2)
         subject.find(2).must_equal new_stem
       end
     end
 
     describe '#delete' do
-      let(:stem) { { 'stem_set_id' => '1' } }
+      let(:stem) { Myaso::Stem.new(2, '1') }
 
       it 'should remove an existent stem' do
         subject.find(2).must_be_nil
-        subject.set(2, stem)
+        subject.set(stem, 2)
         subject.find(2).must_equal stem
         subject.delete(2).must_equal true
         subject.find(2).must_be_nil
@@ -52,9 +51,9 @@ class MiniTest::Unit::TestCase
 
     describe '#find_by_stem_and_rule_set_id' do
       it 'should find an existent stem' do
-        subject.find_by_stem_and_rule_set_id('cat', 1).
-          must_equal('stem' => 'cat',
-                     'rule_set_id' => '1')
+        subject.find_by_stem_and_rule_set_id('cat', 1).must_equal(
+          Myaso::Stem.new(1, '1', nil, 'cat')
+        )
       end
 
       it 'should not find an absent stem by invalid stem' do

@@ -83,7 +83,7 @@ class Myaso::Analyzer
     end.flatten(1).map do |stem_id, suffix|
       rule_set_id = if stem_id
         stem = myaso.stems.find(stem_id)
-        stem['rule_set_id']
+        stem.rule_set_id
       end
 
       rules_ids = myaso.rules.select_by_suffix(suffix, rule_set_id)
@@ -103,15 +103,11 @@ class Myaso::Analyzer
 
         # we need to merge the stem and rule MSDs
         rule = myaso.rules.find(rule_id)
-        rule['id'] = rule_id
-
         stem = myaso.stems.find(stem_id)
-        stem['id'] = stem_id
+        msd = Myaso::MSD.new(language, rule.msd)
 
-        msd = Myaso::MSD.new(language, rule['msd'])
-
-        if stem['msd']
-          msd.merge! Myaso::MSD.new(language, stem['msd']).grammemes
+        if stem.msd
+          msd.merge! Myaso::MSD.new(language, stem.msd).grammemes
         end
 
         result << Result.new(word_id, stem, rule, msd)
@@ -143,12 +139,12 @@ class Myaso::Analyzer
     stem = myaso.stems.find(stem_id)
 
     rules = myaso.rules.
-      select_by_rule_set_id(stem['rule_set_id']).
+      select_by_rule_set_id(stem.rule_set_id).
       map { |id| [id, myaso.rules.find(id)] }
 
     rule_id = rules.sort do |(id1, rule1), (id2, rule2)|
-      msd1, msd2 = Myaso::MSD.new(language, rule1['msd']),
-                   Myaso::MSD.new(language, rule2['msd'])
+      msd1, msd2 = Myaso::MSD.new(language, rule1.msd),
+                   Myaso::MSD.new(language, rule2.msd)
 
       length_criteria = msd1.grammemes.length <=> msd2.grammemes.length
       next length_criteria unless length_criteria == 0
@@ -172,8 +168,8 @@ class Myaso::Analyzer
   # # take the first Myaso::Result of analysis
   # result = analyzer.analyze('человек').first
   #
-  # # lemmatize
-  # analyzer.inflect(result.stem['id'], 'Nc-p') # => люди
+  # # inflect
+  # analyzer.inflect(result.stem['id'], 'Nc-pn') # => люди
   # ```
   #
   # @param stem_id [Fixnum] a stem identifier.
@@ -185,12 +181,12 @@ class Myaso::Analyzer
     msd = Myaso::MSD.new(language, msd_string)
 
     rules = myaso.rules.
-      select_by_rule_set_id(stem['rule_set_id']).
+      select_by_rule_set_id(stem.rule_set_id).
       map { |id| [id, myaso.rules.find(id)] }
 
     rule_id = rules.sort do |(id1, rule1), (id2, rule2)|
-      msd1, msd2 = Myaso::MSD.new(language, rule1['msd']),
-                   Myaso::MSD.new(language, rule2['msd'])
+      msd1, msd2 = Myaso::MSD.new(language, rule1.msd),
+                   Myaso::MSD.new(language, rule2.msd)
 
       msd_similarity(msd, msd1) <=> msd_similarity(msd, msd2)
     end.last[0]

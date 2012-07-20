@@ -3,11 +3,13 @@
 # @private
 class Myaso::TokyoCabinet::Prefixes < Myaso::Adapter
   def find id
-    prefixes.get(id)
+    return unless prefix = prefixes.get(id)
+    values = prefix.values_at('prefix')
+    Myaso::Prefix.new(id.to_i, *values)
   end
 
-  def set id, prefix
-    prefixes.put(id, prefix)
+  def set prefix, id = nil
+    prefixes.put(id || prefix.id, prefix.to_h.tap { |r| r.delete('id') })
   end
 
   def delete id

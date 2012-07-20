@@ -32,8 +32,8 @@ module Myaso
       result.must_be_kind_of Analyzer::Result
 
       result.word_id.must_equal '1'
-      result.stem['id'].must_equal '1'
-      result.rule['id'].must_equal '1'
+      result.stem.id.must_equal 1
+      result.rule.id.must_equal 1
 
       result.msd.language.must_equal language
       result.msd.to_s.must_equal 'Nc-s'
@@ -49,14 +49,14 @@ module Myaso
     it 'should lemmatize by stem' do
       analysis = subject.analyze('cats').first
 
-      lemma = subject.lemmatize(analysis.stem['id'])
+      lemma = subject.lemmatize(analysis.stem.id)
       lemma.must_equal 'cat'
     end
 
     it 'should inflect words' do
       analysis = subject.analyze('cat').first
 
-      inflection = subject.inflect(analysis.stem['id'], 'Nc-p')
+      inflection = subject.inflect(analysis.stem.id, 'Nc-p')
       inflection.must_equal 'cats'
     end
   end
