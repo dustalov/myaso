@@ -41,7 +41,7 @@ class Myaso::Analyzer
   # Analyze the single word.
   #
   # ```ruby
-  # pp analyzer.lookup 'бублик'
+  # analyzer.lookup 'бублик'
   # ```
   #
   # The analysis results for word *бублик* are looking like this:
@@ -49,16 +49,28 @@ class Myaso::Analyzer
   # ```
   # [#<struct Myaso::Analyzer::Result
   #   word_id="410728",
-  #   stem={"rule_set_id"=>"21", "stem"=>"бублик", "msd_id"=>"687", "id"=>"18572"},
-  #   rule={"msd"=>"Ncmsn", "rule_set_id"=>"21", "id"=>"502"},
-  #   msd=
-  #    #<Myaso::MSD:0x2b04e68 language=Myaso::MSD::Russian pos=:noun grammemes={:type=>:common, :gender=>:masculine, :number=>:singular, :case=>:nominative, :animate=>:no}>>,
+  #   stem=
+  #    #<struct Myaso::Stem id=18572, rule_set_id="21", msd="*-n", stem="бублик">,
+  #   rule=
+  #    #<struct Myaso::Rule
+  #     id=502,
+  #     rule_set_id="21",
+  #     msd="Ncmsn",
+  #     prefix=nil,
+  #     suffix=nil>,
+  #   msd=#<Myaso::MSD::Russian msd="Ncmsnn">>,
   #  #<struct Myaso::Analyzer::Result
   #   word_id="410731",
-  #   stem={"rule_set_id"=>"21", "stem"=>"бублик", "msd_id"=>"687", "id"=>"18572"},
-  #   rule={"msd"=>"Ncmsa", "rule_set_id"=>"21", "id"=>"505"},
-  #   msd=
-  #    #<Myaso::MSD:0x2b03608 language=Myaso::MSD::Russian pos=:noun grammemes={:type=>:common, :gender=>:masculine, :number=>:singular, :case=>:accusative, :animate=>:no}>>]
+  #   stem=
+  #    #<struct Myaso::Stem id=18572, rule_set_id="21", msd="*-n", stem="бублик">,
+  #   rule=
+  #    #<struct Myaso::Rule
+  #     id=505,
+  #     rule_set_id="21",
+  #     msd="Ncmsa",
+  #     prefix=nil,
+  #     suffix=nil>,
+  #   msd=#<Myaso::MSD::Russian msd="Ncmsan">>]
   # ```
   #
   # @param word [String] a word to be analyzed.
@@ -125,7 +137,23 @@ class Myaso::Analyzer
   # result = analyzer.lookup('люди').first
   #
   # # lemmatize
-  # analyzer.lemmatize(result.stem['id']) # => человек
+  # analyzer.lemmatize(result.stem.id)
+  # ```
+  #
+  # And the result would be represented in the following structure:
+  #
+  # ```
+  # #<struct Myaso::Analyzer::Result
+  #  word_id="4852653",
+  #  stem=#<struct Myaso::Stem id=166979, rule_set_id="338", msd="*-y", stem=nil>,
+  #  rule=
+  #   #<struct Myaso::Rule
+  #    id=9897,
+  #    rule_set_id="338",
+  #    msd="Ncmsn",
+  #    prefix=nil,
+  #    suffix="человек">,
+  #  msd=#<Myaso::MSD::Russian msd="Ncmsny">>
   # ```
   #
   # @param stem_id [Fixnum] a stem identifier.
@@ -167,7 +195,23 @@ class Myaso::Analyzer
   # result = analyzer.lookup('человек').first
   #
   # # inflect
-  # analyzer.inflect(result.stem['id'], 'Nc-pn') # => люди
+  # analyzer.inflect(result.stem.id, 'Nc-pn')
+  # ```
+  #
+  # And the result would be represented in the following structure:
+  #
+  # ```
+  # #<struct Myaso::Analyzer::Result
+  #  word_id="4852659",
+  #  stem=#<struct Myaso::Stem id=166979, rule_set_id="338", msd="*-y", stem=nil>,
+  #  rule=
+  #   #<struct Myaso::Rule
+  #    id=9903,
+  #    rule_set_id="338",
+  #    msd="Ncmpn",
+  #    prefix=nil,
+  #    suffix="люди">,
+  #  msd=#<Myaso::MSD::Russian msd="Ncmpny">>
   # ```
   #
   # @param stem_id [Fixnum] a stem identifier.
