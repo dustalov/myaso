@@ -54,7 +54,7 @@ require 'myaso/msd/russian'
 analyzer = Analyzer.new(@tokyocabinet, MSD::Russian)
 
 # analyze something
-pp analyzer.lookup 'бублик'
+analyzer.lookup 'бублик'
 ```
 
 The analysis results for word *бублик* are looking like this:
