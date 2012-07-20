@@ -22,7 +22,7 @@ module Myaso
     end
 
     it 'should analyze known word' do
-      analysis = subject.analyze('cat')
+      analysis = subject.lookup('cat')
 
       analysis.must_be_kind_of Array
       analysis.size.must_equal 1
@@ -40,21 +40,21 @@ module Myaso
     end
 
     it 'should not analyze unknown word' do
-      analysis = subject.analyze('dog')
+      analysis = subject.lookup('dog')
 
       analysis.must_be_kind_of Array
       analysis.size.must_equal 0
     end
 
     it 'should lemmatize by stem' do
-      analysis = subject.analyze('cats').first
+      analysis = subject.lookup('cats').first
 
       lemma = subject.lemmatize(analysis.stem.id)
       lemma.must_equal 'cat'
     end
 
     it 'should inflect words' do
-      analysis = subject.analyze('cat').first
+      analysis = subject.lookup('cat').first
 
       inflection = subject.inflect(analysis.stem.id, 'Nc-p')
       inflection.must_equal 'cats'
