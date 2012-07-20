@@ -28,7 +28,6 @@ module Myaso
       analysis.size.must_equal 1
 
       result = analysis.first
-
       result.must_be_kind_of Analyzer::Result
 
       result.word_id.must_equal '1'
@@ -49,6 +48,8 @@ module Myaso
       analysis = subject.lookup('cats').first
 
       result = subject.lemmatize(analysis.stem.id)
+      result.must_be_kind_of Analyzer::Result
+
       lemma = myaso.words.assemble(result.word_id)
       lemma.must_equal 'cat'
     end
@@ -57,6 +58,8 @@ module Myaso
       analysis = subject.lookup('cat').first
 
       result = subject.inflect(analysis.stem.id, 'Nc-p')
+      result.must_be_kind_of Analyzer::Result
+
       inflection = myaso.words.assemble(result.word_id)
       inflection.must_equal 'cats'
     end
