@@ -36,7 +36,6 @@ module Myaso
       result.rule.id.must_equal 1
 
       result.msd.language.must_equal language
-      result.msd.to_s.must_equal 'Nc-s'
     end
 
     it 'should not analyze unknown word' do
@@ -49,14 +48,16 @@ module Myaso
     it 'should lemmatize by stem' do
       analysis = subject.lookup('cats').first
 
-      lemma = subject.lemmatize(analysis.stem.id)
+      result = subject.lemmatize(analysis.stem.id)
+      lemma = myaso.words.assemble(result.word_id)
       lemma.must_equal 'cat'
     end
 
     it 'should inflect words' do
       analysis = subject.lookup('cat').first
 
-      inflection = subject.inflect(analysis.stem.id, 'Nc-p')
+      result = subject.inflect(analysis.stem.id, 'Nc-p')
+      inflection = myaso.words.assemble(result.word_id)
       inflection.must_equal 'cats'
     end
   end

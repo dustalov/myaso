@@ -104,11 +104,7 @@ class Myaso::Analyzer
         # we need to merge the stem and rule MSDs
         rule = myaso.rules.find(rule_id)
         stem = myaso.stems.find(stem_id)
-        msd = Myaso::MSD.new(language, rule.msd)
-
-        if stem.msd
-          msd.merge! Myaso::MSD.new(language, stem.msd).grammemes
-        end
+        msd = merge_msds(rule.msd, stem.msd, language)
 
         result << Result.new(word_id, stem, rule, msd)
       end
@@ -133,7 +129,7 @@ class Myaso::Analyzer
   # ```
   #
   # @param stem_id [Fixnum] a stem identifier.
-  # @return [String] a lemma for the given stem.
+  # @return [Myaso::Result] a lemma for the given stem.
   #
   def lemmatize stem_id
     stem = myaso.stems.find(stem_id)
@@ -142,7 +138,7 @@ class Myaso::Analyzer
       select_by_rule_set_id(stem.rule_set_id).
       map { |id| [id, myaso.rules.find(id)] }
 
-    rule_id = rules.sort do |(id1, rule1), (id2, rule2)|
+    rule = rules.sort do |(id1, rule1), (id2, rule2)|
       msd1, msd2 = Myaso::MSD.new(language, rule1.msd),
                    Myaso::MSD.new(language, rule2.msd)
 
@@ -150,10 +146,12 @@ class Myaso::Analyzer
       next length_criteria unless length_criteria == 0
 
       positions_cost(msd1) <=> positions_cost(msd2)
-    end.first[0]
+    end.first[1]
 
-    word_id = myaso.words.find_by_stem_id_and_rule_id(stem_id, rule_id)
-    myaso.words.assemble(word_id)
+    word_id = myaso.words.find_by_stem_id_and_rule_id(stem.id, rule.id)
+    word_msd = merge_msds(rule.msd.to_s, stem.msd.to_s, language)
+
+    Result.new(word_id, stem, rule, word_msd)
   end
 
   # Perform the word inflection based on its `stem_id` and MSD.
@@ -174,7 +172,8 @@ class Myaso::Analyzer
   #
   # @param stem_id [Fixnum] a stem identifier.
   # @param msd_string [String] a textual MSD representation.
-  # @return [String] an inflection for the given stem and required MSD.
+  # @return [Myaso::Result] an inflection for the given stem and
+  #   required MSD.
   #
   def inflect stem_id, msd_string
     stem = myaso.stems.find(stem_id)
@@ -184,18 +183,17 @@ class Myaso::Analyzer
       select_by_rule_set_id(stem.rule_set_id).
       map { |id| [id, myaso.rules.find(id)] }
 
-    rule_id = rules.sort do |(id1, rule1), (id2, rule2)|
+    rule = rules.sort do |(id1, rule1), (id2, rule2)|
       msd1, msd2 = Myaso::MSD.new(language, rule1.msd),
                    Myaso::MSD.new(language, rule2.msd)
 
       msd_similarity(msd, msd1) <=> msd_similarity(msd, msd2)
-    end.last[0]
+    end.last[1]
 
-    if word_id = myaso.words.find_by_stem_id_and_rule_id(stem_id, rule_id)
-      myaso.words.assemble(word_id)
-    else
-      myaso.words.assemble_stem_rule(stem_id, rule_id)
-    end
+    word_id = myaso.words.find_by_stem_id_and_rule_id(stem.id, rule.id)
+    word_msd = merge_msds(rule.msd.to_s, stem.msd.to_s, language)
+
+    Result.new(word_id, stem, rule, word_msd)
   end
 
   protected
@@ -263,7 +261,7 @@ class Myaso::Analyzer
     # Compute the MSD positions cost for lemmatization purposes.
     #
     # @param msd [Myaso::MSD] a MSD instance.
-    # @return a positions cost of this MSD.
+    # @return [Fixnum] a positions cost of this MSD.
     #
     def positions_cost(msd)
       msd.grammemes.inject(0) do |cost, (k, v)|
@@ -278,7 +276,7 @@ class Myaso::Analyzer
     #
     # @param origin [Myaso::MSD] a MSD sample to be considered.
     # @param msd [Myaso::MSD] a MSD instance.
-    # @return a MSD similarity value.
+    # @return [Fixnum] a MSD similarity value.
     #
     def msd_similarity(origin, msd)
       intersection = if origin.pos == msd.pos
@@ -292,5 +290,18 @@ class Myaso::Analyzer
       union = (origin.grammemes.keys | msd.grammemes.keys).length
 
       intersection - union
+    end
+
+    # Merge two MSDs into one.
+    #
+    # @param origin_string [String] a MSD sample to be considered.
+    # @param msd_string [String] a MSD instance.
+    # @return [Myaso::MSD] a new MSD that is generated from the input
+    #   descriptors.
+    #
+    def merge_msds(origin_string, msd_string, language)
+      Myaso::MSD.new(language, origin_string).tap do |origin|
+        origin.merge! Myaso::MSD.new(language, msd_string).grammemes
+      end
     end
 end
