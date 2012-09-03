@@ -230,6 +230,7 @@ module Myaso::MSD::Russian
         compound: 'c'
       } ],
       [ :case, {
+        nominative: 'n',
         genitive: 'g',
         dative: 'd',
         accusative: 'a',
