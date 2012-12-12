@@ -103,6 +103,11 @@ class Myaso::MSD
     to_s <=> other.to_s
   end
 
+  # @private
+  def eql? other
+    to_s == other.to_s
+  end
+
   # Generates Regexp from the MSD that is useful to perform
   # database queries.
   #
