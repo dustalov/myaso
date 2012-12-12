@@ -98,6 +98,11 @@ class Myaso::MSD
     '#<%s msd=%s>' % [language.name, to_s.inspect]
   end
 
+  # @private
+  def <=> other
+    to_s <=> other.to_s
+  end
+
   # Generates Regexp from the MSD that is useful to perform
   # database queries.
   #
