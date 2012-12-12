@@ -104,7 +104,7 @@ class Myaso::MSD
   end
 
   # @private
-  def eql? other
+  def == other
     to_s == other.to_s
   end
 
