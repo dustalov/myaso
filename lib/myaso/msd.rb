@@ -95,7 +95,17 @@ class Myaso::MSD
 
   # @private
   def inspect
-    '#<%s:0x%x msd=%s>' % [language.name, object_id * 2, to_s.inspect]
+    '#<%s msd=%s>' % [language.name, to_s.inspect]
+  end
+
+  # @private
+  def <=> other
+    to_s <=> other.to_s
+  end
+
+  # @private
+  def == other
+    to_s == other.to_s
   end
 
   # Generates Regexp from the MSD that is useful to perform

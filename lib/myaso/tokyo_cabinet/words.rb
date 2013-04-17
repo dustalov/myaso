@@ -1,7 +1,14 @@
 # encoding: utf-8
 
 # @private
-class Myaso::TokyoCabinet::Words < Myaso::Adapter
+class Myaso::TokyoCabinet::Words
+  attr_reader :base
+  protected :base
+
+  def initialize base
+    @base = base
+  end
+
   include TokyoCabinet
 
   def find id

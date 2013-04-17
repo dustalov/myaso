@@ -3,7 +3,7 @@
 require File.expand_path('../lib/myaso/version', __FILE__)
 
 Gem::Specification.new do |gem|
-  gem.authors       = ['Dmitry A. Ustalov']
+  gem.authors       = ['Dmitry Ustalov']
   gem.email         = ['dmitry@eveel.ru']
   gem.description   = 'Myaso is a morphological analysis library in Ruby.'
   gem.summary       = 'Myaso is a morphological analysis and synthesis ' \

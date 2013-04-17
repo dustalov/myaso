@@ -1,7 +1,14 @@
 # encoding: utf-8
 
 # @private
-class Myaso::TokyoCabinet::Prefixes < Myaso::Adapter
+class Myaso::TokyoCabinet::Prefixes
+  attr_reader :base
+  protected :base
+
+  def initialize base
+    @base = base
+  end
+
   def find id
     return unless prefix = prefixes.get(id)
     values = prefix.values_at('prefix')
