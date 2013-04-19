@@ -36,10 +36,7 @@ to prepare the analyzer and perform your tasks.
 #### Dictionaries
 
 Morphological dictionaries are preprocessed by the
-[Myasorubka](https://github.com/eveel/myasorubka) tool.
-
-These dictionaries are available in precompiled state
-and can be [downloaded](https://github.com/eveel/myasorubka/downloads).
+[Myasorubka](https://github.com/ustalov/myasorubka) tool.
 
 ### Analysis
 
@@ -162,7 +159,7 @@ puts @tokyocabinet.words.assemble(inflection.word_id) # => люди
 ### Web Service
 
 A source code of the Myaso-Web application is available in
-the separate repository: <https://github.com/eveel/myaso-web>.
+the separate repository: <https://github.com/ustalov/myaso-web>.
 
 ## Further Work
 
@@ -173,14 +170,8 @@ I guess, the following things would be nice:
 
 ## Acknowledgement
 
-This work is supported by UrB RAS grants:
-
-* 12-С-1-1012 «Облачная платформа для разработки и использования пакетов
-прикладных программ и интеллектуальных систем»;
-* [РЦП-12-П10] «Разработка морфологического анализатора русского языка в
+This work is supported by UrB RAS grant №РЦП-12-П10 «Разработка морфологического анализатора русского языка в
 качестве SaaS облачной платформы УрО РАН».
-
-[РЦП-12-П10]: http://plove.eveel.ru/2012/01/20/morphological-grant
 
 ## Contributing
 
@@ -190,15 +181,12 @@ This work is supported by UrB RAS grants:
 4. Push to the branch (`git push origin my-new-feature`);
 5. Create new Pull Request.
 
-I highly recommend you to use git flow to make development process much
-systematic and awesome.
+## Build Status [<img src="https://secure.travis-ci.org/ustalov/myaso.png"/>](http://travis-ci.org/ustalov/myaso)
 
-## Build Status [<img src="https://secure.travis-ci.org/eveel/myaso.png"/>](http://travis-ci.org/eveel/myaso)
-
-## Dependency Status [<img src="https://gemnasium.com/eveel/myaso.png?travis"/>](https://gemnasium.com/eveel/myaso)
+## Dependency Status [<img src="https://gemnasium.com/ustalov/myaso.png"/>](https://gemnasium.com/ustalov/myaso)
 
 ## Copyright
 
-Copyright (c) 2010-2012 [Dmitry Ustalov]. See LICENSE for details.
+Copyright (c) 2010-2013 [Dmitry Ustalov]. See LICENSE for details.
 
 [Dmitry Ustalov]: http://eveel.ru
