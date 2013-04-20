@@ -68,7 +68,7 @@ The analysis results for word *бублик* are looking like this:
     msd="Ncmsn",
     prefix=nil,
     suffix=nil>,
-  msd=#<Myaso::MSD::Russian msd="Ncmsnn">>,
+  msd=#<Myasorubka::MSD::Russian msd="Ncmsnn">>,
  #<struct Myaso::Analyzer::Result
   word_id="410731",
   stem=
@@ -80,7 +80,7 @@ The analysis results for word *бублик* are looking like this:
     msd="Ncmsa",
     prefix=nil,
     suffix=nil>,
-  msd=#<Myaso::MSD::Russian msd="Ncmsan">>]
+  msd=#<Myasorubka::MSD::Russian msd="Ncmsan">>]
 ```
 
 ### Lemmatization
@@ -109,7 +109,7 @@ The lemmatization result would be presented in the following structure:
    msd="Ncmsn",
    prefix=nil,
    suffix="человек">,
- msd=#<Myaso::MSD::Russian msd="Ncmsny">>
+ msd=#<Myasorubka::MSD::Russian msd="Ncmsny">>
 ```
 
 And it is possible to assemble the correspondent word:
@@ -146,7 +146,7 @@ The inflection result would be presented in the following structure:
    msd="Ncmpn",
    prefix=nil,
    suffix="люди">,
- msd=#<Myaso::MSD::Russian msd="Ncmpny">>
+ msd=#<Myasorubka::MSD::Russian msd="Ncmpny">>
 ```
 
 And it is possible to assemble the correspondent word:
