@@ -26,13 +26,13 @@ class Myaso::Analyzer
   # require 'myaso/msd/russian'
   #
   # # initialize the analyzer
-  # analyzer = Myaso::Analyzer.new(myaso, Myaso::MSD::Russian)
+  # analyzer = Myaso::Analyzer.new(myaso, Myasorubka::MSD::Russian)
   # ```
   #
   # After these steps Analyzer may be used to perform its duties.
   #
   # @param myaso [Myaso::Client] a client.
-  # @param language [Myaso::MSD::Language] a language to operate on.
+  # @param language [Myasorubka::MSD::Language] a language to operate on.
   #
   def initialize myaso, language
     @myaso, @language = myaso, language
@@ -58,7 +58,7 @@ class Myaso::Analyzer
   #     msd="Ncmsn",
   #     prefix=nil,
   #     suffix=nil>,
-  #   msd=#<Myaso::MSD::Russian msd="Ncmsnn">>,
+  #   msd=#<Myasorubka::MSD::Russian msd="Ncmsnn">>,
   #  #<struct Myaso::Analyzer::Result
   #   word_id="410731",
   #   stem=
@@ -70,7 +70,7 @@ class Myaso::Analyzer
   #     msd="Ncmsa",
   #     prefix=nil,
   #     suffix=nil>,
-  #   msd=#<Myaso::MSD::Russian msd="Ncmsan">>]
+  #   msd=#<Myasorubka::MSD::Russian msd="Ncmsan">>]
   # ```
   #
   # @param word [String] a word to be analyzed.
@@ -153,7 +153,7 @@ class Myaso::Analyzer
   #    msd="Ncmsn",
   #    prefix=nil,
   #    suffix="человек">,
-  #  msd=#<Myaso::MSD::Russian msd="Ncmsny">>
+  #  msd=#<Myasorubka::MSD::Russian msd="Ncmsny">>
   # ```
   #
   # @param stem_id [Fixnum] a stem identifier.
@@ -167,8 +167,8 @@ class Myaso::Analyzer
       map { |id| [id, myaso.rules.find(id)] }
 
     rule = rules.sort do |(id1, rule1), (id2, rule2)|
-      msd1, msd2 = Myaso::MSD.new(language, rule1.msd),
-                   Myaso::MSD.new(language, rule2.msd)
+      msd1, msd2 = Myasorubka::MSD.new(language, rule1.msd),
+                   Myasorubka::MSD.new(language, rule2.msd)
 
       length_criteria = msd1.grammemes.length <=> msd2.grammemes.length
       next length_criteria unless length_criteria == 0
@@ -211,7 +211,7 @@ class Myaso::Analyzer
   #    msd="Ncmpn",
   #    prefix=nil,
   #    suffix="люди">,
-  #  msd=#<Myaso::MSD::Russian msd="Ncmpny">>
+  #  msd=#<Myasorubka::MSD::Russian msd="Ncmpny">>
   # ```
   #
   # @param stem_id [Fixnum] a stem identifier.
@@ -221,15 +221,15 @@ class Myaso::Analyzer
   #
   def inflect stem_id, msd_string
     stem = myaso.stems.find(stem_id)
-    msd = Myaso::MSD.new(language, msd_string)
+    msd = Myasorubka::MSD.new(language, msd_string)
 
     rules = myaso.rules.
       select_by_rule_set_id(stem.rule_set_id).
       map { |id| [id, myaso.rules.find(id)] }
 
     rule = rules.sort do |(id1, rule1), (id2, rule2)|
-      msd1, msd2 = Myaso::MSD.new(language, rule1.msd),
-                   Myaso::MSD.new(language, rule2.msd)
+      msd1, msd2 = Myasorubka::MSD.new(language, rule1.msd),
+                   Myasorubka::MSD.new(language, rule2.msd)
 
       msd_similarity(msd, msd1) <=> msd_similarity(msd, msd2)
     end.last[1]
@@ -304,7 +304,7 @@ class Myaso::Analyzer
 
     # Compute the MSD positions cost for lemmatization purposes.
     #
-    # @param msd [Myaso::MSD] a MSD instance.
+    # @param msd [Myasorubka::MSD] a MSD instance.
     # @return [Fixnum] a positions cost of this MSD.
     #
     def positions_cost(msd)
@@ -318,8 +318,8 @@ class Myaso::Analyzer
 
     # Compute the MSD similarity value.
     #
-    # @param origin [Myaso::MSD] a MSD sample to be considered.
-    # @param msd [Myaso::MSD] a MSD instance.
+    # @param origin [Myasorubka::MSD] a MSD sample to be considered.
+    # @param msd [Myasorubka::MSD] a MSD instance.
     # @return [Fixnum] a MSD similarity value.
     #
     def msd_similarity(origin, msd)
@@ -340,12 +340,12 @@ class Myaso::Analyzer
     #
     # @param origin_string [String] a MSD sample to be considered.
     # @param msd_string [String] a MSD instance.
-    # @return [Myaso::MSD] a new MSD that is generated from the input
+    # @return [Myasorubka::MSD] a new MSD that is generated from the input
     #   descriptors.
     #
     def merge_msds(origin_string, msd_string, language)
-      Myaso::MSD.new(language, origin_string).tap do |origin|
-        origin.merge! Myaso::MSD.new(language, msd_string).grammemes
+      Myasorubka::MSD.new(language, origin_string).tap do |origin|
+        origin.merge! Myasorubka::MSD.new(language, msd_string).grammemes
       end
     end
 end

@@ -18,6 +18,7 @@ Gem::Specification.new do |gem|
   gem.version       = Myaso::VERSION
 
   gem.add_dependency 'unicode_utils', '~> 1.3'
+  gem.add_dependency 'myasorubka', '~> 0.1'
 
   gem.add_development_dependency 'activerecord', '~> 3.0'
   gem.add_development_dependency 'sqlite3', '~> 1.3.6'

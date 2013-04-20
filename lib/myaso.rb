@@ -2,7 +2,7 @@
 
 require 'myaso/version'
 
-require 'myaso/msd'
+require 'myasorubka'
 
 require 'myaso/base'
 # require 'myaso/adapter'

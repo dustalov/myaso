@@ -2,13 +2,13 @@
 
 require File.expand_path('../spec_helper', __FILE__)
 
-require 'myaso/msd/english'
+require 'myasorubka/msd/english'
 
 module Myaso
   describe Analyzer do
     let(:tmpdir) { Dir.mktmpdir }
     let(:myaso) { Myaso::TokyoCabinet.new(tmpdir, :manage) }
-    let(:language) { Myaso::MSD::English }
+    let(:language) { Myasorubka::MSD::English }
 
     let(:analyzer) { Myaso::Analyzer.new(myaso, language) }
 
