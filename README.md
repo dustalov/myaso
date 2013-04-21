@@ -1,12 +1,10 @@
 # Myaso
-
 Myaso [ˈmʲæ.sə] is a morphological analysis and synthesis library,
 written in Ruby.
 
 ![Myaso](myaso.jpg)
 
 ## Installation
-
 Add this line to your application's Gemfile:
 
 ```ruby
@@ -17,164 +15,70 @@ And then execute:
 
     $ bundle
 
-Or install it yourself as:
+Or install it:
 
     $ gem install myaso
 
 ## Usage
+At the moment, Myaso has pretty fast part of speech (POS) tagger built on
+hidden Markov models (HMMs). The tagging operation requires statistical
+model to be trained.
 
-It is possible to perform morphological analysis with Myaso. In this
-example, a dictionary in the Tokyo Cabinet format is stored in
-`../myasorubka` path:
+Myaso supports trained models in the TnT format. One could be obtained
+at the Serge Sharoff et al. resource called [Russian statistical taggers
+and parsers](http://corpus.leeds.ac.uk/mocky/).
 
-    $ myaso --tc-path ../myasorubka -i
+### Tagging
+Myaso performs POS tagging using its own implementation of the Viterbi
+algorithm on HMMs. The output has the following format: `token<TAB>tag`.
 
-After this, the `@tokyocabinet` variable will be allocated as a
-ready for use `Myaso::TokyoCabinet` instance. All you need is
-to prepare the analyzer and perform your tasks.
+Please remember that tagger command line interface accepts only tokenized
+texts — one token per line. For instance, the
+[Greeb](http://nlpub.ru/wiki/Greeb) tokenizer can help you.
+Don't be afraid to use another text tokenization or segmentation tool if
+necessary.
 
-#### Dictionaries
+```
+% echo 'Как поспал, проголодался наверное?' | greeb | myaso -n snyat-msd.123 -l snyat-msd.lex tagger
+Как P-----r
+поспал  Vmis-sma
+, ,
+проголодался  Vmis-sma
+наверное  R
+? SENT
+```
 
-Morphological dictionaries are preprocessed by the
-[Myasorubka](https://github.com/ustalov/myasorubka) tool.
+Unfortunately, current implementation of the tagger has two significant
+drawbacks:
 
-### Analysis
+1. The tagger crashes on unknown words. Sorry.
+2. Tagging is fast inself, but requires pretty slow training procedure
+running only once.
 
-Morphological analysis is a main purpose of any morphological
-analyzer. In Myaso this can be done in elegant way.
+#### Tagging API
+It is possible to embed the POS tagging feature in your own application
+using API.
 
 ```ruby
-# load the Russian morphosyntactic descriptions
-require 'myaso/msd/russian'
-
-# initialize the analyzer
-analyzer = Analyzer.new(@tokyocabinet, MSD::Russian)
-
-# analyze something
-analyzer.lookup 'бублик'
+tagger = Myaso::Tagger.new('model.123', 'model.lex')
+pp tagger.viterbi(%w(Как поспал , проголодался наверное ?))
+=begin
+["P-----r", "Vmis-sma", ",", "Vmis-sma", "R", "SENT"]
+=end
 ```
 
-The analysis results for word *бублик* are looking like this:
-
-```
-[#<struct Myaso::Analyzer::Result
-  word_id="410728",
-  stem=
-   #<struct Myaso::Stem id=18572, rule_set_id="21", msd="*-n", stem="бублик">,
-  rule=
-   #<struct Myaso::Rule
-    id=502,
-    rule_set_id="21",
-    msd="Ncmsn",
-    prefix=nil,
-    suffix=nil>,
-  msd=#<Myasorubka::MSD::Russian msd="Ncmsnn">>,
- #<struct Myaso::Analyzer::Result
-  word_id="410731",
-  stem=
-   #<struct Myaso::Stem id=18572, rule_set_id="21", msd="*-n", stem="бублик">,
-  rule=
-   #<struct Myaso::Rule
-    id=505,
-    rule_set_id="21",
-    msd="Ncmsa",
-    prefix=nil,
-    suffix=nil>,
-  msd=#<Myasorubka::MSD::Russian msd="Ncmsan">>]
-```
-
-### Lemmatization
-
-It is possible to perform the word lemmatization. At this moment,
-Myaso analyzer is able to lemmatize by word stem identifier:
-
-```ruby
-# take the first Myaso::Result of analysis
-result = analyzer.lookup('люди').first
-
-# lemmatize
-analyzer.lemmatize(result.stem.id)
-```
-
-The lemmatization result would be presented in the following structure:
-
-```
-#<struct Myaso::Analyzer::Result
- word_id="4852653",
- stem=#<struct Myaso::Stem id=166979, rule_set_id="338", msd="*-y", stem=nil>,
- rule=
-  #<struct Myaso::Rule
-   id=9897,
-   rule_set_id="338",
-   msd="Ncmsn",
-   prefix=nil,
-   suffix="человек">,
- msd=#<Myasorubka::MSD::Russian msd="Ncmsny">>
-```
-
-And it is possible to assemble the correspondent word:
-
-```ruby
-lemmatization = analyzer.lemmatize(result.stem.id)
-puts @tokyocabinet.words.assemble(lemmatization.word_id) # => человек
-```
-
-### Inflection
-
-It is possible to perform the word inflection. At this moment,
-Myaso analyzer is able to lemmatize by word stem identifier with
-the required morphosyntactic descriptor:
-
-```ruby
-# take the first Myaso::Result of analysis
-result = analyzer.lookup('человек').first
-
-# inflect
-analyzer.inflect(result.stem.id, 'Nc-pn')
-```
-
-The inflection result would be presented in the following structure:
-
-```
-#<struct Myaso::Analyzer::Result
- word_id="4852659",
- stem=#<struct Myaso::Stem id=166979, rule_set_id="338", msd="*-y", stem=nil>,
- rule=
-  #<struct Myaso::Rule
-   id=9903,
-   rule_set_id="338",
-   msd="Ncmpn",
-   prefix=nil,
-   suffix="люди">,
- msd=#<Myasorubka::MSD::Russian msd="Ncmpny">>
-```
-
-And it is possible to assemble the correspondent word:
-
-```ruby
-inflection = analyzer.inflect(result.stem.id, 'Nc-pn')
-puts @tokyocabinet.words.assemble(inflection.word_id) # => люди
-```
+Please note that you should perform tokenization of your text before
+any processing. The [Greeb](http://nlpub.ru/wiki/Greeb) text segmentator
+performs pretty well at this.
 
 ### Web Service
-
-A source code of the Myaso-Web application is available in
+A source code of the Myaso-Web application is available at
 the separate repository: <https://github.com/ustalov/myaso-web>.
 
-## Further Work
-
-I guess, the following things would be nice:
-
-1. Implement backends for Sequel and ActiveRecord;
-2. An algorithm of unknown word prediction.
-
 ## Acknowledgement
-
-This work is supported by UrB RAS grant №РЦП-12-П10 «Разработка морфологического анализатора русского языка в
-качестве SaaS облачной платформы УрО РАН».
+This work is partially supported by UrB RAS grant №RCP-12-P10.
 
 ## Contributing
-
 1. Fork it;
 2. Create your feature branch (`git checkout -b my-new-feature`);
 3. Commit your changes (`git commit -am 'Added some feature'`);
