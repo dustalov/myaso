@@ -30,9 +30,8 @@ optparse = OptionParser.new do |opts|
     options.lexicon = l
   end
 
-  opts.on_tail '-e', '--eval [code]', 'Just evaluate the given code' do |e|
-    eval(options[:eval], binding, __FILE__, __LINE__)
-    exit
+  opts.on '-e', '--eval [code]', 'Evaluate the given line of code' do |e|
+    options.eval = e
   end
 
   opts.on_tail '-h', '--help', 'Just display this help' do
@@ -46,6 +45,8 @@ optparse = OptionParser.new do |opts|
     exit
   end
 end.tap(&:parse!)
+
+eval(options.eval, binding, __FILE__, __LINE__) if options.eval
 
 case ARGV.first
 when 'tagger' then
