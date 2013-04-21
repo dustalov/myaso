@@ -40,12 +40,12 @@ necessary.
 
 ```
 % echo 'Как поспал, проголодался наверное?' | greeb | myaso -n snyat-msd.123 -l snyat-msd.lex tagger
-Как P-----r
-поспал  Vmis-sma
-, ,
-проголодался  Vmis-sma
-наверное  R
-? SENT
+Как	P-----r
+поспал	Vmis-sma
+,	,
+проголодался	Vmis-sma
+наверное	R
+?	SENT
 ```
 
 Unfortunately, current implementation of the tagger has two significant
