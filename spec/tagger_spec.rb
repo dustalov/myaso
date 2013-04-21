@@ -32,7 +32,7 @@ describe Myaso::Tagger do
   end
 
   describe 'learn!' do
-    it 'should learn with the same results as in gold standart' do
+    it 'should learn with the same results as in gold standard' do
       subject.words_tags.must_equal(Myaso::Fixtures::WORDS_TAGS)
       subject.ngrams.must_equal(Myaso::Fixtures::NGRAMS)
     end
