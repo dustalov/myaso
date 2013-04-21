@@ -4,8 +4,10 @@
 require 'ostruct'
 require 'optparse'
 
-$:.unshift File.expand_path('../../lib', __FILE__)
-require 'rubygems'
+if File.exists? File.expand_path('../../.git', __FILE__)
+  $:.unshift File.expand_path('../../lib', __FILE__)
+end
+
 require 'myaso'
 
 options = OpenStruct.new
