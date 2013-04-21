@@ -20,7 +20,7 @@ class MiniTest::Unit::TestCase
     options = (arguments.last.is_a? Hash) ? arguments.pop : {}
     executable = File.expand_path('../../../bin/myaso', __FILE__)
 
-    Open3.popen2e(executable, *arguments) do |i, o, _|
+    Open3.popen3(executable, *arguments) do |i, o, *_|
       i.puts options[:stdin] if options[:stdin]
       i.close
       invoke_cache[argv] = o.readlines.map(&:chomp!)
