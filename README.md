@@ -85,7 +85,7 @@ This work is partially supported by UrB RAS grant №RCP-12-P10.
 4. Push to the branch (`git push origin my-new-feature`);
 5. Create new Pull Request.
 
-## Build Status [<img src="https://secure.travis-ci.org/ustalov/myaso.png"/>](http://travis-ci.org/ustalov/myaso)
+## Build Status [<img src="https://secure.travis-ci.org/ustalov/myaso.png"/>](https://travis-ci.org/ustalov/myaso)
 
 ## Dependency Status [<img src="https://gemnasium.com/ustalov/myaso.png"/>](https://gemnasium.com/ustalov/myaso)
 
