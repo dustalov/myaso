@@ -1,0 +1,49 @@
+---
+- - б
+  - - !ruby/struct:Words
+      word: братишка
+      tag: a
+      count: 1.0
+- - б
+  - - !ruby/struct:Words
+      word: братишка
+      tag: e
+      count: 1.0
+- - я
+  - - !ruby/struct:Words
+      word: я
+      tag: b
+      count: 4.0
+- - я
+  - - !ruby/struct:Words
+      word: я
+      tag: c
+      count: 2.0
+- - т
+  - - !ruby/struct:Words
+      word: тебе
+      tag: b
+      count: 8.0
+- - т
+  - - !ruby/struct:Words
+      word: тебе
+      tag: c
+      count: 2.0
+- - т
+  - - !ruby/struct:Words
+      word: тебе
+      tag: a
+      count: 1.0
+- - п
+  - - !ruby/struct:Words
+      word: покушать
+      tag: d
+      count: 5.0
+    - !ruby/struct:Words
+      word: принес
+      tag: d
+      count: 5.0
+    - !ruby/struct:Words
+      word: принес
+      tag: e
+      count: 2.0
