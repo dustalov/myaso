@@ -2,8 +2,9 @@
 
 # This class implements Viterbi algorithm.
 #
-class Viterbi
-  attr_accessor :ngrams, :words_tags
+class Myaso::Tagger
+  attr_reader :ngrams_path, :lexicon_path
+  attr_reader :ngrams, :words_tags
 
   # Start and stop tags for sentence.
   START, STOP = 'SENT', 'SENT'
@@ -12,7 +13,7 @@ class Viterbi
   CARD, CARDPUNCT, CARDSUFFIX, CARDSEPS, UNKNOWN =
   %w(@CARD @CARDPUNCT @CARDSUFFIX @CARDSEPS @UNKNOWN)
 
-  def initialize(ngrams_path, words_path)
+  def initialize(ngrams_path, lexicon_path)
     # 1,2,3-grams are arrays of nested structures
     # kind of (:value, :tags, :count).
     #
@@ -30,14 +31,17 @@ class Viterbi
     # [first_char, [*Words]]
     @words_tags = []
 
-    learn! ngrams_path, words_path
+    @ngrams_path = File.expand_path(ngrams_path)
+    @lexicon_path = File.expand_path(lexicon_path)
+    learn!
   end
 
   # Viterbi algorithm itself. Return tags that input sentence
-  # should be marked.
+  # should be annotated.
   #
-  def viterbi(sentence)
+  def annotate(sentence)
     return [] if sentence.size == 0
+    sentence = sentence.dup
     tags_first = [START]
     pi_table = [Point.new(1, START, START, 0.0)]
     backpoints = []
@@ -76,16 +80,24 @@ class Viterbi
     size.downto(4) do |index|
       y[index - 2] = bp(backpoints, index, y[index - 1], y[index])
     end
+
     y[2..-1]
   end
 
-  private
+  def inspect
+    '#<%s ngrams_path=%s lexicon_path=%s' % [
+      self.class.name,
+      ngrams_path,
+      lexicon_path
+    ]
+  end
 
+  private
   # Parse path files and fill @tags, @bigrams, @trigrams, @tags.
   #
-  def learn!(ngrams_path, words_path)
+  def learn!
     # Parse file with ngrams.
-    strings = IO.readlines(File.expand_path(ngrams_path)).map(&:chomp).
+    strings = IO.readlines(ngrams_path).map(&:chomp).
       delete_if { |s| s.empty? || s[0..1] == '%%' }
 
     strings.each do |string|
@@ -105,7 +117,7 @@ class Viterbi
     end
 
     # Parse file with words and tags.
-    IO.readlines(File.expand_path(words_path)).map(&:chomp).
+    IO.readlines(lexicon_path).map(&:chomp).
       delete_if { |s| s.empty? || s[0..1] == '%%' }.
       map(&:split).each do |string|
         word, _ = string.shift, string.shift
