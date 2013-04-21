@@ -92,6 +92,24 @@ class Myaso::Tagger
     ]
   end
 
+  # Function e in the Viterbi algorithm. It process probability of
+  # generation word with this tag relatively to all words with
+  # this tag.
+  #
+  def e(word, tag)
+    return 0 if ngram(tag).zero?
+    count(word, tag) / ngram(tag)
+  end
+
+  # Maximum likeness model of processing attitude between trigram
+  # (a, b, c) and bigram (a, b). It have the next sense:
+  # probability that current tag is (c) if last two are (a, b).
+  #
+  def q(first, second, third)
+    return 0 if ngram(first, second).zero?
+    ngram(first, second, third) / ngram(first, second)
+  end
+
   private
   # Parse path files and fill @tags, @bigrams, @trigrams, @tags.
   #
@@ -160,24 +178,6 @@ class Myaso::Tagger
     else
       UNKNOWN
     end
-  end
-
-  # Function e in viterby algorithm. It process probability of
-  # generation word with this tag relatively to all words with
-  # this tag.
-  #
-  def e(word, tag)
-    return 0 if ngram(tag).zero?
-    count(word, tag) / ngram(tag)
-  end
-
-  # Maximum likeness model of processing attitude between trigram
-  # (a, b, c) and bigram (a, b). It have the next sense:
-  # probability that current tag is (c) if last two are (a, b).
-  #
-  def q(first, second, third)
-    return 0 if ngram(first, second).zero?
-    ngram(first, second, third) / ngram(first, second)
   end
 
   # Find count of ngram with given tags.
