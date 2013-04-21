@@ -61,7 +61,7 @@ using API.
 
 ```ruby
 tagger = Myaso::Tagger.new('model.123', 'model.lex')
-pp tagger.viterbi(%w(Как поспал , проголодался наверное ?))
+pp tagger.annotate(%w(Как поспал , проголодался наверное ?))
 =begin
 ["P-----r", "Vmis-sma", ",", "Vmis-sma", "R", "SENT"]
 =end
