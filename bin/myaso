@@ -1,93 +1,66 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
 
+require 'ostruct'
 require 'optparse'
 
-require 'rubygems'
-
 $:.unshift File.expand_path('../../lib', __FILE__)
-
-BACKENDS = Hash[%w(tokyocabinet active_record).map do |backend|
-  success = begin
-    require backend
-    true
-  rescue LoadError
-    false
-  end
-
-  [backend.to_sym, success]
-end]
-
+require 'rubygems'
 require 'myaso'
 
-options = {}
+options = OpenStruct.new
 
 optparse = OptionParser.new do |opts|
-  opts.banner = 'Usage: %s [options]' % $0
+  opts.banner = 'Usage: %s [options] command' % $0
 
-  if BACKENDS[:tokyocabinet]
-    opts.on '--tc-path [path]',
-            'Tokyo Cabinet: path to database' do |d|
-      d and options[:tc_path] = d
-    end
+  opts.separator ''
+  opts.separator 'Commands:'
+  opts.separator '    tagger: run the HMM tagger'
+  opts.separator '    console: start an IRB session'
+  opts.separator ''
+  opts.separator 'Options:'
 
-    opts.on '--tc-mode [mode]', [:read, :manage],
-            'Tokyo Cabinet: mode (read or manage)' do |m|
-      m and options[:tc_mode] = m
-    end
+  opts.on('-n', '--ngrams ngrams', 'Path to ngrams file for tagger') do |n|
+    options.ngrams = n
   end
 
-  opts.on_tail '-i', '--irb', 'Start an IRB session' do |i|
-    options[:irb] = i
+  opts.on('-l', '--lexicon lexicon', 'Path to lexicon file for tagger') do |l|
+    options.lexicon = l
   end
 
-  opts.on_tail '-e', '--eval [code]', 'Evaluate the given code and exit' do |e|
-    options[:eval] = e
-  end
-
-  opts.on_tail '-b', '--backends', 'List the available backends' do |b|
-    p BACKENDS
+  opts.on_tail '-e', '--eval [code]', 'Just evaluate the given code' do |e|
+    eval(options[:eval], binding, __FILE__, __LINE__)
     exit
   end
 
-  opts.on_tail '-h', '--help', 'Display this help and exit' do
+  opts.on_tail '-h', '--help', 'Just display this help' do
     puts opts
     exit
   end
 
-  opts.on_tail '-v', '--version', 'Output version infomation and exit' do
+  opts.on_tail '-v', '--version', 'Just print the version infomation' do
     puts 'Myaso v%s' % Myaso::VERSION
-    puts 'Copyright (c) 2010-2012 Dmitry A. Ustalov'
+    puts 'Copyright (c) 2010-2013 Dmitry Ustalov'
     exit
   end
-end.tap { |opts| opts.parse! }
+end.tap(&:parse!)
 
-if BACKENDS[:tokyocabinet] && options[:tc_path]
-  options[:tc_mode] = :read unless options[:tc_mode] == :manage
+case ARGV.first
+when 'tagger' then
+  sentence = STDIN.readlines.map(&:chomp)
 
-  @tokyocabinet = Myaso::TokyoCabinet.new(
-    *options.values_at(:tc_path, :tc_mode)
-  )
-end
+  STDERR.puts 'Training the tagger, this procedure is not so fast.'
+  tagger = Myaso::Tagger.new(options.ngrams, options.lexicon)
+  tags = tagger.annotate(sentence)
 
-if options[:irb]
-  require 'myaso/core_ext/irb'
-
-  if @tokyocabinet
-    puts '@tokyocabinet = %s' % @tokyocabinet.inspect
+  sentence.zip(tags).each do |word, tag|
+    puts "%s\t%s" % [word, tag]
   end
-
-  include Myaso
-  IRB.start_session(binding)
-
-  exit
+when 'console' then
+  ARGV.clear
+  require 'irb'
+  IRB.start
+else
+  puts optparse
+  exit 1
 end
-
-if options[:eval]
-  include Myaso
-  eval(options[:eval], binding, __FILE__, __LINE__)
-  exit
-end
-
-puts optparse
-exit 1
