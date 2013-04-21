@@ -32,3 +32,4 @@ class Myaso::Word < Struct.new(:id, :stem_id, :rule_id)
 end
 
 require 'myaso/analyzer'
+require 'myaso/tagger'
