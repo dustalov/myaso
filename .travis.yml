@@ -1,8 +1,7 @@
-before_install:
-  - 'sudo apt-get install libtokyocabinet-dev libtokyocabinet8'
 branches:
   only:
     - master
 rvm:
   - 2.0.0
+  - jruby-19mode
   - rbx-19mode
