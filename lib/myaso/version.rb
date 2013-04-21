@@ -5,5 +5,5 @@
 module Myaso
   # Myaso version string.
   #
-  VERSION = '0.3.1.pre3'
+  VERSION = '0.3.1'
 end
