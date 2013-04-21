@@ -3,8 +3,8 @@
 require_relative 'spec_helper'
 
 describe Myaso::Tagger do
-  let(:lexicon) {File.expand_path('../data/test.lex', __FILE__)}
-  let(:ngrams) {File.expand_path('../data/test.123', __FILE__)}
+  let(:lexicon) { File.expand_path('../data/test.lex', __FILE__) }
+  let(:ngrams) { File.expand_path('../data/test.123', __FILE__) }
   subject { Myaso::Tagger.new(ngrams, lexicon) }
 
   describe 'q(w1, w2, w3)' do

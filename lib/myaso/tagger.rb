@@ -92,7 +92,7 @@ class Myaso::Tagger
     ]
   end
 
-  # Function e in viterby algorithm. It process probability of
+  # Function e in the Viterbi algorithm. It process probability of
   # generation word with this tag relatively to all words with
   # this tag.
   #
