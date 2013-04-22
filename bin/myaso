@@ -61,6 +61,7 @@ when 'tagger' then
   end
 when 'console' then
   ARGV.clear
+  include Myaso
   require 'irb'
   IRB.start
 else
