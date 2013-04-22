@@ -37,4 +37,11 @@ describe Myaso::Tagger do
       subject.ngrams.must_equal(Myaso::Fixtures::NGRAMS)
     end
   end
+
+  describe 'annotate(sentence)' do
+    it 'should annotate sentences with tags' do
+      subject.annotate(%w(братишка я тебе покушать принес)).
+        must_equal(%w(a b b d d))
+    end
+  end
 end
