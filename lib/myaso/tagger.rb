@@ -3,6 +3,23 @@
 # This class implements Viterbi algorithm.
 #
 class Myaso::Tagger
+  # The UnknownWord exception is raised when Tagger considers an unknown
+  # word.
+  #
+  class UnknownWord < RuntimeError
+    attr_reader :word
+
+    # @private
+    def initialize(word)
+      @word = word
+    end
+
+    # @private
+    def to_s
+      'unknown word "%s"' % word
+    end
+  end
+
   attr_reader :ngrams_path, :lexicon_path
   attr_reader :ngrams, :words_tags
 
@@ -214,8 +231,9 @@ class Myaso::Tagger
   # Find tags for given word.
   #
   def tags(word)
-    words_tags.find { |fc, w| fc == word[0] }.last.
-      select { |w| w.word == word}.map { |t| t.tag }
+    _, words = words_tags.find { |fc, w| fc == word[0] }
+    raise UnknownWord.new(word) unless words
+    words.select { |w| w.word == word }.map(&:tag)
   end
 end
 

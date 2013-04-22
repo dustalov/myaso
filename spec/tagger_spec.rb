@@ -43,5 +43,10 @@ describe Myaso::Tagger do
       subject.annotate(%w(братишка я тебе покушать принес)).
         must_equal(%w(a b b d d))
     end
+
+    it 'should raise an UnknownWord exception on unknown words' do
+      lambda { subject.annotate(%w(проголодался наверное)) }.
+        must_raise Myaso::Tagger::UnknownWord
+    end
   end
 end
