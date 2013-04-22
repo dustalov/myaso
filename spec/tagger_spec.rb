@@ -26,7 +26,7 @@ describe Myaso::Tagger do
     end
 
     it 'counts the quotient between count(word, tag) and ngrams(tag)' do
-      subject.e('братишка', 'a').must_equal(1/22.0)
+      subject.e('братишка', 'a').must_equal(1/26.0)
       subject.e('принес', 'e').must_equal(2/6.0)
     end
   end

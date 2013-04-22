@@ -1,12 +1,12 @@
 %% Test set of ngrams.
 %%
 %% Possible tags are: a,b,c,d,e
-a 22
+a 26
 	a 6
 		a 1
 		b 2
 		c 1
-		d 1
+		SENT 1
 		e 1
 	b 8
 		c 3
@@ -14,19 +14,24 @@ a 22
 		e 2
 	c 4
 		a 2
-		e 2
+		e 1
+		SENT 1
 	d 4
 		a 3
 		e 1
-	e 2
+	e 3
 		b 1
 		d 1
+		SENT 1
+	SENT 3
+		a 2
+		e 1
 b 12
 	a 6
 		a 1
 		b 2
 		c 1
-		d 1
+		SENT 1
 		e 1
 	c 4
 		a 2
@@ -52,13 +57,21 @@ d 16
 		d 2
 		e 2
 	e 4
-		b 2
+		SENT 2
 		d 2
 e 6
 	d 2
 		a 1
 		e 1
-	b 4
+	SENT 4
 		a 1
 		c 2
 		d 1
+SENT 10
+	SENT 2
+		a 2
+	a 4
+		b 3
+		d 1
+	e 1
+		SENT 1
