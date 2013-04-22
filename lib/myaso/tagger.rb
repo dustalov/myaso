@@ -72,8 +72,8 @@ class Myaso::Tagger
   # The second one is a lexicon file that stores words and their
   # frequencies in the source corpus.
   #
-  # Please note that the learning stage if Tagger is not optimized so
-  # that procedure takes about 90 seconds.
+  # Please note that the Tagger learning stage is not optimized so the
+  # initialization procedure may take about 90 seconds.
   #
   def initialize(ngrams_path, lexicon_path)
     @ngrams, @words_tags = [], []
