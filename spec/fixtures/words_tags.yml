@@ -1,49 +1,49 @@
 ---
 - - б
-  - - !ruby/struct:Words
+  - - !ruby/struct:Myaso::Tagger::Word
       word: братишка
       tag: a
       count: 1.0
 - - б
-  - - !ruby/struct:Words
+  - - !ruby/struct:Myaso::Tagger::Word
       word: братишка
       tag: e
       count: 1.0
 - - я
-  - - !ruby/struct:Words
+  - - !ruby/struct:Myaso::Tagger::Word
       word: я
       tag: b
       count: 4.0
 - - я
-  - - !ruby/struct:Words
+  - - !ruby/struct:Myaso::Tagger::Word
       word: я
       tag: c
       count: 2.0
 - - т
-  - - !ruby/struct:Words
+  - - !ruby/struct:Myaso::Tagger::Word
       word: тебе
       tag: b
       count: 8.0
 - - т
-  - - !ruby/struct:Words
+  - - !ruby/struct:Myaso::Tagger::Word
       word: тебе
       tag: c
       count: 2.0
 - - т
-  - - !ruby/struct:Words
+  - - !ruby/struct:Myaso::Tagger::Word
       word: тебе
       tag: a
       count: 1.0
 - - п
-  - - !ruby/struct:Words
+  - - !ruby/struct:Myaso::Tagger::Word
       word: покушать
       tag: d
       count: 5.0
-    - !ruby/struct:Words
+    - !ruby/struct:Myaso::Tagger::Word
       word: принес
       tag: d
       count: 5.0
-    - !ruby/struct:Words
+    - !ruby/struct:Myaso::Tagger::Word
       word: принес
       tag: e
       count: 2.0

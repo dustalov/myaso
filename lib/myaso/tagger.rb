@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-# This class implements Viterbi algorithm.
+# This class is an implementation of the Viterbi algorithm.
 #
 class Myaso::Tagger
   # The UnknownWord exception is raised when Tagger considers an unknown
@@ -20,36 +20,67 @@ class Myaso::Tagger
     end
   end
 
+  # The Ngram structure is an uniform representation of an unigram,
+  # a bigram, or a trigram.
+  #
+  Ngram = Struct.new(:value, :tags, :count)
+
+  # The Word structure represents frequencies of tagged words.
+  #
+  Word = Struct.new(:word, :tag, :count)
+
+  # The Point structure is a wrapper of rows in both dynamic programming
+  # and backpoints tables.
+  #
+  Point = Struct.new(:index, :u, :v, :value)
+
   attr_reader :ngrams_path, :lexicon_path
-  attr_reader :ngrams, :words_tags
 
-  # Start and stop tags for sentence.
-  START, STOP = 'SENT', 'SENT'
+  # 1,2,3-grams are arrays of nested structures
+  # kind of (:value, :tags, :count).
+  #
+  attr_reader :ngrams
 
-  # Special tags, used for replacing of rare words.
+  # Training set with words and tags always has a huge size.
+  # So there is a good idea to split it to groups. With this
+  # approach to find word we chould find group of word at
+  # first and find word in group at second. It is faster,
+  # because number of groups and number of words are much less
+  # than size of array with all words.
+  # It is obviously to choose the first char of word as criterium
+  # of grouping. We can see, to which group the word belongs.
+  # @words_tags is array of objects, that has the following nature:
+  # [first_char, [*Word]]
+  #
+  attr_reader :words_tags
+
+  # A start tag for a sentence.
+  #
+  START = 'SENT'
+
+  # A stop tag for a sentence.
+  #
+  STOP = 'SENT'
+
+  # Different special tags.
+  #
   CARD, CARDPUNCT, CARDSUFFIX, CARDSEPS, UNKNOWN =
-  %w(@CARD @CARDPUNCT @CARDSUFFIX @CARDSEPS @UNKNOWN)
+    %w(@CARD @CARDPUNCT @CARDSUFFIX @CARDSEPS @UNKNOWN)
 
+  # Tagger is initialized by two data files. The first one is a
+  # n-grams file that stores statistics for unigrams, bigrams, trigrams.
+  # The second one is a lexicon file that stores words and their
+  # frequencies in the source corpus.
+  #
+  # Please note that the learning stage if Tagger is not optimized so
+  # that procedure takes about 90 seconds.
+  #
   def initialize(ngrams_path, lexicon_path)
-    # 1,2,3-grams are arrays of nested structures
-    # kind of (:value, :tags, :count).
-    #
-    @ngrams = []
-
-    # Training set with words and tags always has a huge size.
-    # So there is a good idea to split it to groups. With this
-    # approach to find word we chould find group of word at
-    # first and find word in group at second. It is faster,
-    # because number of groups and number of words are much less
-    # than size of array with all words.
-    # It is obviously to choose the first char of word as criterium
-    # of grouping. We can see, to which group the word belongs.
-    # @words_tags is array of objects, that has the following nature:
-    # [first_char, [*Words]]
-    @words_tags = []
+    @ngrams, @words_tags = [], []
 
     @ngrams_path = File.expand_path(ngrams_path)
     @lexicon_path = File.expand_path(lexicon_path)
+
     learn!
   end
 
@@ -58,10 +89,11 @@ class Myaso::Tagger
   #
   def annotate(sentence)
     return [] if sentence.size == 0
-    sentence = sentence.dup
+
     tags_first = [START]
-    pi_table = [Point.new(1, START, START, 0.0)]
-    backpoints = []
+    pi_table, backpoints = [Point.new(1, START, START, 0.0)], []
+
+    sentence = sentence.dup
     sentence.unshift(START, START)
 
     sentence.each_with_index.each_cons(3) do |(w1, i1), (w2, i2), (w3, index)|
@@ -75,11 +107,11 @@ class Myaso::Tagger
         p.value, b.value = w_tags.map do |w|
           next([-Float::INFINITY, w]) unless pi(pi_table, index - 1, w, u).finite?
           [pi(pi_table, index - 1, w, u) + Math.log2(q(w, u, v) * e(word, v)), w]
-        end.max_by { |pi, bp| pi } # w
+        end.max_by { |pi, bp| pi }
         pi_table << p
         backpoints << b
-      end # u, v
-    end # word
+      end
+    end
 
     y = []
     size = sentence.size - 1
@@ -101,6 +133,8 @@ class Myaso::Tagger
     y[2..-1]
   end
 
+  # @private
+  #
   def inspect
     '#<%s ngrams_path=%s lexicon_path=%s' % [
       self.class.name,
@@ -161,9 +195,9 @@ class Myaso::Tagger
 
         string.each_slice(2) do |tag, count|
           if this_char
-            words_tags[this_char.last].last << Words.new(word, tag, count.to_f)
+            words_tags[this_char.last].last << Word.new(word, tag, count.to_f)
           else
-            words_tags << [word[0], [Words.new(word, tag, count.to_f)]]
+            words_tags << [word[0], [Word.new(word, tag, count.to_f)]]
           end
         end
       end
@@ -236,7 +270,3 @@ class Myaso::Tagger
     words.select { |w| w.word == word }.map(&:tag)
   end
 end
-
-Ngram = Struct.new(:value, :tags, :count)
-Words = Struct.new(:word, :tag, :count)
-Point = Struct.new(:index, :u, :v, :value)

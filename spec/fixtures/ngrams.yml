@@ -1,295 +1,295 @@
 ---
-- !ruby/struct:Ngram
+- !ruby/struct:Myaso::Tagger::Ngram
   value: a
   tags:
-  - !ruby/struct:Ngram
+  - !ruby/struct:Myaso::Tagger::Ngram
     value: a
     tags:
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: a
       tags: 
       count: 1.0
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: b
       tags: 
       count: 2.0
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: c
       tags: 
       count: 1.0
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: SENT
       tags: 
       count: 1.0
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: e
       tags: 
       count: 1.0
     count: 6.0
-  - !ruby/struct:Ngram
+  - !ruby/struct:Myaso::Tagger::Ngram
     value: b
     tags:
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: c
       tags: 
       count: 3.0
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: d
       tags: 
       count: 3.0
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: e
       tags: 
       count: 2.0
     count: 8.0
-  - !ruby/struct:Ngram
+  - !ruby/struct:Myaso::Tagger::Ngram
     value: c
     tags:
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: a
       tags: 
       count: 2.0
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: e
       tags: 
       count: 1.0
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: SENT
       tags: 
       count: 1.0
     count: 4.0
-  - !ruby/struct:Ngram
+  - !ruby/struct:Myaso::Tagger::Ngram
     value: d
     tags:
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: a
       tags: 
       count: 3.0
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: e
       tags: 
       count: 1.0
     count: 4.0
-  - !ruby/struct:Ngram
+  - !ruby/struct:Myaso::Tagger::Ngram
     value: e
     tags:
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: b
       tags: 
       count: 1.0
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: d
       tags: 
       count: 1.0
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: SENT
       tags: 
       count: 1.0
     count: 3.0
-  - !ruby/struct:Ngram
+  - !ruby/struct:Myaso::Tagger::Ngram
     value: SENT
     tags:
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: a
       tags: 
       count: 2.0
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: e
       tags: 
       count: 1.0
     count: 3.0
   count: 26.0
-- !ruby/struct:Ngram
+- !ruby/struct:Myaso::Tagger::Ngram
   value: b
   tags:
-  - !ruby/struct:Ngram
+  - !ruby/struct:Myaso::Tagger::Ngram
     value: a
     tags:
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: a
       tags: 
       count: 1.0
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: b
       tags: 
       count: 2.0
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: c
       tags: 
       count: 1.0
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: SENT
       tags: 
       count: 1.0
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: e
       tags: 
       count: 1.0
     count: 6.0
-  - !ruby/struct:Ngram
+  - !ruby/struct:Myaso::Tagger::Ngram
     value: c
     tags:
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: a
       tags: 
       count: 2.0
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: e
       tags: 
       count: 2.0
     count: 4.0
-  - !ruby/struct:Ngram
+  - !ruby/struct:Myaso::Tagger::Ngram
     value: d
     tags:
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: a
       tags: 
       count: 1.0
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: e
       tags: 
       count: 1.0
     count: 2.0
   count: 12.0
-- !ruby/struct:Ngram
+- !ruby/struct:Myaso::Tagger::Ngram
   value: c
   tags:
-  - !ruby/struct:Ngram
+  - !ruby/struct:Myaso::Tagger::Ngram
     value: a
     tags:
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: a
       tags: 
       count: 1.0
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: b
       tags: 
       count: 3.0
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: c
       tags: 
       count: 2.0
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: d
       tags: 
       count: 1.0
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: e
       tags: 
       count: 1.0
     count: 8.0
-  - !ruby/struct:Ngram
+  - !ruby/struct:Myaso::Tagger::Ngram
     value: e
     tags:
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: b
       tags: 
       count: 1.0
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: d
       tags: 
       count: 1.0
     count: 2.0
   count: 10.0
-- !ruby/struct:Ngram
+- !ruby/struct:Myaso::Tagger::Ngram
   value: d
   tags:
-  - !ruby/struct:Ngram
+  - !ruby/struct:Myaso::Tagger::Ngram
     value: a
     tags:
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: a
       tags: 
       count: 1.0
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: b
       tags: 
       count: 4.0
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: c
       tags: 
       count: 3.0
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: d
       tags: 
       count: 2.0
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: e
       tags: 
       count: 2.0
     count: 12.0
-  - !ruby/struct:Ngram
+  - !ruby/struct:Myaso::Tagger::Ngram
     value: e
     tags:
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: SENT
       tags: 
       count: 2.0
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: d
       tags: 
       count: 2.0
     count: 4.0
   count: 16.0
-- !ruby/struct:Ngram
+- !ruby/struct:Myaso::Tagger::Ngram
   value: e
   tags:
-  - !ruby/struct:Ngram
+  - !ruby/struct:Myaso::Tagger::Ngram
     value: d
     tags:
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: a
       tags: 
       count: 1.0
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: e
       tags: 
       count: 1.0
     count: 2.0
-  - !ruby/struct:Ngram
+  - !ruby/struct:Myaso::Tagger::Ngram
     value: SENT
     tags:
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: a
       tags: 
       count: 1.0
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: c
       tags: 
       count: 2.0
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: d
       tags: 
       count: 1.0
     count: 4.0
   count: 6.0
-- !ruby/struct:Ngram
+- !ruby/struct:Myaso::Tagger::Ngram
   value: SENT
   tags:
-  - !ruby/struct:Ngram
+  - !ruby/struct:Myaso::Tagger::Ngram
     value: SENT
     tags:
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: a
       tags: 
       count: 2.0
     count: 2.0
-  - !ruby/struct:Ngram
+  - !ruby/struct:Myaso::Tagger::Ngram
     value: a
     tags:
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: b
       tags: 
       count: 3.0
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: d
       tags: 
       count: 1.0
     count: 4.0
-  - !ruby/struct:Ngram
+  - !ruby/struct:Myaso::Tagger::Ngram
     value: e
     tags:
-    - !ruby/struct:Ngram
+    - !ruby/struct:Myaso::Tagger::Ngram
       value: SENT
       tags: 
       count: 1.0
