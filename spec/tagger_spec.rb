@@ -26,7 +26,7 @@ describe Myaso::Tagger do
     end
 
     it 'counts the quotient between count(word, tag) and ngrams(tag)' do
-      subject.e('братишка', 'a').must_equal(1/22.0)
+      subject.e('братишка', 'a').must_equal(1/26.0)
       subject.e('принес', 'e').must_equal(2/6.0)
     end
   end
@@ -35,6 +35,13 @@ describe Myaso::Tagger do
     it 'should learn with the same results as in gold standard' do
       subject.words_tags.must_equal(Myaso::Fixtures::WORDS_TAGS)
       subject.ngrams.must_equal(Myaso::Fixtures::NGRAMS)
+    end
+  end
+
+  describe 'annotate(sentence)' do
+    it 'should annotate sentences with tags' do
+      subject.annotate(%w(братишка я тебе покушать принес)).
+        must_equal(%w(a b b d d))
     end
   end
 end

@@ -18,7 +18,7 @@
       tags: 
       count: 1.0
     - !ruby/struct:Ngram
-      value: d
+      value: SENT
       tags: 
       count: 1.0
     - !ruby/struct:Ngram
@@ -52,7 +52,11 @@
     - !ruby/struct:Ngram
       value: e
       tags: 
-      count: 2.0
+      count: 1.0
+    - !ruby/struct:Ngram
+      value: SENT
+      tags: 
+      count: 1.0
     count: 4.0
   - !ruby/struct:Ngram
     value: d
@@ -77,8 +81,24 @@
       value: d
       tags: 
       count: 1.0
-    count: 2.0
-  count: 22.0
+    - !ruby/struct:Ngram
+      value: SENT
+      tags: 
+      count: 1.0
+    count: 3.0
+  - !ruby/struct:Ngram
+    value: SENT
+    tags:
+    - !ruby/struct:Ngram
+      value: a
+      tags: 
+      count: 2.0
+    - !ruby/struct:Ngram
+      value: e
+      tags: 
+      count: 1.0
+    count: 3.0
+  count: 26.0
 - !ruby/struct:Ngram
   value: b
   tags:
@@ -98,7 +118,7 @@
       tags: 
       count: 1.0
     - !ruby/struct:Ngram
-      value: d
+      value: SENT
       tags: 
       count: 1.0
     - !ruby/struct:Ngram
@@ -202,7 +222,7 @@
     value: e
     tags:
     - !ruby/struct:Ngram
-      value: b
+      value: SENT
       tags: 
       count: 2.0
     - !ruby/struct:Ngram
@@ -227,7 +247,7 @@
       count: 1.0
     count: 2.0
   - !ruby/struct:Ngram
-    value: b
+    value: SENT
     tags:
     - !ruby/struct:Ngram
       value: a
@@ -243,3 +263,35 @@
       count: 1.0
     count: 4.0
   count: 6.0
+- !ruby/struct:Ngram
+  value: SENT
+  tags:
+  - !ruby/struct:Ngram
+    value: SENT
+    tags:
+    - !ruby/struct:Ngram
+      value: a
+      tags: 
+      count: 2.0
+    count: 2.0
+  - !ruby/struct:Ngram
+    value: a
+    tags:
+    - !ruby/struct:Ngram
+      value: b
+      tags: 
+      count: 3.0
+    - !ruby/struct:Ngram
+      value: d
+      tags: 
+      count: 1.0
+    count: 4.0
+  - !ruby/struct:Ngram
+    value: e
+    tags:
+    - !ruby/struct:Ngram
+      value: SENT
+      tags: 
+      count: 1.0
+    count: 1.0
+  count: 10.0
