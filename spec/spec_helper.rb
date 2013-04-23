@@ -5,6 +5,7 @@ require 'rubygems'
 gem 'minitest' if RUBY_VERSION == '1.8'
 
 require 'minitest/autorun'
+require 'minitest/hell'
 
 unless 'true' == ENV['TRAVIS']
   require 'simplecov'
