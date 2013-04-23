@@ -14,8 +14,8 @@ describe Myaso::Tagger do
     end
 
     it 'counts the quotient between trigram and bigram counts othewise' do
-      subject.q('a', 'a', 'a').must_equal(1/6.0)
-      subject.q('b', 'a', 'b').must_equal(1/3.0)
+      subject.q('a', 'a', 'a').must_equal(1 / 6.0)
+      subject.q('b', 'a', 'b').must_equal(1 / 3.0)
     end
   end
 
@@ -26,8 +26,8 @@ describe Myaso::Tagger do
     end
 
     it 'counts the quotient between count(word, tag) and ngrams(tag)' do
-      subject.e('братишка', 'a').must_equal(1/26.0)
-      subject.e('принес', 'e').must_equal(2/6.0)
+      subject.e('братишка', 'a').must_equal(1 / 26.0)
+      subject.e('принес', 'e').must_equal(2 / 6.0)
     end
   end
 
@@ -45,7 +45,7 @@ describe Myaso::Tagger do
     end
 
     it 'should raise an UnknownWord exception on unknown words' do
-      lambda { subject.annotate(%w(проголодался наверное)) }.
+      proc { subject.annotate(%w(проголодался наверное)) }.
         must_raise Myaso::Tagger::UnknownWord
     end
   end

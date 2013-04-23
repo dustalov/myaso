@@ -91,7 +91,7 @@ class Myaso::Tagger
     return [] if sentence.size == 0
 
     tags_first = [START]
-    pi_table, backpoints = [Point.new(1, START, START, 0.0)], []
+    pi_table, bp_table = [Point.new(1, START, START, 0.0)], []
 
     sentence = sentence.dup
     sentence.unshift(START, START)
@@ -104,12 +104,18 @@ class Myaso::Tagger
 
       u_tags.product(v_tags).each do |u, v|
         p, b = Point.new(index, u, v, :value), Point.new(index, u, v, :value)
+
         p.value, b.value = w_tags.map do |w|
-          next([-Float::INFINITY, w]) unless pi(pi_table, index - 1, w, u).finite?
-          [pi(pi_table, index - 1, w, u) + Math.log2(q(w, u, v) * e(word, v)), w]
-        end.max_by { |pi, bp| pi }
+          unless pi(pi_table, index - 1, w, u).finite?
+            next [-Float::INFINITY, w]
+          end
+
+          [pi(pi_table, index - 1, w, u) + Math.log2(q(w, u, v) *
+            e(word, v)), w]
+        end.max_by { |pi, _| pi }
+
         pi_table << p
-        backpoints << b
+        bp_table << b
       end
     end
 
@@ -127,7 +133,7 @@ class Myaso::Tagger
       max_by { |u, v| pi(pi_table, size, u, v) + Math.log2(q(u, v, STOP)) }
 
     size.downto(4) do |index|
-      y[index - 2] = bp(backpoints, index, y[index - 1], y[index])
+      y[index - 2] = bp(bp_table, index, y[index - 1], y[index])
     end
 
     y[2..-1]
@@ -136,11 +142,8 @@ class Myaso::Tagger
   # @private
   #
   def inspect
-    '#<%s ngrams_path=%s lexicon_path=%s' % [
-      self.class.name,
-      ngrams_path,
-      lexicon_path
-    ]
+    '#<%s ngrams_path=%s lexicon_path=%s' % [self.class.name,
+      ngrams_path, lexicon_path]
   end
 
   # Function e in the Viterbi algorithm. It process probability of
@@ -258,8 +261,8 @@ class Myaso::Tagger
 
   # Find backpoints(index, u, v).
   #
-  def bp(backpoints, index, u, v)
-    backpoints.find { |bp| bp.index == index and bp.u == u and bp.v == v }.value
+  def bp(bp_table, index, u, v)
+    bp_table.find { |bp| bp.index == index and bp.u == u and bp.v == v }.value
   end
 
   # Find tags for given word.

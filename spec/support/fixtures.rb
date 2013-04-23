@@ -24,26 +24,11 @@ require 'yaml'
 #   => [ :BUCKETS ]
 #
 module Myaso::Fixtures
-  class << self
-    def create_fixtures!
-      Dir[File.expand_path('*.yml', fixtures_path)].each do |filename|
-        create_fixture_for filename
-      end
-    end
+end
 
-    def create_fixture_for filename
-      const_set const_name(filename), YAML.load_file(filename)
-    end
+fixtures_path = File.expand_path('../../fixtures', __FILE__)
 
-    private
-      def const_name(filename)
-        File.basename(filename, '.*').upcase
-      end
-
-      def fixtures_path
-        File.expand_path('../../fixtures', __FILE__)
-      end
-  end
-
-  create_fixtures!
+Dir[File.expand_path('*.yml', fixtures_path)].each do |filename|
+  const_name = File.basename(filename, '.*').upcase
+  Myaso::Fixtures.const_set(const_name, YAML.load_file(filename))
 end

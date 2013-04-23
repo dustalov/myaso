@@ -5,7 +5,7 @@ require 'ostruct'
 require 'optparse'
 
 if File.exists? File.expand_path('../../.git', __FILE__)
-  $:.unshift File.expand_path('../../lib', __FILE__)
+  $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 end
 
 require 'myaso'
@@ -13,7 +13,7 @@ require 'myaso'
 options = OpenStruct.new
 
 optparse = OptionParser.new do |opts|
-  opts.banner = 'Usage: %s [options] command' % $0
+  opts.banner = 'Usage: %s [options] command' % $PROGRAM_NAME
 
   opts.separator ''
   opts.separator 'Commands:'
@@ -44,7 +44,9 @@ optparse = OptionParser.new do |opts|
     puts 'Copyright (c) 2010-2013 Dmitry Ustalov'
     exit
   end
-end.tap(&:parse!)
+end
+
+optparse.parse!
 
 eval(options.eval, binding, __FILE__, __LINE__) if options.eval
 
