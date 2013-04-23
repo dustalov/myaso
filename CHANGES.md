@@ -4,6 +4,13 @@ Changes in Myaso
 Version history of the Myaso morphological analyzer is presented in
 this document.
 
+v0.3.1
+------
+- Rewrited from scratch, again.
+- POS tagging using the Viterbi algorithm on HMMs.
+- TnT data files are used to feed the POS tagger.
+- Morphosyntactic model has been separated into [Myasorubka].
+
 v0.3.0
 ------
 - Complete rewrite of Myaso.
@@ -16,8 +23,8 @@ Rubinius.
 - [Myaso-Web] interface is opened for everybody.
 
 [MULTEXT-East]: http://nl.ijs.si/ME/
-[Myasorubka]: https://github.com/eveel/myasorubka
-[Myaso-Web]: https://github.com/eveel/myaso-web
+[Myasorubka]: https://github.com/ustalov/myasorubka
+[Myaso-Web]: https://github.com/ustalov/myaso-web
 
 v0.2
 ----
