@@ -1,0 +1,3 @@
+# Don't use sprintf instead of %
+FavorSprintf:
+  Enabled: false
