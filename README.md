@@ -89,6 +89,8 @@ This work is partially supported by UrB RAS grant №RCP-12-P10.
 
 ## Dependency Status [<img src="https://gemnasium.com/ustalov/myaso.png"/>](https://gemnasium.com/ustalov/myaso)
 
+## Code Climate [<img src="https://codeclimate.com/github/ustalov/myaso.png"/>](https://codeclimate.com/github/ustalov/myaso)
+
 ## Copyright
 
 Copyright (c) 2010-2013 [Dmitry Ustalov]. See LICENSE for details.
