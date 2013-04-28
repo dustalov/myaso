@@ -226,8 +226,10 @@ class Myaso::Tagger
       delete_if { |s| s.empty? || s[0..1] == '%%' }.
       map(&:split).each do |string|
         word, _ = string.shift, string.shift
-        this_char = words_tags.each_with_index.
-          find { |(fc, _), i| fc == word[0] }
+
+        this_char = words_tags.each_with_index.find do |(first_char, _), index|
+          first_char == word[0]
+        end
 
         string.each_slice(2) do |tag, count|
           if this_char
@@ -292,16 +294,11 @@ class Myaso::Tagger
   def classify_word(word)
     return word unless rare?(word)
     case word
-    when /\d+/
-      CARD
-    when /^\d*\./
-      CARDPUNCT
-    when /^\d+\D+/
-      CARDSUFFIX
-    when /\d*(\.|\\|\/|:)*/
-      CARDSEPS
-    else
-      UNKNOWN
+    when /^\d+$/ then CARD
+    when /^\d+[.,;:]+$/ then CARDPUNCT
+    when /^\d+\D+$/ then CARDSUFFIX
+    when /^\d+[.,;:\-]+(\d+[.,;:\-]+)*\d+$/ then CARDSEPS
+    else UNKNOWN
     end
   end
 
