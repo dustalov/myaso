@@ -54,6 +54,10 @@ class Myaso::Tagger
   #
   attr_reader :words_tags
 
+  # Coefficients for linear interpolation.
+  #
+  attr_reader :interpolations
+
   # A start tag for a sentence.
   #
   START = 'SENT'
@@ -160,8 +164,27 @@ class Myaso::Tagger
   # probability that current tag is (c) if last two are (a, b).
   #
   def q(first, second, third)
-    return 0 if ngram(first, second).zero?
-    ngram(first, second, third) / ngram(first, second)
+    score = Array.new(3)
+
+    if @total_count.zero?
+      return 0
+    else
+      score[2] = (ngram(third) / @total_count) * @interpolations[0]
+    end
+
+    if (den = ngram(first, second)).zero?
+      score[0] = 0
+    else
+      score[0] = (ngram(first, second, third) / den) * @interpolations[1]
+    end
+
+    if (den = ngram(second)).zero?
+      score[1] = 0
+    else
+      score[1] = (ngram(second, third) / den) * @interpolations[2]
+    end
+
+    score.inject(&:+)
   end
 
   private
@@ -207,12 +230,12 @@ class Myaso::Tagger
         end
       end
 
-      @interpolations = interpolations
+      @interpolations = compute_interpolations
   end
 
   # Count coefficients for linear interpolation for
   # evaluating q(first, second, third).
-  def interpolations
+  def compute_interpolations
     interpolations = [0, 0, 0]
     ngrams.each do |unigram|
       unigram.tags.each do |bigram|

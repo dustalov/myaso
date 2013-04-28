@@ -8,14 +8,9 @@ describe Myaso::Tagger do
   subject { Myaso::Tagger.new(ngrams, lexicon) }
 
   describe 'q(w1, w2, w3)' do
-    it 'returns 0 if there is no such tags combination' do
-      subject.q('c', 'd', 'e').must_equal(0)
-      subject.q('c', 'e', 'a').must_equal(0)
-    end
-
     it 'counts the quotient between trigram and bigram counts othewise' do
-      subject.q('a', 'a', 'a').must_equal(1 / 6.0)
-      subject.q('b', 'a', 'b').must_equal(1 / 3.0)
+      subject.q('a', 'a', 'a').must_be_close_to 0.225, 0.001
+      subject.q('b', 'a', 'b').must_be_close_to 0.278, 0.001
     end
   end
 
@@ -35,13 +30,14 @@ describe Myaso::Tagger do
     it 'should learn with the same results as in gold standard' do
       subject.words_tags.must_equal(Myaso::Fixtures::WORDS_TAGS)
       subject.ngrams.must_equal(Myaso::Fixtures::NGRAMS)
+      subject.interpolations.must_equal(Myaso::Fixtures::INTERPOLATIONS)
     end
   end
 
   describe 'annotate(sentence)' do
     it 'should annotate sentences with tags' do
       subject.annotate(%w(братишка я тебе покушать принес)).
-        must_equal(%w(a b b d d))
+        must_equal(%w(a b b d e))
     end
 
     it 'should raise an UnknownWord exception on unknown words' do
