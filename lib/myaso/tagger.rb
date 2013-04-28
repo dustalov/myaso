@@ -165,12 +165,13 @@ class Myaso::Tagger
   end
 
   private
-  # Parse path files and fill @tags, @bigrams, @trigrams, @tags.
+  # Parse path files and fill @ngrams, @words_tags.
   #
   def learn!
     # Parse file with ngrams.
     strings = IO.readlines(ngrams_path).map(&:chomp).
       delete_if { |s| s.empty? || s[0..1] == '%%' }
+    @total_count = 0.0
 
     strings.each do |string|
       tag, count = string.split
@@ -184,6 +185,7 @@ class Myaso::Tagger
         end
       else
         # It is unigram.
+        @total_count += count.to_f
         ngrams << Ngram.new(tag, [], count.to_f)
       end
     end
@@ -204,6 +206,44 @@ class Myaso::Tagger
           end
         end
       end
+
+      @interpolations = interpolations
+  end
+
+  # Count coefficients for linear interpolation for
+  # evaluating q(first, second, third).
+  def interpolations
+    interpolations = [0, 0, 0]
+    ngrams.each do |unigram|
+      unigram.tags.each do |bigram|
+        bigram.tags.each do |trigram|
+          score = Array.new(3)
+
+          if (bigram.count - 1).zero?
+            score[0] = 0
+          else
+            score[0] = (trigram.count - 1) / (bigram.count - 1)
+          end
+
+          if (den = ngram(bigram.value) - 1).zero?
+            score[1] = 0
+          else
+            score[1] = (ngram(bigram.value, trigram.value) - 1) / den
+          end
+
+          if (@total_count - 1).zero?
+            score[2] = 0
+          else
+            score[2] = (ngram(trigram.value) - 1) / (@total_count - 1)
+          end
+
+          max = score.each_with_index.max_by { |v, _| v }.last
+          interpolations[max] += 1
+        end
+      end
+    end
+    sum = interpolations.inject(&:+).to_f
+    interpolations.map { |v| v / sum }
   end
 
   # If word is rare, than it should be replaced in
