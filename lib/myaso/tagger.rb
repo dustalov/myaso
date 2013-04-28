@@ -49,6 +49,7 @@ class Myaso::Tagger
   # than size of array with all words.
   # It is obviously to choose the first char of word as criterium
   # of grouping. We can see, to which group the word belongs.
+  #
   # @words_tags is array of objects, that has the following nature:
   # [first_char, [*Word]]
   #
@@ -57,6 +58,9 @@ class Myaso::Tagger
   # Coefficients for linear interpolation.
   #
   attr_reader :interpolations
+
+  # Total count of trigrams.
+  attr_reader :total_count
 
   # A start tag for a sentence.
   #
@@ -76,8 +80,8 @@ class Myaso::Tagger
   # The second one is a lexicon file that stores words and their
   # frequencies in the source corpus.
   #
-  # Please note that the Tagger learning stage is not optimized so the
-  # initialization procedure may take about 90 seconds.
+  # Please note that the Tagger learning stage is not optimized, so the
+  # initialization procedure may take about 120 seconds.
   #
   def initialize(ngrams_path, lexicon_path)
     @ngrams, @words_tags = [], []
@@ -159,29 +163,33 @@ class Myaso::Tagger
     count(word, tag) / ngram(tag)
   end
 
-  # Maximum likeness model of processing attitude between trigram
-  # (a, b, c) and bigram (a, b). It have the next sense:
-  # probability that current tag is (c) if last two are (a, b).
+  # Linear interpolation model of processing probability of
+  # occurence of the trigram (first, second, third). It
+  # consider three summands: the first one has the next sense:
+  # probability that current tag is (third) if last two are
+  # (first, second), the second one -- that last one is (second),
+  # and the last summand consider independent probability that
+  # current tag is (third).
   #
   def q(first, second, third)
     score = Array.new(3)
 
-    if @total_count.zero?
+    if total_count.zero?
       return 0
     else
-      score[2] = (ngram(third) / @total_count) * @interpolations[0]
+      score[2] = (ngram(third) / total_count) * interpolations[0]
     end
 
     if (den = ngram(first, second)).zero?
       score[0] = 0
     else
-      score[0] = (ngram(first, second, third) / den) * @interpolations[1]
+      score[0] = (ngram(first, second, third) / den) * interpolations[1]
     end
 
     if (den = ngram(second)).zero?
       score[1] = 0
     else
-      score[1] = (ngram(second, third) / den) * @interpolations[2]
+      score[1] = (ngram(second, third) / den) * interpolations[2]
     end
 
     score.inject(&:+)
@@ -230,12 +238,12 @@ class Myaso::Tagger
         end
       end
 
-      @interpolations = compute_interpolations
+      compute_interpolations!
   end
 
   # Count coefficients for linear interpolation for
   # evaluating q(first, second, third).
-  def compute_interpolations
+  def compute_interpolations!
     interpolations = [0, 0, 0]
     ngrams.each do |unigram|
       unigram.tags.each do |bigram|
@@ -266,7 +274,7 @@ class Myaso::Tagger
       end
     end
     sum = interpolations.inject(&:+).to_f
-    interpolations.map { |v| v / sum }
+    @interpolations = interpolations.map { |v| v / sum }
   end
 
   # If word is rare, than it should be replaced in
@@ -278,8 +286,8 @@ class Myaso::Tagger
   end
 
   # If word is rare, it can be one of the following categories:
-  # includes numbers, all symbols are capital, the last symbol
-  # is capital and other. Otherwise, word has it's own category.
+  # includes numbers, numbers and punctuation symbols, non-numbers
+  # following numbers and unknown. Otherwise, word has it's own category.
   #
   def classify_word(word)
     return word unless rare?(word)
@@ -288,7 +296,7 @@ class Myaso::Tagger
       CARD
     when /^\d*\./
       CARDPUNCT
-    when /^\d+D+/
+    when /^\d+\D+/
       CARDSUFFIX
     when /\d*(\.|\\|\/|:)*/
       CARDSEPS
