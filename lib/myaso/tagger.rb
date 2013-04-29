@@ -107,9 +107,9 @@ class Myaso::Tagger
 
     sentence = sentence.dup
     sentence.unshift(START, START)
+    sentence.map! { |w| classify_word(w) }
 
     sentence.each_with_index.each_cons(3) do |(w1, i1), (w2, i2), (w3, index)|
-      word = classify_word(w3)
       w_tags = (i1 < 2) ? tags_first : tags(w1)
       u_tags = (i2 < 2) ? tags_first : tags(w2)
       v_tags = tags(word)
@@ -307,8 +307,8 @@ class Myaso::Tagger
   # preparation of the training set. So, it can't be in the training set.
   #
   def rare?(word)
-    candidate = @words_counts.find { |fc, w| fc == word[0] }.last.
-      find { |w,c| w == word }
+    candidate = @words_counts.find { |fc, w| fc == word[0] }
+    candidate = candidate.last.find { |w,c| w == word } if candidate
     !candidate || candidate.last == 1
   end
 
