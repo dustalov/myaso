@@ -4,8 +4,7 @@
       word: братишка
       tag: a
       count: 1.0
-- - б
-  - - !ruby/struct:Myaso::Tagger::Word
+    - !ruby/struct:Myaso::Tagger::Word
       word: братишка
       tag: e
       count: 1.0
@@ -14,8 +13,7 @@
       word: я
       tag: b
       count: 4.0
-- - я
-  - - !ruby/struct:Myaso::Tagger::Word
+    - !ruby/struct:Myaso::Tagger::Word
       word: я
       tag: c
       count: 2.0
@@ -24,13 +22,11 @@
       word: тебе
       tag: b
       count: 8.0
-- - т
-  - - !ruby/struct:Myaso::Tagger::Word
+    - !ruby/struct:Myaso::Tagger::Word
       word: тебе
       tag: c
       count: 2.0
-- - т
-  - - !ruby/struct:Myaso::Tagger::Word
+    - !ruby/struct:Myaso::Tagger::Word
       word: тебе
       tag: a
       count: 1.0
@@ -47,3 +43,8 @@
       word: принес
       tag: e
       count: 2.0
+- - ! '@'
+  - - !ruby/struct:Myaso::Tagger::Word
+      word: ! '@UNKNOWN'
+      tag: d
+      count: 0.0
