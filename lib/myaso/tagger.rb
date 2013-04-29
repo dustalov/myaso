@@ -64,6 +64,7 @@ class Myaso::Tagger
   attr_reader :interpolations
 
   # Total count of trigrams.
+  #
   attr_reader :total_count
 
   # A start tag for a sentence.
@@ -106,10 +107,10 @@ class Myaso::Tagger
     pi_table, bp_table = [Point.new(1, START, START, 0.0)], []
 
     sentence = sentence.dup
+    sentence.map! { |w| classify(w) }
     sentence.unshift(START, START)
-    sentence.map! { |w| classify_word(w) }
 
-    sentence.each_with_index.each_cons(3) do |(w1, i1), (w2, i2), (w3, index)|
+    sentence.each_with_index.each_cons(3) do |(w1, i1), (w2, i2), (word, index)|
       w_tags = (i1 < 2) ? tags_first : tags(w1)
       u_tags = (i2 < 2) ? tags_first : tags(w2)
       v_tags = tags(word)
@@ -228,10 +229,10 @@ class Myaso::Tagger
     # Parse file with words and tags.
     IO.readlines(lexicon_path).map(&:chomp).
       delete_if { |s| s.empty? || s[0..1] == '%%' }.
-      map(&:split).each do |string|
-        word, word_count = string.shift, string.shift
+      map(&:split).each do |tokens|
+        word, word_count = tokens.shift, tokens.shift
+        word_count = word_count.to_i
         word = classify(word) if word_count == 1
-        word_count = word_count.to_f
 
         char_index = words_counts.index {|(fc, _)| fc == word[0] }
         if char_index
@@ -247,7 +248,7 @@ class Myaso::Tagger
 
         this_char = words_tags.index { |(fc, _)| fc == word[0] }
 
-        string.each_slice(2) do |tag, count|
+        tokens.each_slice(2) do |tag, count|
           if this_char
             this_tag = words_tags[this_char].last.index do |w|
               w.word == word and w.tag == tag
@@ -316,7 +317,7 @@ class Myaso::Tagger
   # includes numbers, numbers and punctuation symbols, non-numbers
   # following numbers and unknown. Otherwise, word has it's own category.
   #
-  def classify_word(word)
+  def classify(word)
     return word unless rare?(word)
     case word
     when /^\d+$/ then CARD

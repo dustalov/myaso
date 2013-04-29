@@ -31,6 +31,7 @@ describe Myaso::Tagger do
       subject.words_tags.must_equal(Myaso::Fixtures::WORDS_TAGS)
       subject.ngrams.must_equal(Myaso::Fixtures::NGRAMS)
       subject.interpolations.must_equal(Myaso::Fixtures::INTERPOLATIONS)
+      subject.words_counts.must_equal(Myaso::Fixtures::WORDS_COUNTS)
     end
   end
 
@@ -40,9 +41,9 @@ describe Myaso::Tagger do
         must_equal(%w(a b b d e))
     end
 
-    it 'should raise an UnknownWord exception on unknown words' do
-      proc { subject.annotate(%w(проголодался наверное)) }.
-        must_raise Myaso::Tagger::UnknownWord
+    it 'should handle unknown words' do
+      subject.annotate(%w(мир прекрасен , как никогда)).
+        must_equal(%w(d d d d d))
     end
   end
 end
