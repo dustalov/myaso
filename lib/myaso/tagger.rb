@@ -29,11 +29,6 @@ class Myaso::Tagger
   #
   Word = Struct.new(:word, :tag, :count)
 
-  # The Point structure is a wrapper of rows in both dynamic programming
-  # and backpoints tables.
-  #
-  Point = Struct.new(:index, :u, :v, :value)
-
   attr_reader :ngrams_path, :lexicon_path
 
   # 1,2,3-grams are arrays of nested structures
