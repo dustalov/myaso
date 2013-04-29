@@ -55,6 +55,10 @@ class Myaso::Tagger
   #
   attr_reader :words_tags
 
+  # Counts of total using words are stored in separate array.
+  #
+  attr_reader :words_counts
+
   # Coefficients for linear interpolation.
   #
   attr_reader :interpolations
@@ -84,7 +88,7 @@ class Myaso::Tagger
   # initialization procedure may take about 120 seconds.
   #
   def initialize(ngrams_path, lexicon_path)
-    @ngrams, @words_tags = [], []
+    @ngrams, @words_tags, @words_counts = [], [], []
 
     @ngrams_path = File.expand_path(ngrams_path)
     @lexicon_path = File.expand_path(lexicon_path)
@@ -225,16 +229,36 @@ class Myaso::Tagger
     IO.readlines(lexicon_path).map(&:chomp).
       delete_if { |s| s.empty? || s[0..1] == '%%' }.
       map(&:split).each do |string|
-        word, _ = string.shift, string.shift
+        word, word_count = string.shift, string.shift
+        word = classify(word) if word_count == 1
+        word_count = word_count.to_f
 
-        this_char = words_tags.each_with_index.find do |(first_char, _), index|
-          first_char == word[0]
+        char_index = words_counts.index {|(fc, _)| fc == word[0] }
+        if char_index
+          word_index = words_counts[char_index].last.index { |(w, _)| w == word }
+          if word_index
+            words_counts[char_index].last[word_index][1] += word_count
+          else
+            words_counts[char_index].last << [word, word_count]
+          end
+        else
+          words_counts << [word[0], [[word, word_count]]]
         end
+
+        this_char = words_tags.index { |(fc, _)| fc == word[0] }
 
         string.each_slice(2) do |tag, count|
           if this_char
-            words_tags[this_char.last].last << Word.new(word, tag, count.to_f)
+            this_tag = words_tags[this_char].last.index do |w|
+              w.word == word and w.tag == tag
+            end
+            if this_tag
+              words_tags[this_char].last[this_tag].count += count.to_f
+            else
+              words_tags[this_char].last << Word.new(word, tag, count.to_f)
+            end
           else
+            this_char = words_tags.size
             words_tags << [word[0], [Word.new(word, tag, count.to_f)]]
           end
         end
@@ -283,8 +307,9 @@ class Myaso::Tagger
   # preparation of the training set. So, it can't be in the training set.
   #
   def rare?(word)
-    @words_tags.find { |fc, w| fc == word[0] }.last.
-      find { |w| w.word == word }.nil?
+    candidate = @words_counts.find { |fc, w| fc == word[0] }.last.
+      find { |w,c| w == word }
+    !candidate || candidate.last == 1
   end
 
   # If word is rare, it can be one of the following categories:
