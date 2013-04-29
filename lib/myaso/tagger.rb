@@ -104,10 +104,11 @@ class Myaso::Tagger
     return [] if sentence.size == 0
 
     tags_first = [START]
-    pi_table, bp_table = [Point.new(1, START, START, 0.0)], []
 
-    sentence = sentence.dup
-    sentence.map! { |w| classify(w) }
+    pi_table, bp_table = Myaso::PiTable.new, Myaso::PiTable.new
+    pi_table[1, START, START] = 0.0
+
+    sentence = sentence.map { |w| classify(w) }
     sentence.unshift(START, START)
 
     sentence.each_with_index.each_cons(3) do |(w1, i1), (w2, i2), (word, index)|
@@ -116,19 +117,12 @@ class Myaso::Tagger
       v_tags = tags(word)
 
       u_tags.product(v_tags).each do |u, v|
-        p, b = Point.new(index, u, v, :value), Point.new(index, u, v, :value)
-
-        p.value, b.value = w_tags.map do |w|
-          unless pi(pi_table, index - 1, w, u).finite?
-            next [-Float::INFINITY, w]
-          end
-
-          [pi(pi_table, index - 1, w, u) + Math.log2(q(w, u, v) *
-            e(word, v)), w]
+        pi_value, bp_value = w_tags.map do |w|
+          next [-Float::INFINITY, w] unless pi_table[index - 1, w, u].finite?
+          [pi_table[index - 1, w, u] + Math.log2(q(w, u, v) * e(word, v)), w]
         end.max_by { |pi, _| pi }
 
-        pi_table << p
-        bp_table << b
+        pi_table[index, u, v], bp_table[index, u, v] = pi_value, bp_value
       end
     end
 
@@ -137,16 +131,16 @@ class Myaso::Tagger
     if size.zero?
       v_tags = tags(sentence[-1])
       return tags_first.product(v_tags).
-        max_by { |u, v| pi(size, u, v) + Math.log2(q(u, v, STOP)) }.last
+        max_by { |u, v| pi_table[size, u, v] + Math.log2(q(u, v, STOP)) }.last
     end
 
     u_tags = tags(sentence[-2])
     v_tags = tags(sentence[-1])
     y[size - 1], y[size] = u_tags.product(v_tags).
-      max_by { |u, v| pi(pi_table, size, u, v) + Math.log2(q(u, v, STOP)) }
+      max_by { |u, v| pi_table[size, u, v] + Math.log2(q(u, v, STOP)) }
 
     size.downto(4) do |index|
-      y[index - 2] = bp(bp_table, index, y[index - 1], y[index])
+      y[index - 2] = bp_table[index, y[index - 1], y[index]]
     end
 
     y[2..-1]
@@ -345,18 +339,6 @@ class Myaso::Tagger
       find { |t| t.tag == tag and t.word == word }
     return 0 unless word
     word.count
-  end
-
-  # Find pi_table(index, u, v).
-  #
-  def pi(pi_table, index, u, v)
-    pi_table.find { |pi| pi.index == index and pi.u == u and pi.v == v }.value
-  end
-
-  # Find backpoints(index, u, v).
-  #
-  def bp(bp_table, index, u, v)
-    bp_table.find { |bp| bp.index == index and bp.u == u and bp.v == v }.value
   end
 
   # Find tags for given word.
