@@ -112,7 +112,6 @@ class Myaso::Tagger::Model
       0
     else
       ngrams[first, second, third] / q3_denominator.to_f
-
     end
 
     q1 * interpolations[0] + q2 * interpolations[1] + q3 * interpolations[2]
@@ -279,7 +278,7 @@ class Myaso::Tagger::Model
         end
       end
 
-      compute_interpolations!
+    compute_interpolations!
   end
 
   # Count coefficients for linear interpolation for evaluating
