@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-# A simple implementation of dynamic programming table in the following
+# A simple implementation of a dynamic programming table in the following
 # form: $\pi(i, u, v)$. where $i$ is an index and $u, v$ are elements of
 # a finite set of tags.
 #
@@ -11,7 +11,7 @@ class Myaso::PiTable
   attr_reader :default, :table
   def_delegator :@table, :each, :each
 
-  # An instance of dynamic programming table can consider the specified
+  # An instance of a dynamic programming table can consider the specified
   # default value.
   #
   def initialize(default = nil)
