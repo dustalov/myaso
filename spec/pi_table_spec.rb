@@ -42,4 +42,10 @@ describe Myaso::PiTable do
       subject[0, 'D', 'V'].must_equal 2
     end
   end
+
+  describe '#each' do
+    it 'iterates over an internal table' do
+      subject.each.to_a.must_equal subject.table.to_a
+    end
+  end
 end

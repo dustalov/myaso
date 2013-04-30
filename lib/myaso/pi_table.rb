@@ -5,46 +5,32 @@
 # a finite set of tags.
 #
 class Myaso::PiTable
-  # Row structure is a wrapper of a row in the programming table.
-  #
-  Row = Struct.new(:i, :u, :v, :value)
+  extend Forwardable
+  include Enumerable
 
-  attr_reader :table, :default
+  attr_reader :default, :table
+  def_delegator :@table, :each, :each
 
   # An instance of dynamic programming table can consider the specified
   # default value.
   #
   def initialize(default = nil)
-    @table, @default = [], default
+    @default = default
+    @table = Hash.new do |h, k|
+      h[k] = Hash.new { |h, k| h[k] = Hash.new(default) }
+    end
   end
 
   # Obtain the value of $\pi(i, u, v)$ or return the default value if it
   # is nil.
   #
   def [] i, u, v
-    if row = obtain(i, u, v)
-      row.value
-    else
-      default
-    end
+    table[i][u][v]
   end
 
   # Set a value of $\pi(i, u, v)$.
   #
   def []= i, u, v, value
-    if row = obtain(i, u, v)
-      row.value = value
-    else
-      table << Row.new(i, u, v, value)
-    end
-
-    value
-  end
-
-  protected
-  # Obtain the value of $\pi(i, u, v)$ or return nil.
-  #
-  def obtain(i, u, v)
-    table.find { |row| row.i == i && row.u == u && row.v == v }
+    table[i][u][v] = value
   end
 end

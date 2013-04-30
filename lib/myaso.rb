@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require 'forwardable'
+
 require 'myaso/version'
 require 'myaso/pi_table'
 require 'myaso/tagger'
