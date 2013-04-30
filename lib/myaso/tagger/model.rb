@@ -175,10 +175,14 @@ class Myaso::Tagger::Model
     words.select { |w| w.word == word }.map(&:tag)
   end
 
+  # Tagger requires the sentence start symbol to be defined.
+  #
   def start_symbol
     START
   end
 
+  # Tagger requires the sentence stop symbol to be defined.
+  #
   def stop_symbol
     STOP
   end

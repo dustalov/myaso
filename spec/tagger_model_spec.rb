@@ -44,4 +44,16 @@ describe Myaso::Tagger::Model do
       subject.words_counts.must_equal Myaso::Fixtures::WORDS_COUNTS
     end
   end
+
+  describe '#start_symbol' do
+    it 'should be SENT' do
+      subject.start_symbol.must_equal 'SENT'
+    end
+  end
+
+  describe '#stop_symbol' do
+    it 'should be SENT' do
+      subject.stop_symbol.must_equal 'SENT'
+    end
+  end
 end
