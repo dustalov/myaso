@@ -13,6 +13,10 @@ class Myaso::Tagger::Model
   #
   STOP = 'SENT'
 
+  # Unknown tag for token.
+  #
+  MISSING = '-'
+
   # Tokens consisting of a sequence of decimal digits.
   #
   CARD = '@CARD'
@@ -204,15 +208,15 @@ class Myaso::Tagger::Model
       if string[0] == "\t"
         if string[1] == "\t"
           # It is trigram.
-          ngrams.last.tags.last.tags << Ngram.new(tag, nil, count.to_f)
+          ngrams.last.tags.last.tags << Myaso::Ngram.new(tag, nil, count.to_f)
         else
           # It is bigram.
-          ngrams.last.tags << Ngram.new(tag, [], count.to_f)
+          ngrams.last.tags << Myaso::Ngram.new(tag, [], count.to_f)
         end
       else
         # It is unigram.
         @total_count += count.to_f
-        ngrams << Ngram.new(tag, [], count.to_f)
+        ngrams << Myaso::Ngram.new(tag, [], count.to_f)
       end
     end
 
@@ -220,7 +224,7 @@ class Myaso::Tagger::Model
     unknown_words = [CARD, CARDPUNCT, CARDSUFFIX, CARDSEPS, UNKNOWN]
     @words_tags, @words_counts = [['@', []]], [['@', []]]
     unknown_words.each do |word|
-      words_tags[0].last << Word.new(word, '-', 0)
+      words_tags[0].last << Myaso::Word.new(word, MISSING, 0)
       words_counts[0].last << [word, 0]
     end
 
@@ -263,14 +267,14 @@ class Myaso::Tagger::Model
             if this_tag
               words_tags[this_char].last[this_tag].count += count
             else
-              words_tags[this_char].last << Word.new(word, tag, count)
+              words_tags[this_char].last << Myaso::Word.new(word, tag, count)
             end
           else
             if this_char
-              words_tags[this_char].last << Word.new(word, tag, count)
+              words_tags[this_char].last << Myaso::Word.new(word, tag, count)
             else
               this_char = words_tags.size
-              words_tags << [word[0], [Word.new(word, tag, count)]]
+              words_tags << [word[0], [Myaso::Word.new(word, tag, count)]]
             end
           end
         end
