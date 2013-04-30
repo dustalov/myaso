@@ -1,4 +1,29 @@
 ---
+- - ! '@'
+  - - !ruby/struct:Myaso::Word
+      word: ! '@CARD'
+      tag: ! '-'
+      count: 0
+    - !ruby/struct:Myaso::Word
+      word: ! '@CARDPUNCT'
+      tag: ! '-'
+      count: 0
+    - !ruby/struct:Myaso::Word
+      word: ! '@CARDSUFFIX'
+      tag: ! '-'
+      count: 0
+    - !ruby/struct:Myaso::Word
+      word: ! '@CARDSEPS'
+      tag: ! '-'
+      count: 0
+    - !ruby/struct:Myaso::Word
+      word: ! '@UNKNOWN'
+      tag: ! '-'
+      count: 0
+    - !ruby/struct:Myaso::Word
+      word: ! '@UNKNOWN'
+      tag: d
+      count: 1.0
 - - б
   - - !ruby/struct:Myaso::Word
       word: братишка
@@ -43,8 +68,3 @@
       word: принес
       tag: e
       count: 2.0
-- - ! '@'
-  - - !ruby/struct:Myaso::Word
-      word: ! '@UNKNOWN'
-      tag: d
-      count: 0.0
