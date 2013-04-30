@@ -3,23 +3,6 @@
 # This class is an implementation of the Viterbi algorithm.
 #
 class Myaso::Tagger
-  # The UnknownWord exception is raised when Tagger considers an unknown
-  # word.
-  #
-  class UnknownWord < RuntimeError
-    attr_reader :word
-
-    # @private
-    def initialize(word)
-      @word = word
-    end
-
-    # @private
-    def to_s
-      'unknown word "%s"' % word
-    end
-  end
-
   attr_reader :model
 
   # An instance of Tagger should be initialized with an instance of
