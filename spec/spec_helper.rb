@@ -2,8 +2,7 @@
 
 require 'rubygems'
 
-gem 'minitest' if RUBY_VERSION == '1.8'
-
+gem 'minitest'
 require 'minitest/autorun'
 require 'minitest/hell'
 
