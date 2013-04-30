@@ -13,6 +13,10 @@ class Myaso::Tagger::Model
   #
   STOP = 'SENT'
 
+  # Unknown tag for token.
+  #
+  MISSING = '-'
+
   # Tokens consisting of a sequence of decimal digits.
   #
   CARD = '@CARD'
@@ -159,8 +163,8 @@ class Myaso::Tagger::Model
   #
   def ngram(*tag)
     gram = ngrams.find { |t| t.value == tag.first }
-    gram = gram.tags.find { |t| t.value == tag[1] } if tag.size > 1
-    gram = gram.tags.find { |t| t.value == tag[2] } if tag.size > 2
+    gram = gram.tags.find { |t| t.value == tag[1] } if tag.size > 1 && gram
+    gram = gram.tags.find { |t| t.value == tag[2] } if tag.size > 2 && gram
     return 0 unless gram
     gram.count
   end
@@ -216,46 +220,67 @@ class Myaso::Tagger::Model
       end
     end
 
+    # Prepare @words_tags, @words_counts.
+    unknown_words = [CARD, CARDPUNCT, CARDSUFFIX, CARDSEPS, UNKNOWN]
+    @words_tags, @words_counts = [['@', []]], [['@', []]]
+    unknown_words.each do |word|
+      words_tags[0].last << Myaso::Word.new(word, MISSING, 0)
+      words_counts[0].last << [word, 0]
+    end
+
     # Parse file with words and tags.
     IO.readlines(lexicon_path).map(&:chomp).
       delete_if { |s| s.empty? || s[0..1] == '%%' }.
       map(&:split).each do |tokens|
+        rare = false
         word, word_count = tokens.shift, tokens.shift
         word_count = word_count.to_i
-        word = classify(word) if word_count == 1
-
-        char_index = words_counts.index {|(fc, _)| fc == word[0] }
-        if char_index
-          word_index = words_counts[char_index].last.index { |(w, _)| w == word }
-          if word_index
-            words_counts[char_index].last[word_index][1] += word_count
-          else
-            words_counts[char_index].last << [word, word_count]
-          end
-        else
-          words_counts << [word[0], [[word, word_count]]]
+        if word_count == 1
+          word = classify(word)
+          rare = true
         end
 
-        this_char = words_tags.index { |(fc, _)| fc == word[0] }
+        if rare
+          index = unknown_words.index(word)
+          words_counts[0].last[index][1] += word_count
+        else
+          char_index = words_counts.index {|(fc, _)| fc == word[0] }
+          if char_index
+            words_counts[char_index].last << [word, word_count]
+          else
+            words_counts << [word[0], [[word, word_count]]]
+          end
+        end
+
+        if rare
+          this_char = 0
+        else
+          this_char = words_tags.index { |(fc, _)| fc == word[0] }
+        end
 
         tokens.each_slice(2) do |tag, count|
-          if this_char
+          count = count.to_f
+          if rare
             this_tag = words_tags[this_char].last.index do |w|
               w.word == word and w.tag == tag
             end
             if this_tag
-              words_tags[this_char].last[this_tag].count += count.to_f
+              words_tags[this_char].last[this_tag].count += count
             else
-              words_tags[this_char].last << Myaso::Word.new(word, tag, count.to_f)
+              words_tags[this_char].last << Myaso::Word.new(word, tag, count)
             end
           else
-            this_char = words_tags.size
-            words_tags << [word[0], [Myaso::Word.new(word, tag, count.to_f)]]
+            if this_char
+              words_tags[this_char].last << Myaso::Word.new(word, tag, count)
+            else
+              this_char = words_tags.size
+              words_tags << [word[0], [Myaso::Word.new(word, tag, count)]]
+            end
           end
         end
       end
 
-    compute_interpolations!
+      compute_interpolations!
   end
 
   # Count coefficients for linear interpolation for
