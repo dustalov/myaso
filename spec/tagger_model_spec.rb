@@ -8,10 +8,10 @@ describe Myaso::Tagger::Model do
 
   subject { Myaso::Tagger::Model.new(ngrams, lexicon) }
 
-  describe '#q(t3|t1,t2)' do
+  describe '#q(t1,t2,t3)' do
     it 'counts the quotient between trigram and bigram counts othewise' do
-      subject.q('a', 'a', 'a').must_be_close_to 0.225, 0.001
-      subject.q('b', 'a', 'b').must_be_close_to 0.278, 0.001
+      subject.q('a', 'a', 'a').must_be_close_to 0.224, 0.001
+      subject.q('b', 'a', 'b').must_be_close_to 0.287, 0.001
     end
   end
 
@@ -28,10 +28,19 @@ describe Myaso::Tagger::Model do
   end
 
   describe '#learn!' do
-    it 'should learn with the same results as in gold standard' do
+    it 'should has the same words_tags as in the gold standard' do
       subject.words_tags.must_equal Myaso::Fixtures::WORDS_TAGS
+    end
+
+    it 'should has the same ngrams as in the gold standard' do
       subject.ngrams.must_equal Myaso::Fixtures::NGRAMS
+    end
+
+    it 'should has the same interpolations as in the gold standard' do
       subject.interpolations.must_equal Myaso::Fixtures::INTERPOLATIONS
+    end
+
+    it 'should has the same words_counts as in the gold standard' do
       subject.words_counts.must_equal Myaso::Fixtures::WORDS_COUNTS
     end
   end

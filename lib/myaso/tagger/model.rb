@@ -75,7 +75,7 @@ class Myaso::Tagger::Model
   # initialization procedure may take about 120 seconds.
   #
   def initialize(ngrams_path, lexicon_path)
-    @ngrams, @words_tags, @words_counts = [], [], []
+    @ngrams, @words_tags, @words_counts = Myaso::Ngrams.new, [], []
 
     @ngrams_path = File.expand_path(ngrams_path)
     @lexicon_path = File.expand_path(lexicon_path)
@@ -92,27 +92,26 @@ class Myaso::Tagger::Model
   # current tag is (third).
   #
   def q(first, second, third)
-    score = Array.new(3)
-
-    if total_count.zero?
-      return 0
+    q1 = if (q1_denominator = total_count).zero?
+      0
     else
-      score[2] = (ngram(third) / total_count) * interpolations[0]
+      ngrams[third] / q1_denominator.to_f
     end
 
-    if (den = ngram(first, second)).zero?
-      score[0] = 0
+    q2 = if (q2_denominator = ngrams[second]).zero?
+      0
     else
-      score[0] = (ngram(first, second, third) / den) * interpolations[1]
+      ngrams[second, third] / q2_denominator.to_f
     end
 
-    if (den = ngram(second)).zero?
-      score[1] = 0
+    q3 = if (q3_denominator = ngrams[first, second]).zero?
+      0
     else
-      score[1] = (ngram(second, third) / den) * interpolations[2]
+      ngrams[first, second, third] / q3_denominator.to_f
+
     end
 
-    score.inject(&:+)
+    q1 * interpolations[0] + q2 * interpolations[1] + q3 * interpolations[2]
   end
 
   # Function e in the Viterbi algorithm. It process probability of
@@ -120,8 +119,8 @@ class Myaso::Tagger::Model
   # this tag.
   #
   def e(word, tag)
-    return 0 if ngram(tag).zero?
-    count(word, tag) / ngram(tag)
+    return 0.0 if ngrams[tag].zero?
+    count(word, tag) / ngrams[tag]
   end
 
   # @private
@@ -153,16 +152,6 @@ class Myaso::Tagger::Model
     when /^\d+[.,;:\-]+(\d+[.,;:\-]+)*\d+$/ then CARDSEPS
     else UNKNOWN
     end
-  end
-
-  # Find count of ngram with given tags.
-  #
-  def ngram(*tag)
-    gram = ngrams.find { |t| t.value == tag.first }
-    gram = gram.tags.find { |t| t.value == tag[1] } if tag.size > 1
-    gram = gram.tags.find { |t| t.value == tag[2] } if tag.size > 2
-    return 0 unless gram
-    gram.count
   end
 
   # Find count for given bunch (word => tag).
@@ -199,20 +188,26 @@ class Myaso::Tagger::Model
       delete_if { |s| s.empty? || s[0..1] == '%%' }
     @total_count = 0.0
 
+    last_unigram, last_bigram = nil, nil
+
     strings.each do |string|
       tag, count = string.split
+      count = count.to_i
+
       if string[0] == "\t"
         if string[1] == "\t"
-          # It is trigram.
-          ngrams.last.tags.last.tags << Myaso::Ngram.new(tag, nil, count.to_f)
+          # a trigram
+          ngrams[last_unigram, last_bigram, tag] = count
         else
-          # It is bigram.
-          ngrams.last.tags << Myaso::Ngram.new(tag, [], count.to_f)
+          # a bigram
+          ngrams[last_unigram, tag] = count
+          last_bigram = tag
         end
       else
-        # It is unigram.
+        # an unigram
+        ngrams[tag] = count
+        last_unigram = tag
         @total_count += count.to_f
-        ngrams << Myaso::Ngram.new(tag, [], count.to_f)
       end
     end
 
@@ -258,42 +253,52 @@ class Myaso::Tagger::Model
     compute_interpolations!
   end
 
-  # Count coefficients for linear interpolation for
-  # evaluating q(first, second, third).
+  # Count coefficients for linear interpolation for evaluating
+  # q(first, second, third).
+  #
   def compute_interpolations!
-    interpolations = [0, 0, 0]
+    lambdas = [0.0, 0.0, 0.0]
 
-    ngrams.each do |unigram|
-      unigram.tags.each do |bigram|
-        bigram.tags.each do |trigram|
-          score = Array.new(3)
+    ngrams.each do |first, bigrams|
+      bigrams.each do |second, trigrams|
+        next unless second
 
-          if (bigram.count - 1).zero?
-            score[0] = 0
+        trigrams.each do |third, count|
+          next unless third
+
+          f1_denominator = total_count - 1
+          f1 = if f1_denominator.zero?
+            0
           else
-            score[0] = (trigram.count - 1) / (bigram.count - 1)
+            (ngrams[third] - 1) / f1_denominator.to_f
           end
 
-          if (den = ngram(bigram.value) - 1).zero?
-            score[1] = 0
+          f2_denominator = ngrams[second] - 1
+          f2 = if f2_denominator.zero?
+            0
           else
-            score[1] = (ngram(bigram.value, trigram.value) - 1) / den
+            (ngrams[second, third] - 1) / f2_denominator.to_f
           end
 
-          if (@total_count - 1).zero?
-            score[2] = 0
+          f3_denominator = ngrams[first, second] - 1
+          f3 = if f3_denominator.zero?
+            0
           else
-            score[2] = (ngram(trigram.value) - 1) / (@total_count - 1)
+            (ngrams[first, second, third] - 1) / f3_denominator.to_f
           end
 
-          max = score.each_with_index.max_by { |v, _| v }.last
-          interpolations[max] += 1
+          if f1 > f2 && f1 > f3
+            lambdas[0] += ngrams[first, second, third]
+          elsif f2 > f1 && f2 > f3
+            lambdas[1] += ngrams[first, second, third]
+          elsif f3 > f1 && f3 > f2
+            lambdas[2] += ngrams[first, second, third]
+          end
         end
       end
     end
 
-    sum = interpolations.inject(&:+).to_f
-
-    @interpolations = interpolations.map { |v| v / sum }
+    total = lambdas.inject(&:+)
+    @interpolations = lambdas.map! { |l| l / total }
   end
 end
