@@ -4,6 +4,7 @@ require 'forwardable'
 
 require 'myaso/version'
 require 'myaso/pi_table'
+require 'myaso/ngrams'
 require 'myaso/tagger'
 require 'myaso/tagger/model'
 
