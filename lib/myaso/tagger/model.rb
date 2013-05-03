@@ -197,7 +197,7 @@ class Myaso::Tagger::Model
   def compute_interpolations!
     lambdas = [0.0, 0.0, 0.0]
 
-    ngrams.each_trigram do |first, second, third|
+    ngrams.each_trigram do |(first, second, third), count|
       f1_denominator = ngrams.unigrams_count - 1
       f1 = if f1_denominator.zero?
         0
@@ -216,15 +216,15 @@ class Myaso::Tagger::Model
       f3 = if f3_denominator.zero?
         0
       else
-        (ngrams[first, second, third] - 1) / f3_denominator.to_f
+        (count - 1) / f3_denominator.to_f
       end
 
       if f1 > f2 && f1 > f3
-        lambdas[0] += ngrams[first, second, third]
+        lambdas[0] += count
       elsif f2 > f1 && f2 > f3
-        lambdas[1] += ngrams[first, second, third]
+        lambdas[1] += count
       elsif f3 > f1 && f3 > f2
-        lambdas[2] += ngrams[first, second, third]
+        lambdas[2] += count
       end
     end
 

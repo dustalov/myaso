@@ -45,8 +45,10 @@ class Myaso::Ngrams
       bigrams.each do |bigram, trigrams|
         next unless bigram
 
-        trigrams.each_key do |trigram|
-          yield [unigram, bigram, trigram] if trigram
+        trigrams.each do |trigram, count|
+          next unless trigram
+
+          yield [[unigram, bigram, trigram], count]
         end
       end
     end

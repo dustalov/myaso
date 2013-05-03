@@ -86,7 +86,7 @@ describe Myaso::Ngrams do
     it 'should enumerate over trigrams' do
       Array.new.tap do |trigrams|
         subject.each_trigram { |trigram| trigrams << trigram }
-        trigrams.must_equal [%w(D N V), %w(N V D)]
+        trigrams.must_equal [[%w(D N V), 5], [%w(N V D), 6]]
       end
     end
   end
