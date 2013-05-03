@@ -8,6 +8,7 @@ require 'myaso/ngrams'
 require 'myaso/lexicon'
 require 'myaso/tagger'
 require 'myaso/tagger/model'
+require 'myaso/tagger/tnt'
 
 # The UnknownWord exception is raised when Tagger considers an unknown
 # word.

@@ -6,7 +6,7 @@ describe Myaso::Tagger::Model do
   let(:ngrams) { File.expand_path('../data/test.123', __FILE__) }
   let(:lexicon) { File.expand_path('../data/test.lex', __FILE__) }
 
-  subject { Myaso::Tagger::Model.new(ngrams, lexicon) }
+  subject { Myaso::Tagger::TnT.new(ngrams, lexicon) }
 
   describe '#q(t1,t2,t3)' do
     it 'counts the quotient between trigram and bigram counts othewise' do

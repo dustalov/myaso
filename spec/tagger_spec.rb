@@ -5,7 +5,7 @@ require_relative 'spec_helper'
 describe Myaso::Tagger do
   let(:ngrams) { File.expand_path('../data/test.123', __FILE__) }
   let(:lexicon) { File.expand_path('../data/test.lex', __FILE__) }
-  let(:model) { Myaso::Tagger::Model.new(ngrams, lexicon) }
+  let(:model) { Myaso::Tagger::TnT.new(ngrams, lexicon) }
 
   subject { Myaso::Tagger.new(model) }
 

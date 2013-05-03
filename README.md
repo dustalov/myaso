@@ -60,7 +60,7 @@ It is possible to embed the POS tagging feature in your own application
 using API.
 
 ```ruby
-model = Myaso::Tagger::Model.new('model.123', 'model.lex')
+model = Myaso::Tagger::TnT.new('model.123', 'model.lex')
 tagger = Myaso::Tagger.new(model)
 pp tagger.annotate(%w(Как поспал , проголодался наверное ?))
 =begin
