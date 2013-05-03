@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require_relative 'spec_helper'
+
 describe Myaso::PiTable do
   let(:length) { 10 }
   let(:tags) { %w(D V N) }
