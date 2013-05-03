@@ -55,7 +55,8 @@ when 'tagger' then
   sentence = STDIN.readlines.map(&:chomp)
 
   STDERR.puts 'Training the tagger, this procedure is not so fast.'
-  tagger = Myaso::Tagger.new(options.ngrams, options.lexicon)
+  model = Myaso::Tagger::Model.new(options.ngrams, options.lexicon)
+  tagger = Myaso::Tagger.new(model)
   tags = tagger.annotate(sentence)
 
   sentence.zip(tags).each do |word, tag|
