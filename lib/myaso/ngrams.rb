@@ -9,8 +9,6 @@ class Myaso::Ngrams
   attr_reader :table
   def_delegator :@table, :each, :each
 
-  attr_reader :ngrams
-
   # An instance of a n-gram storage is initialized by zero counts.
   #
   def initialize
@@ -37,5 +35,28 @@ class Myaso::Ngrams
   #
   def == other
     self.table == other.table
+  end
+
+  # Trigrams enumerator. Yes, this method should return an Enumerator
+  # instance, but it is too slow.
+  #
+  def each_trigram
+    table.each do |unigram, bigrams|
+      bigrams.each do |bigram, trigrams|
+        next unless bigram
+
+        trigrams.each_key do |trigram|
+          yield [unigram, bigram, trigram] if trigram
+        end
+      end
+    end
+  end
+
+  # Unigrams count.
+  #
+  def unigrams_count
+    table.keys.inject(0) do |count, unigram|
+      count + table[unigram][nil][nil]
+    end
   end
 end

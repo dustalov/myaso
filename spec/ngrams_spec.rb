@@ -18,6 +18,10 @@ describe Myaso::Ngrams do
         end
       end
     end
+
+    it 'should be empty' do
+      subject.unigrams_count.must_equal 0
+    end
   end
 
   describe '#[]' do
@@ -36,6 +40,7 @@ describe Myaso::Ngrams do
     it 'should modify an unigram' do
       subject['D'] = 1
       subject['D'].must_equal 1
+      subject.unigrams_count.must_equal 1
     end
 
     it 'should modify a bigram' do
@@ -46,12 +51,6 @@ describe Myaso::Ngrams do
     it 'should modify a trigram' do
       subject['D', 'N', 'V'] = 3
       subject['D', 'N', 'V'].must_equal 3
-    end
-  end
-
-  describe '#each' do
-    it 'should iterate over the internal table' do
-      subject.each.to_a.must_equal subject.table.to_a
     end
   end
 
@@ -67,6 +66,28 @@ describe Myaso::Ngrams do
       subject.wont_equal other
       other['D', 'N', 'V'] = 1
       subject.must_equal other
+    end
+  end
+
+  describe '#each' do
+    before do
+      subject['D'] = 1
+      subject['N'] = 2
+      subject['D', 'N'] = 3
+      subject['V', 'D'] = 4
+      subject['D', 'N', 'V'] = 5
+      subject['N', 'V', 'D'] = 6
+    end
+
+    it 'should iterate over the internal table' do
+      subject.each.to_a.must_equal subject.table.to_a
+    end
+
+    it 'should enumerate over trigrams' do
+      Array.new.tap do |trigrams|
+        subject.each_trigram { |trigram| trigrams << trigram }
+        trigrams.must_equal [%w(D N V), %w(N V D)]
+      end
     end
   end
 end
