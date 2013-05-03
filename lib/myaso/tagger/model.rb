@@ -37,23 +37,7 @@ class Myaso::Tagger::Model
   #
   UNKNOWN = '@UNKNOWN'
 
-  attr_reader :ngrams_path, :lexicon_path
-
-  # 1,2,3-grams are arrays of nested structures
-  # kind of (:value, :tags, :count).
-  #
-  attr_reader :ngrams
-
-  # Training set with words and tags always has a huge size.
-  # So there is a good idea to split it to groups. With this
-  # approach to find word we chould find group of word at
-  # first and find word in group at second. It is faster,
-  # because number of groups and number of words are much less
-  # than size of array with all words.
-  # It is obviously to choose the first char of word as criterium
-  # of grouping. We can see, to which group the word belongs.
-  #
-  attr_reader :lexicon
+  attr_reader :ngrams_path, :lexicon_path, :ngrams, :lexicon
 
   # Coefficients for linear interpolation.
   #
@@ -68,10 +52,9 @@ class Myaso::Tagger::Model
   # initialization procedure may take about 120 seconds.
   #
   def initialize(ngrams_path, lexicon_path)
-    @ngrams, @lexicon = Myaso::Ngrams.new, Myaso::Lexicon.new
-
     @ngrams_path = File.expand_path(ngrams_path)
     @lexicon_path = File.expand_path(lexicon_path)
+    @ngrams, @lexicon = Myaso::Ngrams.new, Myaso::Lexicon.new
 
     learn!
   end
@@ -156,6 +139,7 @@ class Myaso::Tagger::Model
     STOP
   end
 
+  protected
   # Parse n-grams and lexicon files, and compute statistics over them.
   #
   def learn!
@@ -164,7 +148,6 @@ class Myaso::Tagger::Model
     compute_interpolations!
   end
 
-  protected
   # Parse the n-grams file.
   #
   def parse_ngrams!
