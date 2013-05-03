@@ -38,4 +38,11 @@ describe 'CLI' do
     invoke('--lexicon', 'test', '-e', 'puts options.lexicon; exit').
       must_equal(invoke('-l', 'test', '-e', 'puts options.lexicon; exit'))
   end
+
+  it 'should annotate sentences' do
+    stdout = invoke('-n', 'spec/data/test.123', '-l', 'spec/data/test.lex',
+      'tagger', stdin: "братишка\nя\nтебе\nпокушать\nпринес")
+    stdout.must_equal ["братишка\ta", "я\tb", "тебе\tb", "покушать\td",
+      "принес\te"]
+  end
 end
