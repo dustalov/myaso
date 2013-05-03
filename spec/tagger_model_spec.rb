@@ -28,20 +28,16 @@ describe Myaso::Tagger::Model do
   end
 
   describe '#learn!' do
-    it 'should has the same words_tags as in the gold standard' do
-      subject.words_tags.must_equal Myaso::Fixtures::WORDS_TAGS
-    end
-
     it 'should has the same ngrams as in the gold standard' do
       subject.ngrams.must_equal Myaso::Fixtures::NGRAMS
     end
 
-    it 'should has the same interpolations as in the gold standard' do
-      subject.interpolations.must_equal Myaso::Fixtures::INTERPOLATIONS
+    it 'should has the same lexicon as in the gold standard' do
+      subject.lexicon.must_equal Myaso::Fixtures::LEXICON
     end
 
-    it 'should has the same words_counts as in the gold standard' do
-      subject.words_counts.must_equal Myaso::Fixtures::WORDS_COUNTS
+    it 'should has the same interpolations as in the gold standard' do
+      subject.interpolations.must_equal Myaso::Fixtures::INTERPOLATIONS
     end
   end
 
