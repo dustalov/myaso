@@ -53,22 +53,11 @@ class Myaso::Tagger::Model
   # It is obviously to choose the first char of word as criterium
   # of grouping. We can see, to which group the word belongs.
   #
-  # @words_tags is array of objects, that has the following nature:
-  # [first_char, [*Word]]
-  #
-  attr_reader :words_tags
-
-  # Counts of total using words are stored in separate array.
-  #
-  attr_reader :words_counts
+  attr_reader :lexicon
 
   # Coefficients for linear interpolation.
   #
   attr_reader :interpolations
-
-  # Total count of trigrams.
-  #
-  attr_reader :total_count
 
   # The tagging model is initialized by two data files. The first one is a
   # n-grams file that stores statistics for unigrams, bigrams, trigrams.
@@ -79,7 +68,7 @@ class Myaso::Tagger::Model
   # initialization procedure may take about 120 seconds.
   #
   def initialize(ngrams_path, lexicon_path)
-    @ngrams, @words_tags, @words_counts = Myaso::Ngrams.new, [], []
+    @ngrams, @lexicon = Myaso::Ngrams.new, Myaso::Lexicon.new
 
     @ngrams_path = File.expand_path(ngrams_path)
     @lexicon_path = File.expand_path(lexicon_path)
@@ -96,7 +85,7 @@ class Myaso::Tagger::Model
   # current tag is (third).
   #
   def q(first, second, third)
-    q1 = if (q1_denominator = total_count).zero?
+    q1 = if (q1_denominator = ngrams.unigrams_count).zero?
       0
     else
       ngrams[third] / q1_denominator.to_f
@@ -123,23 +112,21 @@ class Myaso::Tagger::Model
   #
   def e(word, tag)
     return 0.0 if ngrams[tag].zero?
-    count(word, tag) / ngrams[tag]
+    lexicon[word, tag] / ngrams[tag].to_f
   end
 
   # @private
   #
   def inspect
-    '#<%s ngrams_path=%s lexicon_path=%s' % [self.class.name,
-      ngrams_path, lexicon_path]
+    sprintf('#<%s ngrams_path=%s lexicon_path=%s>', self.class.name,
+      ngrams_path, lexicon_path)
   end
 
-  # If word is rare, than it should be replaced in
-  # preparation of the training set. So, it can't be in the training set.
+  # If word is rare, than it should be replaced in preparation of the
+  # training set. So, it can't be in the training set.
   #
   def rare?(word)
-    candidate = @words_counts.find { |fc, w| fc == word[0] }
-    candidate = candidate.last.find { |w,c| w == word } if candidate
-    !candidate || candidate.last == 1
+    lexicon[word] <= 1
   end
 
   # If word is rare, it can be one of the following categories:
@@ -147,7 +134,7 @@ class Myaso::Tagger::Model
   # following numbers and unknown. Otherwise, word has it's own category.
   #
   def classify(word)
-    return word unless rare?(word)
+    return word unless rare? word
     case word
     when /^\d+$/ then CARD
     when /^\d+[.,;:]+$/ then CARDPUNCT
@@ -155,23 +142,6 @@ class Myaso::Tagger::Model
     when /^\d+[.,;:\-]+(\d+[.,;:\-]+)*\d+$/ then CARDSEPS
     else UNKNOWN
     end
-  end
-
-  # Find count for given bunch (word => tag).
-  #
-  def count(word, tag)
-    word = words_tags.find { |fc, w| fc == word[0] }.last.
-      find { |t| t.tag == tag and t.word == word }
-    return 0 unless word
-    word.count
-  end
-
-  # Find tags for given word.
-  #
-  def tags(word)
-    _, words = words_tags.find { |fc, w| fc == word[0] }
-    raise UnknownWord.new(word) unless words
-    words.select { |w| w.word == word }.map(&:tag)
   end
 
   # Tagger requires the sentence start symbol to be defined.
@@ -186,99 +156,56 @@ class Myaso::Tagger::Model
     STOP
   end
 
-  protected
-  # Parse path files and fill @ngrams, @words_tags.
+  # Parse n-grams and lexicon files, and compute statistics over them.
   #
   def learn!
-    # Parse file with ngrams.
-    strings = IO.readlines(ngrams_path).map(&:chomp).
-      delete_if { |s| s.empty? || s[0..1] == '%%' }
-    @total_count = 0.0
-
-    last_unigram, last_bigram = nil, nil
-
-    strings.each do |string|
-      tag, count = string.split
-      count = count.to_i
-
-      if string[0] == "\t"
-        if string[1] == "\t"
-          # a trigram
-          ngrams[last_unigram, last_bigram, tag] = count
-        else
-          # a bigram
-          ngrams[last_unigram, tag] = count
-          last_bigram = tag
-        end
-      else
-        # an unigram
-        ngrams[tag] = count
-        last_unigram = tag
-        @total_count += count.to_f
-      end
-    end
-
-    # Prepare @words_tags, @words_counts.
-    unknown_words = [CARD, CARDPUNCT, CARDSUFFIX, CARDSEPS, UNKNOWN]
-    @words_tags, @words_counts = [['@', []]], [['@', []]]
-    unknown_words.each do |word|
-      words_tags[0].last << Myaso::Word.new(word, MISSING, 0)
-      words_counts[0].last << [word, 0]
-    end
-
-    # Parse file with words and tags.
-    IO.readlines(lexicon_path).map(&:chomp).
-      delete_if { |s| s.empty? || s[0..1] == '%%' }.
-      map(&:split).each do |tokens|
-        rare = false
-        word, word_count = tokens.shift, tokens.shift
-        word_count = word_count.to_i
-        if word_count == 1
-          word = classify(word)
-          rare = true
-        end
-
-        if rare
-          index = unknown_words.index(word)
-          words_counts[0].last[index][1] += word_count
-        else
-          char_index = words_counts.index {|(fc, _)| fc == word[0] }
-          if char_index
-            words_counts[char_index].last << [word, word_count]
-          else
-            words_counts << [word[0], [[word, word_count]]]
-          end
-        end
-
-        if rare
-          this_char = 0
-        else
-          this_char = words_tags.index { |(fc, _)| fc == word[0] }
-        end
-
-        tokens.each_slice(2) do |tag, count|
-          count = count.to_f
-          if rare
-            this_tag = words_tags[this_char].last.index do |w|
-              w.word == word and w.tag == tag
-            end
-            if this_tag
-              words_tags[this_char].last[this_tag].count += count
-            else
-              words_tags[this_char].last << Myaso::Word.new(word, tag, count)
-            end
-          else
-            if this_char
-              words_tags[this_char].last << Myaso::Word.new(word, tag, count)
-            else
-              this_char = words_tags.size
-              words_tags << [word[0], [Myaso::Word.new(word, tag, count)]]
-            end
-          end
-        end
-      end
-
+    parse_ngrams!
+    parse_lexicon!
     compute_interpolations!
+  end
+
+  protected
+  # Parse the n-grams file.
+  #
+  def parse_ngrams!
+    unigram, bigram = nil, nil
+
+    read(ngrams_path) do |values|
+      if !values[0] && !values[1]
+        values[0], values[1] = unigram, bigram
+      elsif !values[0] && values[1]
+        values[0] = unigram
+      end
+
+      if values[0] && values[1] && values[2] && values[3] # a trigram
+        ngrams[*values[0..2]] = values[3].to_i
+      elsif values[0] && values[1] && values[2] && !values[3] # a bigram
+        ngrams[*values[0..1]] = values[2].to_i
+      elsif values[0] && values[1] && !values[2] && !values[3] # an unigram
+        ngrams[values[0]] = values[1].to_i
+      else
+        raise 'dafuq i just read: %s' % values.inspect
+      end
+
+      unigram, bigram = values[0], values[1]
+    end
+  end
+
+  # Parse the lexicon file.
+  #
+  def parse_lexicon!
+    read(lexicon_path) do |values|
+      values.compact!
+
+      word, word_count, rare = values.shift, values.shift.to_i, false
+      word = classify(word) if rare = (word_count == 1)
+
+      lexicon[word] += word_count
+
+      values.each_slice(2) do |tag, count|
+        lexicon[word, tag] += count.to_i
+      end
+    end
   end
 
   # Count coefficients for linear interpolation for evaluating
@@ -287,46 +214,48 @@ class Myaso::Tagger::Model
   def compute_interpolations!
     lambdas = [0.0, 0.0, 0.0]
 
-    ngrams.each do |first, bigrams|
-      bigrams.each do |second, trigrams|
-        next unless second
+    ngrams.each_trigram do |first, second, third|
+      f1_denominator = ngrams.unigrams_count - 1
+      f1 = if f1_denominator.zero?
+        0
+      else
+        (ngrams[third] - 1) / f1_denominator.to_f
+      end
 
-        trigrams.each do |third, count|
-          next unless third
+      f2_denominator = ngrams[second] - 1
+      f2 = if f2_denominator.zero?
+        0
+      else
+        (ngrams[second, third] - 1) / f2_denominator.to_f
+      end
 
-          f1_denominator = total_count - 1
-          f1 = if f1_denominator.zero?
-            0
-          else
-            (ngrams[third] - 1) / f1_denominator.to_f
-          end
+      f3_denominator = ngrams[first, second] - 1
+      f3 = if f3_denominator.zero?
+        0
+      else
+        (ngrams[first, second, third] - 1) / f3_denominator.to_f
+      end
 
-          f2_denominator = ngrams[second] - 1
-          f2 = if f2_denominator.zero?
-            0
-          else
-            (ngrams[second, third] - 1) / f2_denominator.to_f
-          end
-
-          f3_denominator = ngrams[first, second] - 1
-          f3 = if f3_denominator.zero?
-            0
-          else
-            (ngrams[first, second, third] - 1) / f3_denominator.to_f
-          end
-
-          if f1 > f2 && f1 > f3
-            lambdas[0] += ngrams[first, second, third]
-          elsif f2 > f1 && f2 > f3
-            lambdas[1] += ngrams[first, second, third]
-          elsif f3 > f1 && f3 > f2
-            lambdas[2] += ngrams[first, second, third]
-          end
-        end
+      if f1 > f2 && f1 > f3
+        lambdas[0] += ngrams[first, second, third]
+      elsif f2 > f1 && f2 > f3
+        lambdas[1] += ngrams[first, second, third]
+      elsif f3 > f1 && f3 > f2
+        lambdas[2] += ngrams[first, second, third]
       end
     end
 
     total = lambdas.inject(&:+)
     @interpolations = lambdas.map! { |l| l / total }
+  end
+
+  def read(path)
+    File.open(path) do |f|
+      until f.eof?
+        line = f.gets.chomp
+        next if line.empty? || line =~ /^%%/
+        yield line.split(/\t/).map! { |s| s.empty? ? nil : s }
+      end
+    end
   end
 end

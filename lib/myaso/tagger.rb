@@ -27,9 +27,9 @@ class Myaso::Tagger
     sentence.unshift(model.start_symbol, model.start_symbol)
 
     sentence.each_with_index.each_cons(3) do |(w1, i1), (w2, i2), (word, index)|
-      w_tags = (i1 < 2) ? tags_first : model.tags(w1)
-      u_tags = (i2 < 2) ? tags_first : model.tags(w2)
-      v_tags = model.tags(word)
+      w_tags = (i1 < 2) ? tags_first : model.lexicon.tags(w1)
+      u_tags = (i2 < 2) ? tags_first : model.lexicon.tags(w2)
+      v_tags = model.lexicon.tags(word)
 
       u_tags.product(v_tags).each do |u, v|
         pi_value, bp_value = w_tags.map do |w|
@@ -49,7 +49,7 @@ class Myaso::Tagger
         max_by { |u, v| pi_table[size, u, v] + Math.log2(model.q(u, v, model.stop_symbol)) }.last
     end
 
-    u_tags, v_tags = model.tags(sentence[-2]), model.tags(sentence[-1])
+    u_tags, v_tags = model.lexicon.tags(sentence[-2]), model.lexicon.tags(sentence[-1])
     y[size - 1], y[size] = u_tags.product(v_tags).
       max_by { |u, v| pi_table[size, u, v] + Math.log2(model.q(u, v, model.stop_symbol)) }
 
