@@ -5,6 +5,7 @@ require 'forwardable'
 require 'myaso/version'
 require 'myaso/pi_table'
 require 'myaso/ngrams'
+require 'myaso/lexicon'
 require 'myaso/tagger'
 require 'myaso/tagger/model'
 
@@ -24,7 +25,3 @@ class Myaso::UnknownWord < RuntimeError
     'unknown word "%s"' % word
   end
 end
-
-# The Word structure represents frequencies of tagged words.
-#
-Myaso::Word = Struct.new(:word, :tag, :count)
