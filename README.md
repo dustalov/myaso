@@ -51,7 +51,7 @@ necessary.
 Unfortunately, current implementation of the tagger has two significant
 drawbacks:
 
-1. The tagger crashes on unknown words. Sorry.
+1. The tagger handles unknown words not so good. Sorry.
 2. Tagging is fast inself, but requires pretty slow training procedure
 running only once.
 
@@ -60,7 +60,8 @@ It is possible to embed the POS tagging feature in your own application
 using API.
 
 ```ruby
-tagger = Myaso::Tagger.new('model.123', 'model.lex')
+model = Myaso::Tagger::Model.new('model.123', 'model.lex')
+tagger = Myaso::Tagger.new(model)
 pp tagger.annotate(%w(Как поспал , проголодался наверное ?))
 =begin
 ["P-----r", "Vmis-sma", ",", "Vmis-sma", "R", "SENT"]
