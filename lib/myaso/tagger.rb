@@ -17,46 +17,64 @@ class Myaso::Tagger
   #
   def annotate(sentence)
     return [] if sentence.size == 0
-
-    tags_first = [model.start_symbol]
-
-    pi_table, bp_table = Myaso::PiTable.new, Myaso::PiTable.new
-    pi_table[1, model.start_symbol, model.start_symbol] = 0.0
-
     sentence = sentence.map { |w| model.classify(w) }
     sentence.unshift(model.start_symbol, model.start_symbol)
+    backpoint(sentence, *iterate(sentence))
+  end
 
-    sentence.each_with_index.each_cons(3) do |(w1, i1), (w2, i2), (word, index)|
-      w_tags = (i1 < 2) ? tags_first : model.lexicon.tags(w1)
-      u_tags = (i2 < 2) ? tags_first : model.lexicon.tags(w2)
+  protected
+  # Emit probabilities into the dynamic programming tables.
+  #
+  def iterate(sentence)
+    pi, bp = Myaso::PiTable.new, Myaso::PiTable.new
+    pi[1, model.start_symbol, model.start_symbol] = 0.0
+
+    sentence.each_with_index.each_cons(3) do |(w1, i1), (w2, i2), (word, k)|
+      w_tags = (i1 < 2) ? [model.start_symbol] : model.lexicon.tags(w1)
+      u_tags = (i2 < 2) ? [model.start_symbol] : model.lexicon.tags(w2)
       v_tags = model.lexicon.tags(word)
 
       u_tags.product(v_tags).each do |u, v|
-        pi_value, bp_value = w_tags.map do |w|
-          next [-Float::INFINITY, w] unless pi_table[index - 1, w, u].finite?
-          [pi_table[index - 1, w, u] + Math.log2(model.q(w, u, v) * model.e(word, v)), w]
-        end.max_by { |pi, _| pi }
-
-        pi_table[index, u, v], bp_table[index, u, v] = pi_value, bp_value
+        pi[k, u, v], bp[k, u, v] = w_tags.
+          select { |w| (value = pi[k - 1, w, u]) && value.finite? }.
+          map! { |w| [pi[k - 1, w, u] + probability(w, u, v, word), w] }.
+          max_by(&:first)
       end
     end
 
-    y = []
+    [pi, bp]
+  end
+
+  # Use backpoints to retrieve the computed tags from the previous stage.
+  #
+  def backpoint(sentence, pi, bp)
     size = sentence.size - 1
-    if size.zero?
-      v_tags = tags(sentence[-1])
-      return tags_first.product(v_tags).
-        max_by { |u, v| pi_table[size, u, v] + Math.log2(model.q(u, v, model.stop_symbol)) }.last
+
+    if (size - 2).zero?
+      return model.lexicon.tags(sentence[-1]).map { |v| [v] }.
+        max_by { |v| pi[size, model.start_symbol, *v] +
+                     probability(model.start_symbol, *v, model.stop_symbol) }
     end
+
+    tags = Array.new(sentence.size)
 
     u_tags, v_tags = model.lexicon.tags(sentence[-2]), model.lexicon.tags(sentence[-1])
-    y[size - 1], y[size] = u_tags.product(v_tags).
-      max_by { |u, v| pi_table[size, u, v] + Math.log2(model.q(u, v, model.stop_symbol)) }
 
-    size.downto(4) do |index|
-      y[index - 2] = bp_table[index, y[index - 1], y[index]]
+    tags[size - 1], tags[size] = u_tags.product(v_tags).
+      select { |u, v| (value = pi[size, u, v]) && value.finite? }.
+      max_by { |u, v| pi[size, u, v] + probability(u, v, model.stop_symbol) }
+
+    size.downto(4) do |k|
+      tags[k - 2] = bp[k, tags[k - 1], tags[k]]
     end
 
-    y[2..-1]
+    tags.slice! 2..-1
+  end
+
+  # Compute the probability of q(v|w, u) * e(word|v).
+  #
+  def probability(w, u, v, word = nil)
+    return Math.log2(model.q(w, u, v)) unless word
+    Math.log2(model.q(w, u, v) * model.e(word, v))
   end
 end

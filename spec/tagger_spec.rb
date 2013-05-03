@@ -10,6 +10,10 @@ describe Myaso::Tagger do
   subject { Myaso::Tagger.new(model) }
 
   describe 'annotate(sentence)' do
+    it 'should annotate one word sentences' do
+      subject.annotate(%w(братишка)).must_equal %w(e)
+    end
+
     it 'should annotate sentences with tags' do
       subject.annotate(%w(братишка я тебе покушать принес)).
         must_equal(%w(a b b d e))
