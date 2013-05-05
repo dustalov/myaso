@@ -45,10 +45,10 @@ class Myaso::Tagger::TnT < Myaso::Tagger::Model
   # Please note that the learning stage is not so optimized, so the
   # initialization procedure may take about 120 seconds.
   #
-  def initialize(ngrams_path, lexicon_path)
+  def initialize(ngrams_path, lexicon_path, interpolations = nil)
     @ngrams_path = File.expand_path(ngrams_path)
     @lexicon_path = File.expand_path(lexicon_path)
-    super()
+    super(interpolations)
   end
 
   # If word is rare, it can be one of the following categories:
@@ -83,7 +83,7 @@ class Myaso::Tagger::TnT < Myaso::Tagger::Model
   def learn!
     parse_ngrams!
     parse_lexicon!
-    compute_interpolations!
+    compute_interpolations! if interpolations.nil?
   end
 
   # Parse the n-grams file.
@@ -127,6 +127,62 @@ class Myaso::Tagger::TnT < Myaso::Tagger::Model
         lexicon[word, tag] += count.to_i
       end
     end
+  end
+
+  # Count coefficients for linear interpolation for evaluating
+  # q(first, second, third).
+  #
+  def compute_interpolations!
+    lambdas = [0.0, 0.0, 0.0]
+
+    unigram, bigram = nil, nil
+
+    read(ngrams_path) do |first, second, third, count|
+      if !first && !second
+        first, second = unigram, bigram
+      elsif !first && second
+        first = unigram
+      end
+
+      unless third && count
+        unigram, bigram = first, second
+        next
+      end
+
+      count = count.to_i
+
+      f1_denominator = ngrams.unigrams_count - 1
+      f1 = if f1_denominator.zero?
+        0
+      else
+        (ngrams[third] - 1) / f1_denominator.to_f
+      end
+
+      f2_denominator = ngrams[second] - 1
+      f2 = if f2_denominator.zero?
+        0
+      else
+        (ngrams[second, third] - 1) / f2_denominator.to_f
+      end
+
+      f3_denominator = ngrams[first, second] - 1
+      f3 = if f3_denominator.zero?
+        0
+      else
+        (count.to_i - 1) / f3_denominator.to_f
+      end
+
+      if f1 > f2 && f1 > f3
+        lambdas[0] += count
+      elsif f2 > f1 && f2 > f3
+        lambdas[1] += count
+      elsif f3 > f1 && f3 > f2
+        lambdas[2] += count
+      end
+    end
+
+    total = lambdas.inject(&:+)
+    @interpolations = lambdas.map! { |l| l / total }
   end
 
   # @private

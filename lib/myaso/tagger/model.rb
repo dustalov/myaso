@@ -9,8 +9,21 @@ class Myaso::Tagger::Model
 
   # Tagging model requires n-grams and lexicon.
   #
-  def initialize
+  # It is possible to the the interpolations vector when its values are
+  # known. If there are necessity to recompute the interpolations then
+  # nil shall be given (default behavior). If there should be no
+  # interpolations then false shall be given. In other cases it is possible
+  # to set them explicitly.
+  #
+  def initialize(interpolations = nil)
     @ngrams, @lexicon = Myaso::Ngrams.new, Myaso::Lexicon.new
+    @interpolations = if interpolations == false
+      [0.33, 0.33, 0.33]
+    elsif interpolations.nil?
+      nil
+    else
+      interpolations
+    end
     learn!
   end
 
@@ -58,47 +71,5 @@ class Myaso::Tagger::Model
   #
   def rare?(word)
     lexicon[word] <= 1
-  end
-
-  protected
-  # Count coefficients for linear interpolation for evaluating
-  # q(first, second, third).
-  #
-  def compute_interpolations!
-    lambdas = [0.0, 0.0, 0.0]
-
-    ngrams.each_trigram do |(first, second, third), count|
-      f1_denominator = ngrams.unigrams_count - 1
-      f1 = if f1_denominator.zero?
-        0
-      else
-        (ngrams[third] - 1) / f1_denominator.to_f
-      end
-
-      f2_denominator = ngrams[second] - 1
-      f2 = if f2_denominator.zero?
-        0
-      else
-        (ngrams[second, third] - 1) / f2_denominator.to_f
-      end
-
-      f3_denominator = ngrams[first, second] - 1
-      f3 = if f3_denominator.zero?
-        0
-      else
-        (count - 1) / f3_denominator.to_f
-      end
-
-      if f1 > f2 && f1 > f3
-        lambdas[0] += count
-      elsif f2 > f1 && f2 > f3
-        lambdas[1] += count
-      elsif f3 > f1 && f3 > f2
-        lambdas[2] += count
-      end
-    end
-
-    total = lambdas.inject(&:+)
-    @interpolations = lambdas.map! { |l| l / total }
   end
 end
