@@ -7,7 +7,7 @@ require 'myaso/version'
 Gem::Specification.new do |spec|
   spec.name          = 'myaso'
   spec.version       = Myaso::VERSION
-  spec.authors       = ['Dmitry Ustalov']
+  spec.authors       = ['Dmitry Ustalov', 'Sergey Smagin']
   spec.email         = ['dmitry@eveel.ru']
   spec.description   = 'Myaso is a morphological analysis library in Ruby.'
   spec.summary       = 'Myaso is a morphological analysis and synthesis ' \
