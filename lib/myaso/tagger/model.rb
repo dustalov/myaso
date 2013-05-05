@@ -48,8 +48,7 @@ class Myaso::Tagger::Model
   # this tag.
   #
   def e(word, tag)
-    return 0.0 if ngrams[tag].zero?
-    lexicon[word, tag] / ngrams[tag].to_f
+    conditional(lexicon[word, tag], ngrams[tag])
   end
 
   # If word is rare, than it should be replaced in preparation of the
