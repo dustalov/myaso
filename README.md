@@ -69,13 +69,13 @@ pp tagger.annotate(%w(Как поспал , проголодался навер�
 ```
 
 It is possible to significantly speed up the initialization process by
-expicit set of the interpolations vector.
+expicit setting of the interpolations vector. For instance, the TnT model
+from http://corpus.leeds.ac.uk/mocky/ has the following (approximated)
+linear interpolation coefficients: *k1 = 0.14*, *k2 = 0.30*, *k3 = 0.56*.
+In the example these values are provided precisely.
 
 ```ruby
-# these values are estimated by the deleted interpolation method
-# on data from http://corpus.leeds.ac.uk/mocky/
 interpolations = [0.14095796503456284, 0.3032174211273352, 0.555824613838102]
-
 model = Myaso::Tagger::TnT.new('model.123', 'model.lex', interpolations)
 tagger = Myaso::Tagger.new(model)
 pp tagger.annotate(%w(Как поспал , проголодался наверное ?))
