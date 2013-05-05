@@ -68,6 +68,22 @@ pp tagger.annotate(%w(Как поспал , проголодался навер�
 =end
 ```
 
+It is possible to significantly speed up the initialization process by
+expicit set of the interpolations vector.
+
+```ruby
+# these values are estimated by the deleted interpolation method
+# on data from http://corpus.leeds.ac.uk/mocky/
+interpolations = [0.14095796503456284, 0.3032174211273352, 0.555824613838102]
+
+model = Myaso::Tagger::TnT.new('model.123', 'model.lex', interpolations)
+tagger = Myaso::Tagger.new(model)
+pp tagger.annotate(%w(Как поспал , проголодался наверное ?))
+=begin
+["P-----r", "Vmis-sma", ",", "Vmis-sma", "R", "SENT"]
+=end
+```
+
 Please note that you should perform tokenization of your text before
 any processing. The [Greeb](http://nlpub.ru/wiki/Greeb) text segmentator
 performs pretty well at this.
