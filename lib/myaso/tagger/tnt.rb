@@ -188,8 +188,9 @@ class Myaso::Tagger::TnT < Myaso::Tagger::Model
   # @private
   #
   def inspect
-    sprintf('#<%s ngrams_path=%s lexicon_path=%s>', self.class.name,
-      ngrams_path, lexicon_path)
+    sprintf('#<%s @ngrams_path=%s @lexicon_path=%s @interpolations=%s>',
+      self.class.name, ngrams_path.inspect, lexicon_path.inspect,
+      interpolations.inspect)
   end
 
   private
