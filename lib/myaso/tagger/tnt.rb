@@ -92,11 +92,8 @@ class Myaso::Tagger::TnT < Myaso::Tagger::Model
     unigram, bigram = nil, nil
 
     read(ngrams_path) do |values|
-      if !values[0] && !values[1]
-        values[0], values[1] = unigram, bigram
-      elsif !values[0] && values[1]
-        values[0] = unigram
-      end
+      values[0] = unigram unless values[0]
+      values[1] = bigram unless values[1]
 
       if values[0] && values[1] && values[2] && values[3] # a trigram
         ngrams[*values[0..2]] = values[3].to_i
@@ -139,11 +136,8 @@ class Myaso::Tagger::TnT < Myaso::Tagger::Model
     unigram, bigram = nil, nil
 
     read(ngrams_path) do |first, second, third, count|
-      if !first && !second
-        first, second = unigram, bigram
-      elsif !first && second
-        first = unigram
-      end
+      first = unigram unless first
+      second = bigram unless second
 
       unless third && count
         unigram, bigram = first, second
@@ -156,13 +150,15 @@ class Myaso::Tagger::TnT < Myaso::Tagger::Model
       f2 = conditional(ngrams[second, third] - 1, ngrams[second] - 1)
       f3 = conditional(count - 1, ngrams[first, second] - 1)
 
-      if f1 > f2 && f1 > f3
-        lambdas[0] += count
+      index = if f1 > f2 && f1 > f3
+        0
       elsif f2 > f1 && f2 > f3
-        lambdas[1] += count
+        1
       elsif f3 > f1 && f3 > f2
-        lambdas[2] += count
+        2
       end
+
+      lambdas[index] += count
     end
 
     total = lambdas.inject(&:+)
