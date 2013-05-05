@@ -36,23 +36,9 @@ class Myaso::Tagger::Model
   # current tag is (third).
   #
   def q(first, second, third)
-    q1 = if (q1_denominator = ngrams.unigrams_count).zero?
-      0
-    else
-      ngrams[third] / q1_denominator.to_f
-    end
-
-    q2 = if (q2_denominator = ngrams[second]).zero?
-      0
-    else
-      ngrams[second, third] / q2_denominator.to_f
-    end
-
-    q3 = if (q3_denominator = ngrams[first, second]).zero?
-      0
-    else
-      ngrams[first, second, third] / q3_denominator.to_f
-    end
+    q1 = conditional(ngrams[third], ngrams.unigrams_count)
+    q2 = conditional(ngrams[second, third], ngrams[second])
+    q3 = conditional(ngrams[first, second, third], ngrams[first, second])
 
     q1 * interpolations[0] + q2 * interpolations[1] + q3 * interpolations[2]
   end
@@ -71,5 +57,13 @@ class Myaso::Tagger::Model
   #
   def rare?(word)
     lexicon[word] <= 1
+  end
+
+  # Conditional probability p(A|B) = p(A, B) / p(B). Returns zero when
+  # denominator is zero.
+  #
+  def conditional(ab, b)
+    return 0.0 if b.zero?
+    ab / b.to_f
   end
 end

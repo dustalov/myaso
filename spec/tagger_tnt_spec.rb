@@ -52,4 +52,22 @@ describe Myaso::Tagger::Model do
       subject.stop_symbol.must_equal 'SENT'
     end
   end
+
+  describe '#conditional' do
+    it 'should compute p(0|0) as 0' do
+      subject.conditional(0, 0).must_equal 0.0
+    end
+
+    it 'should compute p(1|0) as 0' do
+      subject.conditional(1, 0).must_equal 0.0
+    end
+
+    it 'should compute p(0|1) as 0' do
+      subject.conditional(0, 1).must_equal 0.0
+    end
+
+    it 'should compute p(3|2) as 1.5' do
+      subject.conditional(3, 2).must_equal 1.5
+    end
+  end
 end
