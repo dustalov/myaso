@@ -132,7 +132,6 @@ class Myaso::Tagger::TnT < Myaso::Tagger::Model
   def compute_interpolations!
     lambdas = [0.0, 0.0, 0.0]
 
-    unigrams_count = ngrams.unigrams_count
     unigram, bigram = nil, nil
 
     read(ngrams_path) do |first, second, third, count|
@@ -146,7 +145,7 @@ class Myaso::Tagger::TnT < Myaso::Tagger::Model
 
       count = count.to_i
 
-      f1 = conditional(ngrams[third] - 1, unigrams_count - 1)
+      f1 = conditional(ngrams[third] - 1, ngrams.unigrams_count - 1)
       f2 = conditional(ngrams[second, third] - 1, ngrams[second] - 1)
       f3 = conditional(count - 1, ngrams[first, second] - 1)
 

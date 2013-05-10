@@ -82,7 +82,9 @@ describe Myaso::Ngrams do
     end
 
     it 'should iterate over the internal table' do
-      subject.each.to_a.must_equal subject.table.to_a
+      subject.each.to_a.must_equal([["D", {nil=>{nil=>1},
+        "N"=>{nil=>3, "V"=>5}}], ["N", {nil=>{nil=>2}, "V"=>{"D"=>6}}],
+        ["V", {"D"=>{nil=>4}}]])
     end
 
     it 'should enumerate over trigrams' do

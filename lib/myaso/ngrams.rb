@@ -7,6 +7,8 @@ class Myaso::Ngrams
   include Enumerable
 
   attr_reader :table
+  protected :table
+
   def_delegator :@table, :each, :each
 
   # An instance of a n-gram storage is initialized by zero counts.
@@ -28,6 +30,7 @@ class Myaso::Ngrams
   # Assign the count to the specified unigram, bigram, or trigram.
   #
   def []= unigram, bigram = nil, trigram = nil, count
+    @unigrams_count = nil
     table[unigram][bigram][trigram] = count
   end
 
@@ -57,7 +60,7 @@ class Myaso::Ngrams
   # Unigrams count.
   #
   def unigrams_count
-    table.keys.inject(0) do |count, unigram|
+    @unigrams_count ||= table.keys.inject(0) do |count, unigram|
       count + table[unigram][nil][nil]
     end
   end
