@@ -4,7 +4,7 @@ require 'open3'
 
 # http://dota2.ru/guides/880-invokirkhakha-sanstrajk-ni-azhydal-da/
 #
-class MiniTest::Unit::TestCase
+class MiniTest::Test
   # Quas Wex Exort.
   #
   def invoke_cache
