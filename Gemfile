@@ -8,3 +8,8 @@ group :development do
   gem 'ruby-prof', :platforms => :mri
   gem 'simplecov'
 end
+
+group :test do
+  gem 'minitest', '~> 5.0'
+  gem 'rake'
+end
