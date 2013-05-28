@@ -157,7 +157,7 @@ class Myaso::Tagger::TnT < Myaso::Tagger::Model
         2
       end
 
-      lambdas[index] += count
+      lambdas[index] += count if index
     end
 
     total = lambdas.inject(&:+)
