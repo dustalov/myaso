@@ -145,17 +145,13 @@ class Myaso::Tagger::TnT < Myaso::Tagger::Model
 
       count = count.to_i
 
-      f1 = conditional(ngrams[third] - 1, ngrams.unigrams_count - 1)
-      f2 = conditional(ngrams[second, third] - 1, ngrams[second] - 1)
-      f3 = conditional(count - 1, ngrams[first, second] - 1)
+      f = Array.new
 
-      index = if f1 > f2 && f1 > f3
-        0
-      elsif f2 > f1 && f2 > f3
-        1
-      elsif f3 > f1 && f3 > f2
-        2
-      end
+      f << conditional(ngrams[third] - 1, ngrams.unigrams_count - 1)
+      f << conditional(ngrams[second, third] - 1, ngrams[second] - 1)
+      f << conditional(count - 1, ngrams[first, second] - 1)
+
+      index = f.index(f.max)
 
       lambdas[index] += count if index
     end
