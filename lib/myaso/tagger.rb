@@ -19,13 +19,13 @@ class Myaso::Tagger
     return [] if sentence.size == 0
     sentence = sentence.map { |w| model.classify(w) }
     sentence.unshift(model.start_symbol, model.start_symbol)
-    backpoint(sentence, *iterate(sentence))
+    backward(sentence, *forward(sentence))
   end
 
   protected
   # Emit probabilities into the dynamic programming tables.
   #
-  def iterate(sentence)
+  def forward(sentence)
     pi, bp = Myaso::PiTable.new, Myaso::PiTable.new
     pi[1, model.start_symbol, model.start_symbol] = 0.0
 
@@ -35,19 +35,24 @@ class Myaso::Tagger
       v_tags = model.lexicon.tags(word)
 
       u_tags.product(v_tags).each do |u, v|
-        pi[k, u, v], bp[k, u, v] = w_tags.
-          select { |w| (value = pi[k - 1, w, u]) && value.finite? }.
-          map! { |w| [pi[k - 1, w, u] + probability(w, u, v, word), w] }.
-          max_by(&:first)
+        pi[k, u, v], bp[k, u, v] = forward_iteration(pi, k, u, v, w_tags, word)
       end
     end
 
     [pi, bp]
   end
 
+  # Essential of forward part of Viterbi algorithm.
+  #
+  def forward_iteration(pi, k, u, v, tags, word)
+    tags.select { |w| (value = pi[k - 1, w, u]) && value.finite? }.
+      map! { |w| [pi[k - 1, w, u] + probability(w, u, v, word), w] }.
+      max_by(&:first)
+  end
+
   # Use backpoints to retrieve the computed tags from the previous stage.
   #
-  def backpoint(sentence, pi, bp)
+  def backward(sentence, pi, bp)
     size = sentence.size - 1
 
     if (size - 2).zero?
@@ -56,6 +61,19 @@ class Myaso::Tagger
                      probability(model.start_symbol, *v, model.stop_symbol) }
     end
 
+    tags = prepare_backward(sentence, pi)
+
+    size.downto(4) do |k|
+      tags[k - 2] = bp[k, tags[k - 1], tags[k]]
+    end
+
+    tags.slice! 2..-1
+  end
+
+  # Preparations to tags computing.
+  #
+  def prepare_backward(sentence, pi)
+    size = sentence.size - 1
     tags = Array.new(sentence.size)
 
     u_tags, v_tags = model.lexicon.tags(sentence[-2]), model.lexicon.tags(sentence[-1])
@@ -64,11 +82,7 @@ class Myaso::Tagger
       select { |u, v| (value = pi[size, u, v]) && value.finite? }.
       max_by { |u, v| pi[size, u, v] + probability(u, v, model.stop_symbol) }
 
-    size.downto(4) do |k|
-      tags[k - 2] = bp[k, tags[k - 1], tags[k]]
-    end
-
-    tags.slice! 2..-1
+    tags
   end
 
   # Compute the probability of q(v|w, u) * e(word|v).
