@@ -1,4 +1,4 @@
-Copyright (c) 2010-2013 Dmitry Ustalov
+Copyright (c) 2010-2015 Dmitry Ustalov
 
 MIT License
 
