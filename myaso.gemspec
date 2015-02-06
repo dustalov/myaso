@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.description   = 'Myaso is a morphological analysis library in Ruby.'
   spec.summary       = 'Myaso is a morphological analysis and synthesis ' \
                        'library in Ruby.'
-  spec.homepage      = 'https://github.com/dmchk/myaso'
+  spec.homepage      = 'https://github.com/dustalov/myaso'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files`.split($/)
