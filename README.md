@@ -152,7 +152,7 @@ A source code of the Myaso-Web application is available in the separate reposito
 
 ## Acknowledgement
 
-This work is partially supported by UrB RAS grant №RCP-12-P10.
+This work is partially supported by the Ural Branch of the Russian Academy of Sciences, grant no. РЦП-12-П10.
 
 ## Contributing
 
