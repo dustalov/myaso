@@ -6,11 +6,6 @@ rvm:
   - 2.1.0
   - 2.0.0
   - rbx
-  - jruby-19mode
-matrix:
-  allow_failures:
-    rvm: rbx
-    rvm: jruby-19mode
 install:
   - wget https://github.com/yandex/tomita-parser/releases/download/v1.0/libmystem_c_binding.so.linux_x64.zip
   - unzip libmystem_c_binding.so.linux_x64.zip
