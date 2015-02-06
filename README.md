@@ -3,7 +3,18 @@
 Myaso [ˈmʲæ.sə] is a morphological analysis and synthesis library,
 written in Ruby.
 
+[![Gem Version][badge_fury_badge]][badge_fury_link] [![Dependency Status][gemnasium_badge]][gemnasium_link] [![Build Status][travis_ci_badge]][travis_ci_link] [![Code Climate][code_climate_badge]][code_climage_link]
+
 ![Myaso](myaso.jpg)
+
+[badge_fury_badge]: https://badge.fury.io/rb/myaso.svg
+[badge_fury_link]: https://badge.fury.io/rb/myaso
+[gemnasium_badge]: https://gemnasium.com/dustalov/myaso.svg
+[gemnasium_link]: https://gemnasium.com/dustalov/myaso
+[travis_ci_badge]: https://travis-ci.org/dustalov/myaso.svg
+[travis_ci_link]: https://travis-ci.org/dustalov/myaso
+[code_climate_badge]: https://codeclimate.com/github/dustalov/myaso/badges/gpa.svg
+[code_climage_link]: https://codeclimate.com/github/dustalov/myaso
 
 ## Installation
 
@@ -174,12 +185,6 @@ This work is partially supported by UrB RAS grant №RCP-12-P10.
 3. Commit your changes (`git commit -am 'Added some feature'`);
 4. Push to the branch (`git push origin my-new-feature`);
 5. Create new Pull Request.
-
-## Build Status [<img src="https://secure.travis-ci.org/dustalov/myaso.png"/>](https://travis-ci.org/dustalov/myaso)
-
-## Dependency Status [<img src="https://gemnasium.com/dustalov/myaso.png"/>](https://gemnasium.com/dustalov/myaso)
-
-## Code Climate [<img src="https://codeclimate.com/github/dustalov/myaso.png"/>](https://codeclimate.com/github/dustalov/myaso)
 
 ## Copyright
 
