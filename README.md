@@ -1,10 +1,12 @@
 # Myaso
+
 Myaso [ˈmʲæ.sə] is a morphological analysis and synthesis library,
 written in Ruby.
 
 ![Myaso](myaso.jpg)
 
 ## Installation
+
 Add this line to your application's Gemfile:
 
 ```ruby
@@ -20,6 +22,7 @@ Or install it:
     $ gem install myaso
 
 ## Usage
+
 At the moment, Myaso has pretty fast part of speech (POS) tagger built on
 hidden Markov models (HMMs). The tagging operation requires statistical
 model to be trained.
@@ -28,7 +31,73 @@ Myaso supports trained models in the TnT format. One could be obtained
 at the Serge Sharoff et al. resource called [Russian statistical taggers
 and parsers](http://corpus.leeds.ac.uk/mocky/).
 
+### Analysis
+
+Since Yandex has released the [Mystem](https://tech.yandex.ru/mystem/)
+analyzer in the form of shared library, it makes it possible to use
+the analyzer through the usage of the foreign function interface.
+
+Firstly, it is necessary to read and agree with the [mystem EULA].
+Secondly, [download] and install the shared library for your operating
+system. Finally, use Myaso and enjoy the benefits.
+
+[mystem EULA]: http://legal.yandex.ru/mystem/
+[download]: https://github.com/yandex/tomita-parser/releases/tag/v1.0
+
+#### Analysis API
+
+Myaso uses mystem library to process Russian words. That is quite simple.
+
+```ruby
+pp Myaso::Mystem.analyze('котёночка')
+=begin
+[#<struct Myaso::Mystem::Lemma
+  lemma="котеночек",
+  form="котёночка",
+  quality=:dictionary,
+  msd=#<Myasorubka::MSD::Russian msd="Ncmsay">,
+  stem_grammemes=[136, 192, 201],
+  flex_grammemes=[168, 174, 166],
+  flex_length=6,
+  rule_id=1525>]
+=> [#<Myaso::Mystem::Lemma lemma="котеночек" msd="Ncmsay">]
+=end
+```
+
+Myaso works fine even in case the given word is either ambiguous or
+does not appear in the mystem's dictionary.
+
+```ruby
+pp Myaso::Mystem.analyze('аудисты')
+=begin
+[#<struct Myaso::Mystem::Lemma
+  lemma="аудист",
+  form="аудисты",
+  quality=:bastard,
+  msd=#<Myasorubka::MSD::Russian msd="Ncmpny">,
+  stem_grammemes=[136, 192, 201],
+  flex_grammemes=[165, 175],
+  flex_length=1,
+  rule_id=25>,
+ #<struct Myaso::Mystem::Lemma
+  lemma="аудистый",
+  form="аудисты",
+  quality=:bastard,
+  msd=#<Myasorubka::MSD::Russian msd="A---p-s">,
+  stem_grammemes=[128],
+  flex_grammemes=[175, 183],
+  flex_length=1,
+  rule_id=65>]
+=> [#<Myaso::Mystem::Lemma lemma="аудист" msd="Ncmpny">, #<Myaso::Mystem::Lemma lemma="аудистый" msd="A---p-s">]
+=end
+```
+
+### Synthesis
+
+The inflection features are not implemented yet. Sorry.
+
 ### Tagging
+
 Myaso performs POS tagging using its own implementation of the Viterbi
 algorithm on HMMs. The output has the following format: `token<TAB>tag`.
 
@@ -56,6 +125,7 @@ drawbacks:
 running only once.
 
 #### Tagging API
+
 It is possible to embed the POS tagging feature in your own application
 using API.
 
@@ -89,13 +159,16 @@ any processing. The [Greeb](http://nlpub.ru/wiki/Greeb) text segmentator
 performs pretty well at this.
 
 ### Web Service
+
 A source code of the Myaso-Web application is available at
 the separate repository: <https://github.com/dustalov/myaso-web>.
 
 ## Acknowledgement
+
 This work is partially supported by UrB RAS grant №RCP-12-P10.
 
 ## Contributing
+
 1. Fork it;
 2. Create your feature branch (`git checkout -b my-new-feature`);
 3. Commit your changes (`git commit -am 'Added some feature'`);
