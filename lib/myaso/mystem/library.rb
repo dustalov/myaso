@@ -1,7 +1,7 @@
 module Myaso::Mystem::Library
   extend FFI::Library
 
-  ffi_lib './libmystem_c_binding.so'
+  ffi_lib ['mystem_c_binding', 'libmystem_c_binding.so']
 
   attach_function :MystemAnalyze,          [:pointer, :int], :pointer
   attach_function :MystemAnalysesCount,    [:pointer],       :int
