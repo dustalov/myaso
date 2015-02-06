@@ -43,7 +43,15 @@ module Myaso::Mystem extend self
     0x01000000 => :fix
   }.freeze
 
-  Analysis = Struct.new(:lemma, :form, :quality, :stem_grammemes, :flex_grammemes, :flex_length, :rule_id)
+  class Lemma < Struct.new(:lemma, :form, :quality, :msd, :stem_grammemes, :flex_grammemes, :flex_length, :rule_id)
+    def inspect
+      '#<%s lemma=%s msd="%s">' % [self.class.name, lemma.inspect, msd]
+    end
+
+    def to_s
+      lemma
+    end
+  end
 
   def analyze(word)
     symbols = as_symbols(word)
@@ -60,17 +68,21 @@ module Myaso::Mystem extend self
       form_text = MystemLemmaForm(lemma)
       form_text_len = MystemLemmaFormLen(lemma)
 
+      stem_grammemes = MystemLemmaStemGram(lemma).bytes
       flex_grammemes_raw = MystemLemmaFlexGram(lemma)
       flex_grammemes_len = MystemLemmaFlexGramNum(lemma)
+      flex_grammemes = as_strings(flex_grammemes_raw, flex_grammemes_len)
+      grammemes = stem_grammemes | flex_grammemes
 
-      Analysis.new(
-        as_string(lemma_text, lemma_text_len),              # lemma
-        as_string(form_text, form_text_len),                # form
-        QUALITY[MystemLemmaQuality(lemma)],                 # quality
-        MystemLemmaStemGram(lemma).bytes,                   # stem_grammemes
-        as_strings(flex_grammemes_raw, flex_grammemes_len), # flex_grammemes
-        MystemLemmaFlexLen(lemma),                          # flex_length
-        MystemLemmaRuleId(lemma)                            # rule_id
+      Lemma.new(
+        as_string(lemma_text, lemma_text_len),        # lemma
+        as_string(form_text, form_text_len),          # form
+        QUALITY[MystemLemmaQuality(lemma)],           # quality
+        Myasorubka::Mystem::Binary.to_msd(grammemes), # msd
+        stem_grammemes,                               # stem_grammemes
+        flex_grammemes,                               # flex_grammemes
+        MystemLemmaFlexLen(lemma),                    # flex_length
+        MystemLemmaRuleId(lemma)                      # rule_id
       )
     end
   ensure

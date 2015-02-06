@@ -21,6 +21,10 @@ describe Myaso::Mystem do
     it 'normalizes' do
       subject.each { |s| s.form.must_equal 'стали' }
     end
+
+    it 'analyzes' do
+      subject.map { |s| s.msd.pos.to_s }.sort!.must_equal %w(noun verb)
+    end
   end
 
   describe 'analysis of bastard words' do
@@ -28,6 +32,10 @@ describe Myaso::Mystem do
 
     it 'is unambiguous' do
       subject.length.must_equal 1
+    end
+
+    it 'is really a dictionary word' do
+      subject.first.quality.must_equal :bastard
     end
 
     it 'lemmatizes' do
@@ -38,8 +46,8 @@ describe Myaso::Mystem do
       subject.first.form.must_equal 'долбоящера'
     end
 
-    it 'is really a dictionary word' do
-      subject.first.quality.must_equal :bastard
+    it 'analyzes' do
+      subject.first.msd.pos.must_equal :noun
     end
   end
 

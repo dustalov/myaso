@@ -3,6 +3,10 @@
 require 'forwardable'
 require 'ffi'
 
+require 'myasorubka'
+require 'myasorubka/msd/russian'
+require 'myasorubka/mystem'
+
 require 'myaso/version'
 require 'myaso/pi_table'
 require 'myaso/ngrams'
