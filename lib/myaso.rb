@@ -15,6 +15,7 @@ require 'myaso/tagger'
 require 'myaso/tagger/model'
 require 'myaso/tagger/tnt'
 require 'myaso/mystem'
+require 'myaso/mystem/library'
 
 # The UnknownWord exception is raised when Tagger considers an unknown
 # word.
