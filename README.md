@@ -90,7 +90,7 @@ performs pretty well at this.
 
 ### Web Service
 A source code of the Myaso-Web application is available at
-the separate repository: <https://github.com/dmchk/myaso-web>.
+the separate repository: <https://github.com/dustalov/myaso-web>.
 
 ## Acknowledgement
 This work is partially supported by UrB RAS grant №RCP-12-P10.
@@ -102,14 +102,14 @@ This work is partially supported by UrB RAS grant №RCP-12-P10.
 4. Push to the branch (`git push origin my-new-feature`);
 5. Create new Pull Request.
 
-## Build Status [<img src="https://secure.travis-ci.org/dmchk/myaso.png"/>](https://travis-ci.org/dmchk/myaso)
+## Build Status [<img src="https://secure.travis-ci.org/dustalov/myaso.png"/>](https://travis-ci.org/dustalov/myaso)
 
-## Dependency Status [<img src="https://gemnasium.com/dmchk/myaso.png"/>](https://gemnasium.com/dmchk/myaso)
+## Dependency Status [<img src="https://gemnasium.com/dustalov/myaso.png"/>](https://gemnasium.com/dustalov/myaso)
 
-## Code Climate [<img src="https://codeclimate.com/github/dmchk/myaso.png"/>](https://codeclimate.com/github/dmchk/myaso)
+## Code Climate [<img src="https://codeclimate.com/github/dustalov/myaso.png"/>](https://codeclimate.com/github/dustalov/myaso)
 
 ## Copyright
 
-Copyright (c) 2010-2013 [Dmitry Ustalov]. See LICENSE for details.
+Copyright (c) 2010-2015 [Dmitry Ustalov]. See LICENSE for details.
 
-[Dmitry Ustalov]: http://ustalov.name/
+[Dmitry Ustalov]: https://ustalov.name/
