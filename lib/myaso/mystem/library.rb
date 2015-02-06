@@ -1,7 +1,13 @@
 module Myaso::Mystem::Library
   extend FFI::Library
 
-  ffi_lib ['mystem_c_binding', 'libmystem_c_binding.so']
+  begin
+    ffi_lib ENV.fetch('MYSTEM_LIBRARY', Dir["{/{opt,usr}/{,local/}lib{,64},.}/libmystem_c_binding.{dylib,so}"])
+  rescue LoadError
+    fail 'The mystem library could not be loaded. '      \
+         'Please install it and set the MYSTEM_LIBRARY ' \
+         'environment variable to its path.'
+  end
 
   attach_function :MystemAnalyze,          [:pointer, :int], :pointer
   attach_function :MystemAnalysesCount,    [:pointer],       :int
