@@ -14,6 +14,10 @@ module Myaso::Mystem extend self
   }.freeze
 
   class Lemma < Struct.new(:lemma, :form, :quality, :msd, :stem_grammemes, :flex_grammemes, :flex_length, :rule_id)
+    def forms
+      Myaso::Mystem.forms(lemma, rule_id)
+    end
+
     def inspect
       '#<%s lemma=%s msd="%s">' % [self.class.name, lemma.inspect, msd]
     end
@@ -23,40 +27,69 @@ module Myaso::Mystem extend self
     end
   end
 
-  def analyze(word)
-    symbols = as_symbols(word)
-
-    analyzes = MystemAnalyze(symbols, word.length)
-    analyzes_count = MystemAnalysesCount(analyzes)
-
-    analyzes_count.times.map do |i|
-      lemma = MystemLemma(analyzes, i)
-
-      lemma_text = MystemLemmaText(lemma)
-      lemma_text_len = MystemLemmaTextLen(lemma)
-
-      form_text = MystemLemmaForm(lemma)
-      form_text_len = MystemLemmaFormLen(lemma)
-
-      stem_grammemes = MystemLemmaStemGram(lemma).bytes
-      flex_grammemes_raw = MystemLemmaFlexGram(lemma)
-      flex_grammemes_len = MystemLemmaFlexGramNum(lemma)
-      flex_grammemes = as_strings(flex_grammemes_raw, flex_grammemes_len)
-      grammemes = stem_grammemes | flex_grammemes
-
-      Lemma.new(
-        as_string(lemma_text, lemma_text_len),        # lemma
-        as_string(form_text, form_text_len),          # form
-        QUALITY[MystemLemmaQuality(lemma)],           # quality
-        Myasorubka::Mystem::Binary.to_msd(grammemes), # msd
-        stem_grammemes,                               # stem_grammemes
-        flex_grammemes,                               # flex_grammemes
-        MystemLemmaFlexLen(lemma),                    # flex_length
-        MystemLemmaRuleId(lemma)                      # rule_id
-      )
+  class Form < Struct.new(:form, :msd, :stem_grammemes, :flex_grammemes)
+    def inspect
+      '#<%s form=%s msd="%s">' % [self.class.name, form.inspect, msd]
     end
-  ensure
-    MystemDeleteAnalyses(analyzes)
+
+    def to_s
+      form
+    end
+  end
+
+  def analyze(word)
+    Array.new.tap do |lemmas|
+      invoke_analyze(as_symbols(word), word.length) do |lemma|
+        lemma_text = MystemLemmaText(lemma)
+        lemma_text_len = MystemLemmaTextLen(lemma)
+
+        form_text = MystemLemmaForm(lemma)
+        form_text_len = MystemLemmaFormLen(lemma)
+
+        stem_grammemes = MystemLemmaStemGram(lemma).bytes
+        flex_grammemes_raw = MystemLemmaFlexGram(lemma)
+        flex_grammemes_len = MystemLemmaFlexGramNum(lemma)
+        flex_grammemes = as_strings(flex_grammemes_raw, flex_grammemes_len)
+        grammemes = stem_grammemes | flex_grammemes
+
+        lemmas << Lemma.new(
+          as_string(lemma_text, lemma_text_len),        # lemma
+          as_string(form_text, form_text_len),          # form
+          QUALITY[MystemLemmaQuality(lemma)],           # quality
+          Myasorubka::Mystem::Binary.to_msd(grammemes), # msd
+          stem_grammemes,                               # stem_grammemes
+          flex_grammemes,                               # flex_grammemes
+          MystemLemmaFlexLen(lemma),                    # flex_length
+          MystemLemmaRuleId(lemma)                      # rule_id
+        )
+      end
+    end
+  end
+
+  def forms(word, rule_id)
+    Array.new.tap do |forms|
+      invoke_analyze(as_symbols(word), word.length) do |lemma|
+        next unless rule_id == MystemLemmaRuleId(lemma)
+
+        invoke_generate(lemma) do |form|
+          form_text = MystemFormText(form)
+          form_text_len = MystemFormTextLen(form)
+
+          stem_grammemes = MystemFormStemGram(form).bytes
+          flex_grammemes_raw = MystemFormFlexGram(form)
+          flex_grammemes_len = MystemFormFlexGramNum(form)
+          flex_grammemes = as_strings(flex_grammemes_raw, flex_grammemes_len)
+          grammemes = stem_grammemes | flex_grammemes
+
+          forms << Form.new(
+            as_string(form_text, form_text_len),          # form
+            Myasorubka::Mystem::Binary.to_msd(grammemes), # msd
+            stem_grammemes,                               # stem_grammemes
+            flex_grammemes,                               # flex_grammemes
+          )
+        end
+      end
+    end
   end
 
   def inflect(word, form)
@@ -64,6 +97,24 @@ module Myaso::Mystem extend self
   end
 
   protected
+
+  def invoke_analyze(symbols, length, &block)
+    analyzes = MystemAnalyze(symbols, length)
+    MystemAnalysesCount(analyzes).times do |i|
+      block.call(MystemLemma(analyzes, i))
+    end
+  ensure
+    MystemDeleteAnalyses(analyzes)
+  end
+
+  def invoke_generate(lemma, &block)
+    forms = MystemGenerate(lemma)
+    MystemFormsCount(forms).times do |i|
+      block.call(MystemForm(forms, i))
+    end
+  ensure
+    MystemDeleteForms(forms)
+  end
 
   def as_symbols(string)
     FFI::MemoryPointer.

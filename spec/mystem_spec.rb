@@ -51,6 +51,20 @@ describe Myaso::Mystem do
     end
   end
 
+  describe 'form enumeration' do
+    let(:lemma) { Myaso::Mystem.analyze('человеком').first }
+
+    subject { Myaso::Mystem.forms('человеком', 3890) }
+
+    it 'enumerates forms' do
+      subject.length.must_equal 14
+    end
+
+    it 'works for lemmas' do
+      subject.must_equal lemma.forms
+    end
+  end
+
   describe 'inflection' do
     it 'is not implemented yet' do
       proc { Myaso::Mystem.inflect('кот', nil) }.must_raise NotImplementedError

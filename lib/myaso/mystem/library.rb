@@ -32,8 +32,9 @@ module Myaso::Mystem::Library
   attach_function :MystemForm,             [:pointer, :int], :pointer
   attach_function :MystemFormText,         [:pointer],       :pointer
   attach_function :MystemFormTextLen,      [:pointer],       :int
-  attach_function :MystemFormStemGram,     [:pointer],       :pointer
+  attach_function :MystemFormStemGram,     [:pointer],       :string
   attach_function :MystemFormFlexGram,     [:pointer],       :pointer
+  attach_function :MystemFormFlexGramNum,  [:pointer],       :int
 end
 
 Myaso::Mystem.send(:extend, Myaso::Mystem::Library)
