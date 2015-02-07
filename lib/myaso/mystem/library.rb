@@ -1,3 +1,5 @@
+# Myaso uses foreign function interface to interact with the mystem
+# shared library.
 module Myaso::Mystem::Library
   extend FFI::Library
 
@@ -36,6 +38,8 @@ module Myaso::Mystem::Library
   attach_function :MystemFormFlexGram,     [:pointer],       :pointer
   attach_function :MystemFormFlexGramNum,  [:pointer],       :int
 
+  # A meaningful mapping between mystem's internal word quality
+  # descriptors and the Ruby symbols.
   QUALITY = {
     0x00000000 => :dictionary,
     0x00000001 => :bastard,

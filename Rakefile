@@ -15,6 +15,7 @@ end
 
 RDoc::Task.new do |rdoc|
   rdoc.rdoc_dir = 'doc/rdoc'
-  rdoc.main = "README.md"
+  rdoc.main = 'README.md'
+  rdoc.markup = 'markdown'
   rdoc.rdoc_files.include('README.md', 'CHANGES.md', 'LICENSE.txt', 'lib/**/*.rb')
 end
