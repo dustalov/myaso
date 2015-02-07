@@ -66,8 +66,16 @@ describe Myaso::Mystem do
   end
 
   describe 'inflection' do
-    it 'is not implemented yet' do
-      proc { Myaso::Mystem.inflect('кот', nil) }.must_raise NotImplementedError
+    let(:lemma) { Myaso::Mystem.analyze('людьми').first }
+
+    subject { lemma.inflect(:number => :plural, :case => :dative) }
+
+    it 'is ambiguous' do
+      subject.length.must_equal 2
+    end
+
+    it 'inflects' do
+      subject.map!(&:form).sort!.must_equal %w(людям человекам)
     end
   end
 end

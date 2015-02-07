@@ -18,8 +18,12 @@ module Myaso::Mystem extend self
       Myaso::Mystem.forms(lemma, rule_id)
     end
 
+    def inflect(grammemes)
+      Myaso::Mystem.inflect(forms, grammemes)
+    end
+
     def inspect
-      '#<%s lemma=%s msd="%s">' % [self.class.name, lemma.inspect, msd]
+      '#<%s lemma=%s msd="%s">' % [self.class.name, to_s.inspect, msd]
     end
 
     def to_s
@@ -29,7 +33,7 @@ module Myaso::Mystem extend self
 
   class Form < Struct.new(:form, :msd, :stem_grammemes, :flex_grammemes)
     def inspect
-      '#<%s form=%s msd="%s">' % [self.class.name, form.inspect, msd]
+      '#<%s form=%s msd="%s">' % [self.class.name, to_s.inspect, msd]
     end
 
     def to_s
@@ -92,8 +96,10 @@ module Myaso::Mystem extend self
     end
   end
 
-  def inflect(word, form)
-    raise NotImplementedError, 'the library is not yet completed'
+  def inflect(forms, grammemes)
+    forms.select do |form|
+      grammemes.inject(true) { |r, (k, v)| r && form.msd.grammemes[k] == v }
+    end
   end
 
   protected

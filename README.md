@@ -100,7 +100,7 @@ Given the analyzed word, it is possible to retrieve all the possible forms. Havi
 In general form, all the possible word forms can be extracted with the specified word and its inflection rule.
 
 ```ruby
->> pp Myaso::Mystem.forms('человеком', 3890)
+pp Myaso::Mystem.forms('человеком', 3890)
 =begin
 [#<struct Myaso::Mystem::Form
   form="людей",
@@ -116,11 +116,11 @@ In general form, all the possible word forms can be extracted with the specified
 =end
 ```
 
-There exists a convenient way of doing this, which requires previously lemmatized word.
+There exists a convenient way of doing this, which requires a previously lemmatized word.
 
 ```ruby
->> lemmas = Myaso::Mystem.analyze('кот') # => [#<Myaso::Mystem::Lemma lemma="кот" msd="Ncmsny">]
->> pp lemmas[0].forms
+lemmas = Myaso::Mystem.analyze('кот') # => [#<Myaso::Mystem::Lemma lemma="кот" msd="Ncmsny">]
+pp lemmas[0].forms
 =begin
 [#<struct Myaso::Mystem::Form
   form="кот",
@@ -133,6 +133,25 @@ There exists a convenient way of doing this, which requires previously lemmatize
   msd=#<Myasorubka::MSD::Russian msd="Ncmpny">,
   stem_grammemes=[136, 192, 201],
   flex_grammemes=[165, 175]>]
+=end
+```
+
+Moreover, Myaso makes it possible to find exact matches of grammemes, but you have to be careful because computational linguistics is a hard field.
+
+```ruby
+lemmas = Myaso::Mystem.analyze('человек') # => [#<Myaso::Mystem::Lemma lemma="человек" msd="Ncmpay">]
+pp lemmas[0].inflect(:number => :plural, :case => :dative)
+=begin
+[#<struct Myaso::Mystem::Form
+  form="людям",
+  msd=#<Myasorubka::MSD::Russian msd="Ncmpdy">,
+  stem_grammemes=[136, 192, 201],
+  flex_grammemes=[167, 175]>,
+ #<struct Myaso::Mystem::Form
+  form="человекам",
+  msd=#<Myasorubka::MSD::Russian msd="Ncmpdy">,
+  stem_grammemes=[136, 192, 201],
+  flex_grammemes=[167, 175]>]
 =end
 ```
 
