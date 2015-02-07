@@ -1,18 +1,4 @@
 module Myaso::Mystem extend self
-  QUALITY = {
-    0x00000000 => :dictionary,
-    0x00000001 => :bastard,
-    0x00000002 => :sob,
-    0x00000004 => :prefixoid,
-    0x00000008 => :foundling,
-    0x00000010 => :bad_request,
-    0x00010000 => :from_english,
-    0x00020000 => :to_english,
-    0x00040000 => :untranslit,
-    0x00100000 => :overrode,
-    0x01000000 => :fix
-  }.freeze
-
   class Lemma < Struct.new(:lemma, :form, :quality, :msd, :stem_grammemes, :flex_grammemes, :flex_length, :rule_id)
     def forms
       Myaso::Mystem.forms(lemma, rule_id)
