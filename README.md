@@ -62,7 +62,6 @@ pp Myaso::Mystem.analyze('котёночка')
   flex_grammemes=[168, 174, 166],
   flex_length=6,
   rule_id=1525>]
-=> [#<Myaso::Mystem::Lemma lemma="котеночек" msd="Ncmsay">]
 =end
 ```
 
@@ -89,14 +88,53 @@ pp Myaso::Mystem.analyze('аудисты')
   flex_grammemes=[175, 183],
   flex_length=1,
   rule_id=65>]
-=> [#<Myaso::Mystem::Lemma lemma="аудист" msd="Ncmpny">,
-    #<Myaso::Mystem::Lemma lemma="аудистый" msd="A---p-s">]
 =end
 ```
 
 ### Synthesis
 
-The inflection features are not implemented yet. Sorry.
+Given the analyzed word, it is possible to retrieve all the possible forms. Having this information, one may use it to inflect a word. This is implemeneted using the abovementioned mystem shared library.
+
+#### Synthesis API
+
+In general form, all the possible word forms can be extracted with the specified word and its inflection rule.
+
+```ruby
+>> pp Myaso::Mystem.forms('человеком', 3890)
+=begin
+[#<struct Myaso::Mystem::Form
+  form="людей",
+  msd=#<Myasorubka::MSD::Russian msd="Ncmpay">,
+  stem_grammemes=[136, 192, 201],
+  flex_grammemes=[168, 175, 166]>,
+ ...
+ #<struct Myaso::Mystem::Form
+  form="человеку",
+  msd=#<Myasorubka::MSD::Russian msd="Ncmsdy">,
+  stem_grammemes=[136, 192, 201],
+  flex_grammemes=[167, 174]>]
+=end
+```
+
+There exists a convenient way of doing this, which requires previously lemmatized word.
+
+```ruby
+>> lemmas = Myaso::Mystem.analyze('кот') # => [#<Myaso::Mystem::Lemma lemma="кот" msd="Ncmsny">]
+>> pp lemmas[0].forms
+=begin
+[#<struct Myaso::Mystem::Form
+  form="кот",
+  msd=#<Myasorubka::MSD::Russian msd="Ncmsny">,
+  stem_grammemes=[136, 192, 201],
+  flex_grammemes=[165, 174]>,
+ ...
+ #<struct Myaso::Mystem::Form
+  form="коты",
+  msd=#<Myasorubka::MSD::Russian msd="Ncmpny">,
+  stem_grammemes=[136, 192, 201],
+  flex_grammemes=[165, 175]>]
+=end
+```
 
 ### Tagging
 
