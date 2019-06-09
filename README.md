@@ -39,10 +39,7 @@ Myaso supports trained models in the TnT format. One could be obtained at the Se
 
 Since Yandex has released the [Mystem](https://tech.yandex.ru/mystem/) analyzer in the form of shared library, it makes it possible to use the analyzer through the foreign function interface.
 
-Firstly, it is necessary to read and agree with the [mystem EULA]. Secondly, [download] and install the shared library for your operating system. Finally, use Myaso and enjoy the benefits.
-
-[mystem EULA]: http://legal.yandex.ru/mystem/
-[download]: https://github.com/yandex/tomita-parser/releases/tag/v1.0
+Firstly, it is necessary to read and agree with the [mystem EULA](https://yandex.ru/legal/mystem/). Secondly, [download](https://github.com/yandex/tomita-parser/releases/tag/v1.0) and install the shared library for your operating system. Finally, use Myaso and enjoy the benefits.
 
 #### Analysis API
 
@@ -157,7 +154,7 @@ pp lemmas[0].inflect(:number => :plural, :case => :dative)
 
 Myaso performs POS tagging using its own implementation of the Viterbi algorithm on HMMs. The output has the following format: `token<TAB>tag`.
 
-Please remember that tagger command line interface accepts only tokenized texts — one token per line. For instance, the [Greeb](http://nlpub.ru/wiki/Greeb) tokenizer can help you. Don't be afraid to use another text tokenization or segmentation tool if necessary.
+Please remember that tagger command line interface accepts only tokenized texts — one token per line. For instance, the [Greeb](https://github.com/dustalov/greeb) tokenizer can help you. Do not be afraid to use another text tokenization or segmentation tool if necessary.
 
 ```
 % echo 'Как поспал, проголодался наверное?' | greeb | myaso -n snyat-msd.123 -l snyat-msd.lex tagger
@@ -198,8 +195,6 @@ pp tagger.annotate(%w(Как поспал , проголодался навер�
 ["P-----r", "Vmis-sma", ",", "Vmis-sma", "R", "SENT"]
 =end
 ```
-
-Please note that you should perform tokenization of your text before any processing. The [Greeb](http://nlpub.ru/wiki/Greeb) text segmentator performs pretty well at this.
 
 ## Acknowledgement
 
