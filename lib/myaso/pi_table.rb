@@ -17,7 +17,7 @@ class Myaso::PiTable
   def initialize(default = nil)
     @default = default
     @table = Hash.new do |h, k|
-      h[k] = Hash.new { |h, k| h[k] = Hash.new(default) }
+      h[k] = Hash.new { |h_local, k_local| h_local[k_local] = Hash.new(default) }
     end
   end
 

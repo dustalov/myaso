@@ -11,7 +11,7 @@ describe Myaso::Lexicon do
     end
 
     it 'should not initialize @tags' do
-      subject.instance_variable_get(:@tags).must_be_nil
+      subject.instance_variable_defined?(:@tags).must_equal false
     end
   end
 
@@ -37,7 +37,7 @@ describe Myaso::Lexicon do
 
   describe '#tags' do
     it 'should perform lazy initialization' do
-      subject.instance_variable_get(:@tags).must_be_nil
+      subject.instance_variable_defined?(:@tags).must_equal false
       subject.tags
       subject.instance_variable_get(:@tags).wont_be_nil
     end

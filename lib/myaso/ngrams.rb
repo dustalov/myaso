@@ -15,7 +15,7 @@ class Myaso::Ngrams
   #
   def initialize
     @table = Hash.new do |h, k|
-      h[k] = Hash.new { |h, k| h[k] = Hash.new(0) }
+      h[k] = Hash.new { |h_local, k_local| h_local[k_local] = Hash.new(0) }
     end
   end
 

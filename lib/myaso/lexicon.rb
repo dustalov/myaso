@@ -14,7 +14,7 @@ class Myaso::Lexicon
   #
   def initialize
     @table = Hash.new do |h, k|
-      h[k] = Hash.new { |h, k| h[k] = Hash.new(0) }
+      h[k] = Hash.new { |h_local, k_local| h_local[k_local] = Hash.new(0) }
     end
   end
 
@@ -50,7 +50,7 @@ class Myaso::Lexicon
   # Perform lazy initialization of global tags.
   #
   def lazy_aggregated_tags
-    @tags ||= table.inject(Hash.new(0)) do |hash, (prefix, wts)|
+    @tags ||= table.inject(Hash.new(0)) do |hash, (_, wts)|
       wts.each do |word, tags|
         tags.each do |tag, count|
           next unless tag

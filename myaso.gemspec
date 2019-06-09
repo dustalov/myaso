@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.name          = 'myaso'
   spec.version       = Myaso::VERSION
   spec.authors       = ['Dmitry Ustalov', 'Sergey Smagin']
-  spec.email         = ['dmitry@eveel.ru']
+  spec.email         = ['dmitry.ustalov@gmail.com']
   spec.description   = 'Myaso is a morphological analysis library in Ruby.'
   spec.summary       = 'Myaso is a morphological analysis and synthesis ' \
                        'library in Ruby.'

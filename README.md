@@ -2,14 +2,12 @@
 
 Myaso [ˈmʲæ.sə] is a morphological analysis and synthesis library, written in Ruby.
 
-[![Gem Version][badge_fury_badge]][badge_fury_link] [![Dependency Status][gemnasium_badge]][gemnasium_link] [![Build Status][travis_ci_badge]][travis_ci_link] [![Code Climate][code_climate_badge]][code_climage_link]
+[![Gem Version][badge_fury_badge]][badge_fury_link] [![Build Status][travis_ci_badge]][travis_ci_link] [![Code Climate][code_climate_badge]][code_climage_link]
 
 ![Myaso](myaso.jpg)
 
 [badge_fury_badge]: https://badge.fury.io/rb/myaso.svg
 [badge_fury_link]: https://badge.fury.io/rb/myaso
-[gemnasium_badge]: https://gemnasium.com/dustalov/myaso.svg
-[gemnasium_link]: https://gemnasium.com/dustalov/myaso
 [travis_ci_badge]: https://travis-ci.org/dustalov/myaso.svg
 [travis_ci_link]: https://travis-ci.org/dustalov/myaso
 [code_climate_badge]: https://codeclimate.com/github/dustalov/myaso/badges/gpa.svg
@@ -203,10 +201,6 @@ pp tagger.annotate(%w(Как поспал , проголодался навер�
 
 Please note that you should perform tokenization of your text before any processing. The [Greeb](http://nlpub.ru/wiki/Greeb) text segmentator performs pretty well at this.
 
-### Web Service
-
-A source code of the Myaso-Web application is available in the separate repository: <https://github.com/dustalov/myaso-web>.
-
 ## Acknowledgement
 
 This work is partially supported by the Ural Branch of the Russian Academy of Sciences, grant no. РЦП-12-П10.
@@ -221,6 +215,4 @@ This work is partially supported by the Ural Branch of the Russian Academy of Sc
 
 ## Copyright
 
-Copyright (c) 2010-2015 [Dmitry Ustalov]. See LICENSE for details.
-
-[Dmitry Ustalov]: https://ustalov.name/
+Copyright (c) 2010-2019 Dmitry Ustalov. See LICENSE for details.

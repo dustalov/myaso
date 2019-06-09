@@ -5,6 +5,7 @@ source 'https://rubygems.org'
 gemspec
 
 group :development do
+  gem 'rdoc'
   gem 'ruby-prof', :platforms => :mri
 end
 
